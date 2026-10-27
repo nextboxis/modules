@@ -1,0 +1,1421 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Module 3 Graph Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: syllabus header with a progress strip, one tab per topic,
+   a graph-paper workbench on the left and the concept notes on the right. */
+:root {
+  --bg: #edf1f4;
+  --surface: #fbfcfd;
+  --surface-2: #e2e9ee;
+  --ink: #10202c;
+  --muted: #526473;
+  --line: #cbd5dd;
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  --accent-soft: #d3eeea;
+  --visit: #b7791f;
+  --visit-soft: #f6e6c4;
+  --visit-ink: #774c06;
+  --bad: #b3372a;
+  --bad-soft: #f7dcd7;
+  --purple: #6b21a8;
+  --purple-soft: #f3e8ff;
+  --purple-ink: #4c1d95;
+  --blue: #1d4ed8;
+  --blue-soft: #dbeafe;
+  --grid: rgba(16, 32, 44, 0.06);
+  --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+    --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+    --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+    --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+    --blue: #60a5fa; --blue-soft: #172554;
+    --grid: rgba(229, 237, 243, 0.06);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+  --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+  --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+  --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+  --blue: #60a5fa; --blue-soft: #172554;
+  --grid: rgba(229, 237, 243, 0.06);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--font-body); }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); text-wrap: balance; }
+p { margin: 0; }
+
+.page {
+  max-width: 1200px; margin: 0 auto;
+  padding-block: 22px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* header */
+.top { display: flex; gap: 20px 32px; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; padding-bottom: 20px; }
+.top-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.eyebrow { font: 600 12px var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.navlink { font: 500 12px var(--font-mono); color: var(--muted); text-decoration: none; padding: 3px 9px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+.navlink:hover { color: var(--ink); border-color: var(--muted); }
+.navlink.next { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.navlink.next:hover { filter: brightness(1.1); }
+
+/* module progression stepper card */
+.module-stepper {
+  margin-top: 36px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.stepper-info { display: flex; flex-direction: column; gap: 4px; }
+.stepper-step { font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+.stepper-title { font-size: 16px; font-weight: 700; margin: 0; color: var(--ink); }
+.stepper-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+h1 { font-size: clamp(24px, 4.4vw, 40px); font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; line-height: 1.12; }
+.progress { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.pbar { display: flex; gap: 10px; flex-wrap: wrap; }
+.grp { display: flex; gap: 3px; }
+.seg { width: 22px; height: 8px; border-radius: 2px; background: var(--line); transition: background 0.2s; }
+.seg.on { background: var(--accent); }
+.progress p { font: 500 13px var(--font-mono); color: var(--muted); }
+.progress strong { color: var(--ink); font-weight: 600; }
+
+/* tabs */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; }
+.tab { appearance: none; background: none; border: 0; border-bottom: 3px solid transparent; border-radius: 0; margin-bottom: -1px; padding: 11px 14px; font: 600 14px var(--font-body); color: var(--muted); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 8px; align-items: center; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.cnt { font: 500 11px var(--font-mono); padding: 1px 7px; border-radius: 10px; background: var(--surface-2); color: var(--muted); }
+.cnt.full { background: var(--accent); color: var(--accent-ink); }
+
+/* panel */
+.panel { padding-top: 22px; }
+.lede { max-width: 72ch; color: var(--muted); margin-bottom: 18px; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 940px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* workbench */
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+.toolbar .sp { flex: 1 1 8px; }
+.keyfield { display: flex; flex-direction: column; gap: 3px; font: 500 11px var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.keyfield input, .keyfield select { width: 90px; padding: 6px 8px; font: 500 14px var(--font-mono); border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.btn { appearance: none; font: 500 14px var(--font-body); padding: 8px 13px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; transition: transform 0.1s, border-color 0.15s, filter 0.15s; }
+.btn:hover { border-color: var(--muted); }
+.btn:active { transform: scale(0.96); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.sm { padding: 5px 10px; font-size: 13px; }
+.row2 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lbl { font: 500 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.segctl { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.segctl button { appearance: none; border: 0; border-radius: 0; padding: 5px 11px; font: 500 13px var(--font-body); background: var(--surface); color: var(--ink); cursor: pointer; }
+.segctl button + button { border-left: 1px solid var(--line); }
+.segctl button[aria-pressed="true"] { background: var(--ink); color: var(--bg); font-weight: 600; }
+select { font: 500 13px var(--font-body); padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); }
+button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visible, .navlink:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 4px 18px; font: 500 12px var(--font-mono); color: var(--muted); }
+.stats b { color: var(--ink); font-weight: 600; }
+
+.canvas { min-height: 310px; padding: 14px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.canvas svg { display: block; margin: auto; max-width: 100%; flex: none; }
+
+/* SVG Graph Elements */
+.g-node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 2; transition: fill 0.25s, stroke 0.25s; }
+.g-node.active circle { fill: var(--visit-soft); stroke: var(--visit); stroke-width: 3; }
+.g-node.visited circle, .g-node.settled circle { fill: var(--accent); stroke: var(--accent); }
+.g-node text.nl { font: 700 14px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.g-node.visited text.nl, .g-node.settled text.nl { fill: var(--accent-ink); }
+.g-node text.badge { font: 600 10px var(--font-mono); fill: var(--muted); text-anchor: middle; }
+.g-node.active text.badge { fill: var(--visit-ink); font-weight: 700; }
+.g-edge { stroke: var(--muted); stroke-width: 1.8; fill: none; transition: stroke 0.25s, stroke-width 0.25s; }
+.g-edge.mst { stroke: var(--accent); stroke-width: 3.5; }
+.g-edge.relax { stroke: var(--visit); stroke-width: 3; }
+.g-edge.reject { stroke: var(--bad); stroke-width: 2; stroke-dasharray: 4 3; opacity: 0.6; }
+.edge-weight-bg { fill: var(--surface); stroke: var(--line); stroke-width: 1; rx: 4; }
+.edge-weight-txt { font: 600 11px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+
+/* Adjacency Matrix & DSU view styles */
+.aux-view { width: 100%; margin-top: 10px; overflow-x: auto; }
+.matrix-grid { border-collapse: collapse; margin: 0 auto; font-family: var(--font-mono); font-size: 12px; }
+.matrix-grid th, .matrix-grid td { border: 1px solid var(--line); padding: 5px 9px; text-align: center; }
+.matrix-grid th { background: var(--surface-2); color: var(--muted); font-weight: 600; }
+.matrix-grid td.highlight { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.matrix-grid td.relax-cell { background: var(--visit-soft); color: var(--visit-ink); font-weight: 700; animation: flash 0.5s ease-out; }
+.edge-queue-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.edge-chip { font: 500 11px var(--font-mono); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); }
+.edge-chip.mst { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.edge-chip.reject { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); text-decoration: line-through; }
+.edge-chip.cur { border-color: var(--visit); background: var(--visit-soft); color: var(--visit-ink); font-weight: 700; }
+
+/* step log */
+.log { border-top: 1px solid var(--line); padding-top: 12px; min-height: 120px; }
+.log-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.log-head h3 { font-size: 14px; font-weight: 600; font-family: var(--font-body); }
+.chip { font: 600 11px var(--font-mono); padding: 2px 8px; border-radius: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+.chip.hit, .chip.new { background: var(--accent-soft); color: var(--accent); }
+.chip.miss, .chip.dup { background: var(--bad-soft); color: var(--bad); }
+.chip.del { background: var(--visit-soft); color: var(--visit-ink); }
+.chip.blue { background: var(--blue-soft); color: var(--blue); }
+.log ol { margin: 0; padding-left: 24px; font: 400 12.5px/1.65 var(--font-mono); }
+.log li { padding-left: 4px; overflow-wrap: anywhere; }
+.log .hint { font: 400 13px var(--font-body); color: var(--muted); }
+.log .err { color: var(--bad); font: 500 13px var(--font-mono); }
+
+/* concept column */
+.concept { display: flex; flex-direction: column; min-width: 0; }
+.topic { padding: 18px 0; border-top: 1px solid var(--line); }
+.topic:first-child { border-top: 0; padding-top: 0; }
+.topic-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.topic h3 { font-size: 18px; font-weight: 700; }
+.topic p { margin-top: 8px; }
+.topic ul { margin: 8px 0 0; padding-left: 18px; }
+.topic li { margin-top: 4px; }
+.topic li::marker { color: var(--accent); }
+.topic dl { margin: 8px 0 0; display: grid; gap: 8px; }
+.topic dt { font: 600 13px var(--font-mono); color: var(--accent); }
+.topic dd { margin: 0; }
+.tries { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.done { appearance: none; display: inline-flex; gap: 7px; align-items: center; font: 500 12px var(--font-mono); padding: 4px 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--muted); cursor: pointer; white-space: nowrap; }
+.done .box { width: 12px; height: 12px; border: 1.5px solid var(--muted); border-radius: 3px; display: grid; place-items: center; }
+.done[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.done[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); }
+.done[aria-pressed="true"] .box::after { content: ""; width: 3px; height: 6px; border: solid var(--accent-ink); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg) translate(-1px, -1px); }
+
+.tablewrap { overflow-x: auto; margin-top: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+td code, .code { font: 500 12.5px var(--font-mono); }
+.topic table { min-width: 340px; }
+
+/* comparison */
+.compare { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); }
+.compare h2 { font-size: 22px; font-weight: 700; }
+.compare .tablewrap table { min-width: 720px; }
+.compare td:first-child { font-weight: 600; white-space: nowrap; }
+.compare tr.cur td { background: var(--accent-soft); }
+.note { margin-top: 10px; color: var(--muted); font-size: 13px; }
+
+:root[data-motion="off"] * { transition: none !important; animation: none !important; }
+.mnote { max-width: 34ch; font-size: 12px; color: var(--muted); }
+#motion b { font-weight: 600; color: var(--accent); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes segpop { 0% { transform: scale(0.6); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+@keyframes flash { 0% { background: var(--accent); color: var(--accent-ink); } 100% { background: var(--visit-soft); color: var(--visit-ink); } }
+.panel.enter .lede, .panel.enter .bench, .panel.enter .topic { animation: rise 0.42s cubic-bezier(.2,.7,.2,1) both; }
+.panel.enter .bench { animation-delay: 0.05s; }
+.panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
+.log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
+.seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
+</style>
+<div class="page">
+  <header class="top">
+    <div>
+      <div class="top-nav">
+        <span class="eyebrow">Module 3 of 5</span>
+        <a href="Module 2 Hashing Lab.html" class="navlink" title="Previous Module: Hashing">&larr; Module 2</a>
+        <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="Module 4 String & Range Lab.html" class="navlink next" title="Next Module: String & Range">Next: Module 4 (String &amp; Range) &rarr;</a>
+      </div>
+      <h1>Graph Representations, BFS &amp; DFS, Kruskal's MST, Dijkstra &amp; Floyd-Warshall</h1>
+    </div>
+    <div class="progress">
+      <div class="pbar" id="pbar" aria-hidden="true"></div>
+      <p><strong id="pcount">0/4</strong> topics studied</p>
+      <button class="btn sm" id="motion" aria-pressed="true">Animations <b class="mstate">On</b></button>
+      <p class="mnote" id="mnote" hidden>Your device asks for reduced motion, so animations start off. Switch them on here.</p>
+    </div>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs" aria-label="Graph Topics"></nav>
+  <div id="panels"></div>
+
+  <section class="compare" aria-labelledby="cmp-h">
+    <h2 id="cmp-h">Side by side comparison</h2>
+    <p class="note">V is the number of vertices, E is the number of edges. Sparse graphs have E &ll; V², while dense graphs have E &approx; V².</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Algorithm / Structure</th><th>Problem Solved</th><th>Time Complexity</th><th>Space</th><th>Edge Weight Rule</th><th>Core Auxiliary Structure</th><th>Key Weakness / Limitation</th><th>Typical Use Case</th></tr></thead>
+        <tbody>
+          <tr data-row="graph-rep"><td>Adjacency List vs Matrix</td><td>Graph Storage &amp; Edge Query</td><td>List: O(deg(u)), Matrix: O(1) edge check</td><td>List: O(V+E), Matrix: O(V²)</td><td>Any / Unweighted</td><td>Array of linked lists vs 2D array</td><td>Matrix wastes space on sparse graphs; List has slow edge lookup.</td><td>General graph algorithms; Network topologies</td></tr>
+          <tr data-row="bfs-dfs"><td>Breadth-First Search (BFS)</td><td>Level-Order Traversal &amp; Shortest Hops</td><td>O(V + E)</td><td>O(V)</td><td>Unweighted (all w = 1)</td><td>FIFO Queue</td><td>Cannot find shortest paths if weights differ.</td><td>Web crawlers, peer-to-peer networks, social hops</td></tr>
+          <tr data-row="bfs-dfs"><td>Depth-First Search (DFS)</td><td>Deep Exploration &amp; Cycle Detection</td><td>O(V + E)</td><td>O(V)</td><td>Any</td><td>LIFO Stack / Call Stack</td><td>May explore deep suboptimal branches first; recursion limit.</td><td>Topological sort, strongly connected components, mazes</td></tr>
+          <tr data-row="mst-kruskal"><td>Kruskal's Algorithm</td><td>Minimum Spanning Tree (MST)</td><td>O(E log E)</td><td>O(V)</td><td>Undirected, Connected</td><td>Disjoint Set Union (DSU / Union-Find)</td><td>Requires sorting all edges; slower on very dense graphs than Prim.</td><td>Cable network routing, road infrastructure, cluster analysis</td></tr>
+          <tr data-row="shortest-path"><td>Dijkstra's Algorithm</td><td>Single-Source Shortest Path (SSSP)</td><td>O((V + E) log V) with Min-Heap</td><td>O(V)</td><td>Non-negative weights only (w &ge; 0)</td><td>Min-Priority Queue</td><td>Fails permanently or loops infinitely on negative weights.</td><td>GPS Navigation (Google Maps, OSPF routing protocol)</td></tr>
+          <tr data-row="shortest-path"><td>Floyd-Warshall Algorithm</td><td>All-Pairs Shortest Path (APSP)</td><td>O(V³)</td><td>O(V²)</td><td>Handles negative edges (detects neg cycles)</td><td>2D Dynamic Programming Distance Matrix</td><td>Cubic time O(V³) impractical for large graphs (V &gt; 500).</td><td>All-pairs latency tables, transitive closure, flight pricing</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="module-stepper" aria-label="Course Progression">
+    <div class="stepper-info">
+      <span class="stepper-step">Step 3 of 5 &bull; Graphs &amp; Shortest Paths</span>
+      <h3 class="stepper-title">Finished with Graphs? Continue to String &amp; Range</h3>
+    </div>
+    <div class="stepper-actions">
+      <a href="Module 2 Hashing Lab.html" class="btn sm">&larr; Prev: Module 2 (Hashing)</a>
+      <a href="index.html" class="btn sm">🏠 Course Hub</a>
+      <a href="Module 4 String & Range Lab.html" class="btn primary" style="font-weight:600;">Next: Module 4 (String &amp; Range) &rarr;</a>
+    </div>
+  </footer>
+</div>
+<script>
+'use strict';
+/* =====================================================================
+   Module 3: Graph Core Algorithms & SVG Visualizers
+   ===================================================================== */
+
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+/* Standard 6-Node Circular Coordinates */
+var DEFAULT_NODES = ['A', 'B', 'C', 'D', 'E', 'F'];
+var NODE_POS = {
+  A: { x: 260, y: 50 },
+  B: { x: 420, y: 110 },
+  C: { x: 420, y: 250 },
+  D: { x: 260, y: 310 },
+  E: { x: 100, y: 250 },
+  F: { x: 100, y: 110 }
+};
+
+/* ---------------------------------------------------------------------
+   1. Graph Representation Model
+   --------------------------------------------------------------------- */
+class GraphModel {
+  constructor(directed) {
+    this.vertices = DEFAULT_NODES.slice();
+    this.directed = !!directed;
+    this.edges = [];
+  }
+  addEdge(u, v, w) {
+    w = (w === undefined || w === null) ? 1 : Number(w);
+    // remove existing if present
+    this.removeEdge(u, v, true);
+    this.edges.push({ u: u, v: v, w: w });
+  }
+  removeEdge(u, v, silent) {
+    var before = this.edges.length;
+    this.edges = this.edges.filter(function (e) {
+      return !(e.u === u && e.v === v) && !(e.u === v && e.v === u);
+    });
+    return this.edges.length !== before;
+  }
+  adjList() {
+    var adj = {};
+    var self = this;
+    this.vertices.forEach(function (v) { adj[v] = []; });
+    this.edges.forEach(function (e) {
+      adj[e.u].push({ to: e.v, w: e.w });
+      if (!self.directed) adj[e.v].push({ to: e.u, w: e.w });
+    });
+    return adj;
+  }
+  adjMatrix() {
+    var mat = {};
+    var self = this;
+    this.vertices.forEach(function (u) {
+      mat[u] = {};
+      self.vertices.forEach(function (v) { mat[u][v] = 0; });
+    });
+    this.edges.forEach(function (e) {
+      mat[e.u][e.v] = e.w;
+      if (!self.directed) mat[e.v][e.u] = e.w;
+    });
+    return mat;
+  }
+  degree(v) {
+    var list = this.adjList()[v] || [];
+    return list.length;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   2. BFS and DFS Traversal Engines
+   --------------------------------------------------------------------- */
+function runBFS(graph, start) {
+  var adj = graph.adjList();
+  var visited = {};
+  var queue = [start];
+  var steps = [];
+  var order = [];
+  var dist = {};
+  graph.vertices.forEach(function (v) { dist[v] = Infinity; });
+  dist[start] = 0;
+  visited[start] = true;
+
+  steps.push('Initialize BFS Queue: [' + start + ']. Start vertex ' + start + ' at distance 0.');
+
+  while (queue.length > 0) {
+    var u = queue.shift();
+    order.push(u);
+    var neighbors = adj[u] || [];
+    var added = [];
+
+    steps.push('Dequeue vertex ' + u + ' (distance ' + dist[u] + '). Inspect adjacent edges.');
+
+    for (var i = 0; i < neighbors.length; i++) {
+      var v = neighbors[i].to;
+      if (!visited[v]) {
+        visited[v] = true;
+        dist[v] = dist[u] + 1;
+        queue.push(v);
+        added.push(v + ' (dist ' + dist[v] + ')');
+      }
+    }
+    if (added.length > 0) {
+      steps.push('Discovered unvisited neighbors of ' + u + ': ' + added.join(', ') + '. Enqueue &rarr; Queue now: [' + queue.join(', ') + '].');
+    } else {
+      steps.push('All neighbors of ' + u + ' have already been visited.');
+    }
+  }
+  return { order: order, steps: steps, dist: dist };
+}
+
+function runDFS(graph, start) {
+  var adj = graph.adjList();
+  var visited = {};
+  var steps = [];
+  var order = [];
+  var time = 0;
+  var dTime = {}, fTime = {};
+
+  steps.push('Start DFS recursion from vertex ' + start + '.');
+
+  function dfsVisit(u) {
+    time++;
+    dTime[u] = time;
+    visited[u] = true;
+    order.push(u);
+    steps.push('Visit vertex ' + u + ' (discovery time d = ' + time + '). Push to call stack.');
+
+    var neighbors = adj[u] || [];
+    for (var i = 0; i < neighbors.length; i++) {
+      var v = neighbors[i].to;
+      if (!visited[v]) {
+        steps.push('Edge (' + u + ' &rarr; ' + v + ') is a Tree Edge: dive into ' + v + '.');
+        dfsVisit(v);
+      } else {
+        steps.push('Edge (' + u + ' &rarr; ' + v + '): vertex ' + v + ' is already visited (Back/Cross Edge).');
+      }
+    }
+    time++;
+    fTime[u] = time;
+    steps.push('Finished all neighbors of ' + u + ' (finish time f = ' + time + '). Pop from stack.');
+  }
+
+  dfsVisit(start);
+  return { order: order, steps: steps, dTime: dTime, fTime: fTime };
+}
+
+/* ---------------------------------------------------------------------
+   3. Kruskal's Minimum Spanning Tree & Disjoint Set Union (DSU)
+   --------------------------------------------------------------------- */
+class DisjointSet {
+  constructor(elements) {
+    this.parent = {};
+    this.rank = {};
+    var self = this;
+    elements.forEach(function (e) {
+      self.parent[e] = e;
+      self.rank[e] = 0;
+    });
+  }
+  find(i) {
+    if (this.parent[i] === i) return i;
+    this.parent[i] = this.find(this.parent[i]); // path compression
+    return this.parent[i];
+  }
+  union(i, j) {
+    var rootI = this.find(i);
+    var rootJ = this.find(j);
+    if (rootI === rootJ) return false;
+    if (this.rank[rootI] < this.rank[rootJ]) {
+      this.parent[rootI] = rootJ;
+    } else if (this.rank[rootI] > this.rank[rootJ]) {
+      this.parent[rootJ] = rootI;
+    } else {
+      this.parent[rootI] = rootJ;
+      this.rank[rootJ]++;
+    }
+    return true;
+  }
+  sets(elements) {
+    var groups = {};
+    var self = this;
+    elements.forEach(function (e) {
+      var root = self.find(e);
+      if (!groups[root]) groups[root] = [];
+      groups[root].push(e);
+    });
+    return Object.values(groups);
+  }
+}
+
+function runKruskal(graph) {
+  var dsu = new DisjointSet(graph.vertices);
+  var edges = graph.edges.slice();
+  // Sort edges ascending by weight
+  edges.sort(function (a, b) { return a.w - b.w; });
+
+  var mst = [];
+  var rejected = [];
+  var steps = [];
+  var totalWeight = 0;
+
+  steps.push('Sorted all ' + edges.length + ' edges ascending by weight: ' + edges.map(function (e) { return '(' + e.u + '-' + e.v + ': ' + e.w + ')'; }).join(', '));
+
+  for (var i = 0; i < edges.length; i++) {
+    var e = edges[i];
+    var rootU = dsu.find(e.u);
+    var rootV = dsu.find(e.v);
+    if (rootU !== rootV) {
+      dsu.union(e.u, e.v);
+      mst.push(e);
+      totalWeight += e.w;
+      steps.push('Edge (' + e.u + '-' + e.v + ') wt ' + e.w + ': Find(' + e.u + ')=' + rootU + ' &ne; Find(' + e.v + ')=' + rootV + '. ACCEPT into MST! (Total wt: ' + totalWeight + '). Sets: ' + JSON.stringify(dsu.sets(graph.vertices)));
+      if (mst.length === graph.vertices.length - 1) {
+        steps.push('MST has accepted |V| - 1 = ' + (graph.vertices.length - 1) + ' edges. Spanning tree complete!');
+        break;
+      }
+    } else {
+      rejected.push(e);
+      steps.push('Edge (' + e.u + '-' + e.v + ') wt ' + e.w + ': Both vertices share root ' + rootU + '. REJECT (creates a cycle)!');
+    }
+  }
+
+  return { mst: mst, rejected: rejected, totalWeight: totalWeight, steps: steps, sortedEdges: edges };
+}
+
+/* ---------------------------------------------------------------------
+   4. Shortest Paths: Dijkstra (SSSP) & Floyd-Warshall (APSP)
+   --------------------------------------------------------------------- */
+function runDijkstra(graph, start) {
+  var adj = graph.adjList();
+  var dist = {}, prev = {};
+  var unvisited = new Set(graph.vertices);
+  var steps = [];
+
+  graph.vertices.forEach(function (v) {
+    dist[v] = Infinity;
+    prev[v] = null;
+  });
+  dist[start] = 0;
+
+  steps.push('Initialize distances: dist[' + start + '] = 0; all other vertices dist = &infin;.');
+
+  while (unvisited.size > 0) {
+    var curr = null;
+    unvisited.forEach(function (v) {
+      if (curr === null || dist[v] < dist[curr]) curr = v;
+    });
+
+    if (dist[curr] === Infinity) {
+      steps.push('Remaining unvisited vertices ' + Array.from(unvisited).join(', ') + ' are unreachable. Terminating.');
+      break;
+    }
+
+    unvisited.delete(curr);
+    steps.push('Select unvisited vertex with minimal tentative distance: ' + curr + ' (dist = ' + dist[curr] + '). Settling vertex.');
+
+    var neighbors = adj[curr] || [];
+    for (var i = 0; i < neighbors.length; i++) {
+      var e = neighbors[i];
+      if (unvisited.has(e.to)) {
+        var alt = dist[curr] + e.w;
+        if (alt < dist[e.to]) {
+          steps.push('• Relax edge (' + curr + ' &rarr; ' + e.to + ' wt ' + e.w + '): dist[' + e.to + '] drops from ' + (dist[e.to] === Infinity ? '&infin;' : dist[e.to]) + ' &rarr; ' + alt + '. Predecessor set to ' + curr + '.');
+          dist[e.to] = alt;
+          prev[e.to] = curr;
+        } else {
+          steps.push('• Edge (' + curr + ' &rarr; ' + e.to + ' wt ' + e.w + '): new path (' + alt + ') &ge; existing (' + dist[e.to] + '). No relaxation.');
+        }
+      }
+    }
+  }
+
+  return { dist: dist, prev: prev, steps: steps };
+}
+
+function runFloydWarshall(graph, stepK) {
+  var V = graph.vertices;
+  var D = {};
+  var steps = [];
+
+  // Initialize
+  V.forEach(function (u) {
+    D[u] = {};
+    V.forEach(function (v) { D[u][v] = (u === v) ? 0 : Infinity; });
+  });
+
+  graph.edges.forEach(function (e) {
+    D[e.u][e.v] = Math.min(D[e.u][e.v], e.w);
+    if (!graph.directed) D[e.v][e.u] = Math.min(D[e.v][e.u], e.w);
+  });
+
+  steps.push('Initialize D⁰ matrix directly from graph edge weights (0 on diagonal, &infin; if no direct edge).');
+
+  var maxK = stepK !== undefined ? Math.min(stepK, V.length) : V.length;
+  var relaxations = 0;
+
+  for (var kIdx = 0; kIdx < maxK; kIdx++) {
+    var k = V[kIdx];
+    var currentRelax = [];
+    for (var iIdx = 0; iIdx < V.length; iIdx++) {
+      var i = V[iIdx];
+      for (var jIdx = 0; jIdx < V.length; jIdx++) {
+        var j = V[jIdx];
+        if (D[i][k] !== Infinity && D[k][j] !== Infinity) {
+          if (D[i][k] + D[k][j] < D[i][j]) {
+            var oldVal = D[i][j] === Infinity ? '∞' : D[i][j];
+            D[i][j] = D[i][k] + D[k][j];
+            currentRelax.push('D[' + i + '][' + j + ']: ' + oldVal + ' &rarr; ' + D[i][j] + ' (via ' + k + ')');
+            relaxations++;
+          }
+        }
+      }
+    }
+    if (currentRelax.length > 0) {
+      steps.push('Iteration k = ' + k + ' (' + (kIdx + 1) + '/' + V.length + '): ' + currentRelax.join(', '));
+    } else {
+      steps.push('Iteration k = ' + k + ' (' + (kIdx + 1) + '/' + V.length + '): No shorter paths found using ' + k + ' as intermediate.');
+    }
+  }
+
+  return { D: D, steps: steps, relaxations: relaxations };
+}
+
+/* =====================================================================
+   SVG Graph Rendering Engine
+   ===================================================================== */
+function renderGraphSVG(g, meta) {
+  var width = 520, height = 360;
+  var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Graph Diagram">';
+  
+  // Arrowhead marker for directed graphs
+  svg += '<defs><marker id="g-arrow" viewBox="0 0 10 10" refX="24" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
+    '<path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--muted)" />' +
+    '</marker>' +
+    '<marker id="g-arrow-active" viewBox="0 0 10 10" refX="24" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
+    '<path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--accent)" />' +
+    '</marker></defs>';
+
+  meta = meta || {};
+  var activeNode = meta.activeNode || null;
+  var visitedNodes = meta.visitedNodes || [];
+  var mstEdges = meta.mstEdges || [];
+  var rejectEdges = meta.rejectEdges || [];
+  var nodeBadges = meta.nodeBadges || {};
+
+  // Draw Edges
+  g.edges.forEach(function (e) {
+    var p1 = NODE_POS[e.u] || { x: 100, y: 100 };
+    var p2 = NODE_POS[e.v] || { x: 200, y: 200 };
+    
+    var isMST = mstEdges.some(function (m) {
+      return (m.u === e.u && m.v === e.v) || (!g.directed && m.u === e.v && m.v === e.u);
+    });
+    var isReject = rejectEdges.some(function (r) {
+      return (r.u === e.u && r.v === e.v) || (!g.directed && r.u === e.v && r.v === e.u);
+    });
+
+    var edgeCls = 'g-edge';
+    if (isMST) edgeCls += ' mst';
+    if (isReject) edgeCls += ' reject';
+
+    var marker = g.directed ? (isMST ? 'url(#g-arrow-active)' : 'url(#g-arrow)') : '';
+    svg += '<line class="' + edgeCls + '" x1="' + p1.x + '" y1="' + p1.y + '" x2="' + p2.x + '" y2="' + p2.y + '" ' + (marker ? 'marker-end="' + marker + '"' : '') + ' />';
+
+    // Weight pill
+    if (e.w !== undefined && e.w !== null) {
+      var mx = (p1.x + p2.x) / 2;
+      var my = (p1.y + p2.y) / 2;
+      svg += '<rect class="edge-weight-bg" x="' + (mx - 10) + '" y="' + (my - 9) + '" width="20" height="18" />' +
+        '<text class="edge-weight-txt" x="' + mx + '" y="' + my + '">' + e.w + '</text>';
+    }
+  });
+
+  // Draw Vertices
+  g.vertices.forEach(function (v) {
+    var p = NODE_POS[v] || { x: 100, y: 100 };
+    var isAct = v === activeNode;
+    var isVis = visitedNodes.indexOf(v) !== -1;
+    var cls = 'g-node' + (isAct ? ' active' : '') + (isVis ? ' visited' : '');
+    
+    svg += '<g class="' + cls + '" transform="translate(' + p.x + ',' + p.y + ')">' +
+      '<circle r="20" />' +
+      '<text class="nl" y="1">' + v + '</text>';
+    
+    if (nodeBadges[v] !== undefined) {
+      svg += '<text class="badge" y="32">' + esc(nodeBadges[v]) + '</text>';
+    }
+    svg += '</g>';
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+/* =====================================================================
+   Topics Specification (0/4 Total)
+   ===================================================================== */
+var GRAPH_REP_TABLE = '<div class="tablewrap"><table><thead><tr><th>Metric</th><th>Adjacency Matrix</th><th>Adjacency List</th></tr></thead><tbody>' +
+  '<tr><td>Space Complexity</td><td class="code">O(V²)</td><td class="code">O(V + E) (Optimal for sparse)</td></tr>' +
+  '<tr><td>Check Edge (u, v)</td><td class="code">O(1) &mdash; M[u][v] lookup</td><td class="code">O(deg(u)) &mdash; scan list</td></tr>' +
+  '<tr><td>Iterate All Neighbors</td><td class="code">O(V) &mdash; scan row</td><td class="code">O(deg(u)) &mdash; direct pointer</td></tr>' +
+  '<tr><td>Add / Remove Edge</td><td class="code">O(1)</td><td class="code">O(deg(u))</td></tr>' +
+  '</tbody></table></div>';
+
+var BFS_DFS_TABLE = '<div class="tablewrap"><table><thead><tr><th>Feature</th><th>Breadth-First Search (BFS)</th><th>Depth-First Search (DFS)</th></tr></thead><tbody>' +
+  '<tr><td>Auxiliary Data Structure</td><td>FIFO Queue</td><td>LIFO Stack / Call Stack</td></tr>' +
+  '<tr><td>Traversal Strategy</td><td>Level-by-level (radiates outward)</td><td>Deepest path first (backtracks on dead end)</td></tr>' +
+  '<tr><td>Shortest Path Guarantee</td><td>Yes (unweighted graphs only)</td><td>No (depends on discovery order)</td></tr>' +
+  '<tr><td>Edge Classifications</td><td>Tree Edges, Cross Edges</td><td>Tree, Back (Cycle!), Forward, Cross</td></tr>' +
+  '<tr><td>Prime Application</td><td>Bipartiteness, Fewest hops, Social distance</td><td>Topological sort, Strong components, Mazes</td></tr>' +
+  '</tbody></table></div>';
+
+var KRUSKAL_PRIM_TABLE = '<div class="tablewrap"><table><thead><tr><th>Algorithm</th><th>Approach</th><th>Time Complexity</th><th>Best Suited For</th></tr></thead><tbody>' +
+  '<tr><td>Kruskal\'s Algorithm</td><td>Edge-centric greedy with Disjoint Set Union</td><td class="code">O(E log E)</td><td>Sparse graphs (E &ll; V²)</td></tr>' +
+  '<tr><td>Prim\'s Algorithm</td><td>Vertex-centric greedy with Priority Queue</td><td class="code">O((V + E) log V)</td><td>Dense graphs (E &approx; V²)</td></tr>' +
+  '</tbody></table></div>';
+
+var SHORTEST_PATH_TABLE = '<div class="tablewrap"><table><thead><tr><th>Algorithm</th><th>Scope</th><th>Time</th><th>Negative Edges?</th><th>Negative Cycles?</th></tr></thead><tbody>' +
+  '<tr><td>Dijkstra</td><td>Single-Source (SSSP)</td><td class="code">O((V+E) log V)</td><td>No (Weights must be &ge; 0)</td><td>Fails permanently</td></tr>' +
+  '<tr><td>Bellman-Ford</td><td>Single-Source (SSSP)</td><td class="code">O(V · E)</td><td>Yes</td><td>Detects negative cycle</td></tr>' +
+  '<tr><td>Floyd-Warshall</td><td>All-Pairs (APSP)</td><td class="code">O(V³)</td><td>Yes</td><td>Detects if D[i][i] &lt; 0</td></tr>' +
+  '</tbody></table></div>';
+
+var TOPICS = [
+  {
+    id: 'graph-rep', hash: 'graph-rep', tab: 'Graph Representations', kind: 'graph-rep',
+    lede: 'A graph G = (V, E) models networks of vertices connected by edges. Choosing between an Adjacency Matrix and an Adjacency List balances lookup speed against memory.',
+    subs: [
+      {
+        id: 'graph-rep-sub', title: 'Adjacency Matrix & Adjacency List',
+        lead: 'Compare dense matrix storage against sparse linked adjacency lists. Switch graph modes below to observe matrix vs list transformations.',
+        points: [
+          'Adjacency Matrix: A V×V matrix where M[u][v] stores edge weight. Provides instant O(1) edge lookups, but consumes O(V²) space even if empty.',
+          'Adjacency List: An array of lists where adj[u] stores only outgoing neighbors. Optimal O(V + E) space, perfect for real-world sparse networks.',
+          'Degree Sum Formula: For any undirected graph, the sum of all vertex degrees equals 2|E| (the Handshaking Lemma).',
+          'Graph Density: Sparse graphs have |E| &approx; O(V); dense graphs approach complete topology with |E| &approx; V(V - 1)/2.'
+        ],
+        extra: GRAPH_REP_TABLE,
+        tries: [
+          { label: 'Load Complete Mesh (K₄)', reset: true, preset: 'k4' },
+          { label: 'Load Directed DAG', reset: true, preset: 'dag' },
+          { label: 'Load Cycle Graph (C₆)', reset: true, preset: 'cycle' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'bfs-dfs', hash: 'bfs-dfs', tab: 'BFS & DFS', kind: 'bfs-dfs',
+    lede: 'Graph traversals explore every reachable vertex systematically. Breadth-First Search radiates outward in concentric waves; Depth-First Search plunges to the deepest leaf before backtracking.',
+    subs: [
+      {
+        id: 'bfs-dfs-sub', title: 'Breadth-First & Depth-First Search',
+        lead: 'Watch the Queue (BFS) and Call Stack (DFS) expand and contract as vertices are discovered, visited, and completed.',
+        points: [
+          'Breadth-First Search (BFS): Uses a FIFO Queue. Guarantees finding the shortest path in unweighted graphs in O(V + E) time.',
+          'Depth-First Search (DFS): Uses recursion or a LIFO Stack. Discovers tree edges, and identifies Back Edges that indicate cycles.',
+          'Cycle Detection: In a directed graph, finding an edge to an ancestor currently on the recursion stack proves a cycle exists.',
+          'Topological Sort: Linear ordering of vertices in a DAG where every directed edge u &rarr; v has u appearing before v (order by decreasing DFS finish time).'
+        ],
+        extra: BFS_DFS_TABLE,
+        tries: [
+          { label: 'Run BFS from Vertex A', reset: true, act: 'bfs' },
+          { label: 'Run DFS from Vertex A', reset: true, act: 'dfs' },
+          { label: 'Run BFS from Vertex C', reset: true, act: 'bfs-c' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'mst-kruskal', hash: 'mst-kruskal', tab: 'Kruskal\'s MST', kind: 'mst-kruskal',
+    lede: 'A Minimum Spanning Tree (MST) connects all V vertices with exactly V - 1 edges of minimum possible total weight without creating cycles.',
+    subs: [
+      {
+        id: 'mst-kruskal-sub', title: 'Minimum Spanning Trees & Kruskal\'s Algorithm',
+        lead: 'Kruskal\'s greedy algorithm sorts all edges by weight, adding the cheapest edge unless it creates a cycle (detected via Disjoint Set Union).',
+        points: [
+          'Cut Property: For any partition (cut) of vertices, the minimum-weight edge crossing the cut must belong to the MST.',
+          'Edge Sorting: Kruskal starts by sorting all E edges in O(E log E) time.',
+          'Disjoint Set Union (DSU): Maintains vertex components. Find(u) == Find(v) detects cycles in nearly O(1) amortized time via path compression.',
+          'Termination: Exactly V - 1 edges are accepted, producing a tree spanning all vertices.'
+        ],
+        extra: KRUSKAL_PRIM_TABLE,
+        tries: [
+          { label: 'Step through Kruskal MST', reset: true, act: 'kruskal-step' },
+          { label: 'Run Full Kruskal Algorithm', reset: true, act: 'kruskal-all' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'shortest-path', hash: 'shortest-path', tab: 'Dijkstra & Floyd-Warshall', kind: 'shortest-path',
+    lede: 'Shortest path algorithms find the minimum cumulative weight path between vertices. Dijkstra solves Single-Source; Floyd-Warshall computes All-Pairs via Dynamic Programming.',
+    subs: [
+      {
+        id: 'shortest-path-sub', title: 'Dijkstra & Floyd-Warshall Algorithms',
+        lead: 'Compare greedy single-source edge relaxation (Dijkstra) against the all-pairs O(V³) dynamic programming matrix (Floyd-Warshall).',
+        points: [
+          'Dijkstra\'s Algorithm: Greedily selects the unvisited vertex with smallest tentative distance, relaxing all outgoing edges in O((V + E) log V).',
+          'Non-Negative Constraint: Dijkstra assumes edge weights w &ge; 0. A negative edge breaks the greedy invariant and produces invalid paths.',
+          'Floyd-Warshall Algorithm: Computes shortest paths between all pairs of vertices in O(V³) time via dynamic programming recurrence: D[i][j] = min(D[i][j], D[i][k] + D[k][j]).',
+          'Negative Cycle Detection: Floyd-Warshall safely handles negative edge weights and flags a negative cycle if any diagonal D[i][i] becomes &lt; 0.'
+        ],
+        extra: SHORTEST_PATH_TABLE,
+        tries: [
+          { label: 'Run Dijkstra from Vertex A', reset: true, act: 'dijkstra-a' },
+          { label: 'Step Floyd-Warshall (k = A)', reset: true, act: 'floyd-1' },
+          { label: 'Run Full Floyd-Warshall APSP', reset: true, act: 'floyd-all' }
+        ]
+      }
+    ]
+  }
+];
+
+var ALL_SUBS = [];
+TOPICS.forEach(function (t) { t.subs.forEach(function (s) { ALL_SUBS.push(s.id); }); });
+
+/* =====================================================================
+   App State & Persistence
+   ===================================================================== */
+var STORE = 'graph_module_done';
+var MSTORE = 'graph_module_motion';
+var done = {};
+try { done = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) { done = {}; }
+function save() { try { localStorage.setItem(STORE, JSON.stringify(done)); } catch (e) { /* storage disabled */ } }
+
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var motionOn = true;
+try {
+  var savedM = localStorage.getItem(MSTORE);
+  if (savedM !== null) motionOn = savedM === 'on';
+  else if (reduce) motionOn = false;
+} catch (e) { /* no storage */ }
+
+function applyMotion() {
+  document.documentElement.setAttribute('data-motion', motionOn ? 'on' : 'off');
+  var b = document.getElementById('motion');
+  if (b) {
+    b.setAttribute('aria-pressed', motionOn ? 'true' : 'false');
+    b.querySelector('.mstate').textContent = motionOn ? 'On' : 'Off';
+  }
+  var mn = document.getElementById('mnote');
+  if (mn) mn.hidden = !reduce;
+}
+
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+/* =====================================================================
+   Standard Presets
+   ===================================================================== */
+function makeStandardGraph(directed) {
+  var g = new GraphModel(directed);
+  g.addEdge('A', 'B', 4);
+  g.addEdge('A', 'F', 2);
+  g.addEdge('B', 'C', 3);
+  g.addEdge('B', 'F', 1);
+  g.addEdge('C', 'D', 5);
+  g.addEdge('C', 'E', 2);
+  g.addEdge('D', 'E', 4);
+  g.addEdge('E', 'F', 3);
+  return g;
+}
+
+/* =====================================================================
+   Panel HTML Generation
+   ===================================================================== */
+var panels = {};
+
+function panelHTML(t) {
+  var id = t.id;
+  var extras = '';
+  
+  if (id === 'graph-rep') {
+    extras = '<div class="row2"><span class="lbl">Topology</span>' +
+      '<button class="btn sm" data-preset="standard">Standard (8 edges)</button>' +
+      '<button class="btn sm" data-preset="cycle">Cycle C₆</button>' +
+      '<button class="btn sm" data-preset="k4">Mesh K₄</button>' +
+      '<button class="btn sm" data-preset="dag">Directed DAG</button>' +
+      '<span class="sp"></span>' +
+      '<span class="segctl" role="group" aria-label="View format">' +
+      '<button data-view="matrix" aria-pressed="true">Matrix</button>' +
+      '<button data-view="list" aria-pressed="false">Adj List</button></span></div>';
+  } else if (id === 'bfs-dfs') {
+    extras = '<div class="row2"><span class="lbl">Algorithm</span>' +
+      '<span class="segctl" role="group" aria-label="Traversal algorithm">' +
+      '<button data-algo="bfs" aria-pressed="true">BFS (Queue)</button>' +
+      '<button data-algo="dfs" aria-pressed="false">DFS (Stack)</button></span>' +
+      '<label class="lbl" for="start-' + id + '">Start Node</label>' +
+      '<select id="start-' + id + '" data-start><option value="A" selected>A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select>' +
+      '<button class="btn primary sm" data-act="run-traversal">Run Traversal</button></div>';
+  } else if (id === 'mst-kruskal') {
+    extras = '<div class="row2"><span class="lbl">Kruskal MST</span>' +
+      '<button class="btn primary sm" data-act="kruskal-step">Step Next Edge</button>' +
+      '<button class="btn sm" data-act="kruskal-all">Run All</button>' +
+      '<button class="btn sm" data-act="kruskal-reset">Reset MST</button></div>';
+  } else if (id === 'shortest-path') {
+    extras = '<div class="row2"><span class="lbl">Algorithm</span>' +
+      '<span class="segctl" role="group" aria-label="Shortest Path Algorithm">' +
+      '<button data-sp="dijkstra" aria-pressed="true">Dijkstra (SSSP)</button>' +
+      '<button data-sp="floyd" aria-pressed="false">Floyd-Warshall (APSP)</button></span>' +
+      '<label class="lbl" for="source-' + id + '">Source</label>' +
+      '<select id="source-' + id + '" data-source><option value="A" selected>A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select>' +
+      '<button class="btn primary sm" data-act="run-sp">Compute Paths</button>' +
+      '<button class="btn sm" data-act="step-floyd" hidden>Step k</button></div>';
+  }
+
+  var concept = t.subs.map(function (s, si) {
+    var pts = s.points && s.points.length ? '<ul>' + s.points.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '';
+    var tries = s.tries && s.tries.length ? '<div class="tries">' + s.tries.map(function (tr, i) {
+      return '<button class="btn sm" data-try="' + s.id + ':' + i + '">Try: ' + esc(tr.label) + '</button>';
+    }).join('') + '</div>' : '';
+    return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
+      '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
+      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+  }).join('');
+
+  return '<section class="panel" id="panel-' + id + '" role="tabpanel" aria-labelledby="tab-' + id + '" hidden>' +
+    '<p class="lede">' + esc(t.lede) + '</p>' +
+    '<div class="layout"><div class="bench">' +
+    extras +
+    '<div class="stats" data-stats></div>' +
+    '<div class="canvas" data-canvas></div>' +
+    '<div class="aux-view" data-aux></div>' +
+    '<div class="log" data-log aria-live="polite"></div>' +
+    '</div><div class="concept">' + concept + '</div></div></section>';
+}
+
+/* =====================================================================
+   Auxiliary Views (Matrix, List, Tables)
+   ===================================================================== */
+function renderMatrixHTML(g) {
+  var mat = g.adjMatrix();
+  var V = g.vertices;
+  var html = '<table class="matrix-grid"><thead><tr><th></th>' + V.map(function (v) { return '<th>' + v + '</th>'; }).join('') + '</tr></thead><tbody>';
+  V.forEach(function (u) {
+    html += '<tr><th>' + u + '</th>';
+    V.forEach(function (v) {
+      var w = mat[u][v];
+      html += '<td' + (w > 0 ? ' class="highlight"' : '') + '>' + w + '</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
+function renderAdjListHTML(g) {
+  var list = g.adjList();
+  var html = '<div style="font-family:var(--font-mono);font-size:12.5px;padding:8px 12px;background:var(--surface-2);border-radius:6px;display:grid;gap:6px;">';
+  g.vertices.forEach(function (v) {
+    var edges = list[v] || [];
+    var targets = edges.map(function (e) { return '<b>' + e.to + '</b> (wt:' + e.w + ')'; }).join(' &rarr; ');
+    html += '<div><span style="color:var(--accent);font-weight:700;">' + v + ':</span> ' + (targets ? targets + ' &rarr; &bull;' : '&bull; (empty)') + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderFloydMatrixHTML(D, V) {
+  var html = '<p class="lbl" style="margin-bottom:6px;">All-Pairs Distance Matrix D[i][j]:</p><table class="matrix-grid"><thead><tr><th></th>' + V.map(function (v) { return '<th>' + v + '</th>'; }).join('') + '</tr></thead><tbody>';
+  V.forEach(function (u) {
+    html += '<tr><th>' + u + '</th>';
+    V.forEach(function (v) {
+      var d = D[u][v];
+      var str = d === Infinity ? '&infin;' : d;
+      html += '<td' + (d > 0 && d !== Infinity ? ' class="highlight"' : '') + '>' + str + '</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
+function renderDijkstraTableHTML(dist, prev, V) {
+  var html = '<div class="tablewrap"><table style="font-size:12.5px;"><thead><tr><th>Vertex</th><th>Shortest Distance</th><th>Predecessor</th><th>Status</th></tr></thead><tbody>';
+  V.forEach(function (v) {
+    var d = dist[v];
+    var str = d === Infinity ? '&infin;' : d;
+    html += '<tr><td><b>' + v + '</b></td><td class="code">' + str + '</td><td class="code">' + (prev[v] || '&mdash;') + '</td><td><span class="chip ' + (d !== Infinity ? 'hit' : 'miss') + '">' + (d !== Infinity ? 'Settled' : 'Unreachable') + '</span></td></tr>';
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+
+function renderKruskalQueueHTML(sortedEdges, mst, rejected, curIdx) {
+  var html = '<p class="lbl" style="margin-bottom:6px;">Sorted Edge Priority List:</p><div class="edge-queue-list">';
+  sortedEdges.forEach(function (e, idx) {
+    var isMST = mst.some(function (m) { return m.u === e.u && m.v === e.v; });
+    var isRej = rejected.some(function (r) { return r.u === e.u && r.v === e.v; });
+    var isCur = idx === curIdx;
+    var cls = 'edge-chip';
+    if (isMST) cls += ' mst';
+    if (isRej) cls += ' reject';
+    if (isCur) cls += ' cur';
+    html += '<span class="' + cls + '">(' + e.u + '-' + e.v + ' : ' + e.w + ')' + (isMST ? ' ✓' : (isRej ? ' ✕' : '')) + '</span>';
+  });
+  html += '</div>';
+  return html;
+}
+
+/* =====================================================================
+   Workbench Engine: Execution & Step Logs
+   ===================================================================== */
+function statsHTML(p) {
+  var id = p.topic.id;
+  var items = [];
+  if (id === 'graph-rep') {
+    var vCount = p.graph.vertices.length;
+    var eCount = p.graph.edges.length;
+    var maxEdges = p.graph.directed ? vCount * (vCount - 1) : (vCount * (vCount - 1)) / 2;
+    var density = (eCount / (maxEdges || 1)).toFixed(2);
+    items = [
+      ['Vertices |V|', vCount],
+      ['Edges |E|', eCount],
+      ['Graph Type', p.graph.directed ? 'Directed (DAG)' : 'Undirected'],
+      ['Density', density]
+    ];
+  } else if (id === 'bfs-dfs') {
+    items = [
+      ['Vertices |V|', p.graph.vertices.length],
+      ['Algorithm', p.algo.toUpperCase()],
+      ['Start Node', p.startNode],
+      ['Traversed', (p.lastResult ? p.lastResult.order.length : 0) + ' / ' + p.graph.vertices.length]
+    ];
+  } else if (id === 'mst-kruskal') {
+    var accepted = p.kruskalState ? p.kruskalState.mst.length : 0;
+    var totalW = p.kruskalState ? p.kruskalState.totalWeight : 0;
+    items = [
+      ['Vertices |V|', p.graph.vertices.length],
+      ['Required Edges', (p.graph.vertices.length - 1)],
+      ['MST Edges Added', accepted + ' / ' + (p.graph.vertices.length - 1)],
+      ['Total MST Weight', '<b>' + totalW + '</b>']
+    ];
+  } else if (id === 'shortest-path') {
+    items = [
+      ['Mode', p.spMode === 'dijkstra' ? 'Dijkstra (SSSP)' : 'Floyd-Warshall (APSP)'],
+      ['Source Vertex', p.spMode === 'dijkstra' ? p.sourceNode : 'All Pairs'],
+      ['Complexity', p.spMode === 'dijkstra' ? 'O((V+E) log V)' : 'O(V³)']
+    ];
+  }
+  return items.map(function (x) { return x[0] + ' <b>' + x[1] + '</b>'; }).join('<span aria-hidden="true"> &bull; </span>');
+}
+
+function showLog(p, title, chipLabel, chipClass, steps) {
+  p.log.innerHTML = '<div class="log-head"><h3>' + esc(title) + '</h3><span class="chip ' + chipClass + '">' + esc(chipLabel) + '</span></div>' +
+    '<ol>' + steps.map(function (s, i) { return '<li style="--i:' + i + '">' + s + '</li>'; }).join('') + '</ol>';
+}
+
+function hint(p, msg, err) {
+  p.log.innerHTML = '<p class="' + (err ? 'err' : 'hint') + '">' + esc(msg) + '</p>';
+}
+
+function draw(p, meta) {
+  p.canvas.innerHTML = renderGraphSVG(p.graph, meta);
+  p.stats.innerHTML = statsHTML(p);
+
+  // Aux View
+  if (p.topic.id === 'graph-rep') {
+    p.aux.innerHTML = p.viewFormat === 'list' ? renderAdjListHTML(p.graph) : renderMatrixHTML(p.graph);
+  } else if (p.topic.id === 'mst-kruskal' && p.kruskalState) {
+    p.aux.innerHTML = renderKruskalQueueHTML(p.kruskalState.sortedEdges, p.kruskalState.mst, p.kruskalState.rejected, p.kruskalState.curIdx);
+  } else if (p.topic.id === 'shortest-path') {
+    if (p.spMode === 'dijkstra' && p.lastDijkstra) {
+      p.aux.innerHTML = renderDijkstraTableHTML(p.lastDijkstra.dist, p.lastDijkstra.prev, p.graph.vertices);
+    } else if (p.spMode === 'floyd' && p.lastFloyd) {
+      p.aux.innerHTML = renderFloydMatrixHTML(p.lastFloyd.D, p.graph.vertices);
+    }
+  }
+}
+
+/* =====================================================================
+   Progress Bar & Checkmarks (4 Topics Total: 0/4)
+   ===================================================================== */
+var GROUPS = [1, 1, 1, 1]; // 4 topics total
+
+function buildBar() {
+  var html = '', i = 0;
+  GROUPS.forEach(function (g) {
+    html += '<div class="grp">';
+    for (var j = 0; j < g; j++, i++) html += '<span class="seg" data-seg="' + ALL_SUBS[i] + '"></span>';
+    html += '</div>';
+  });
+  $('#pbar').innerHTML = html;
+}
+
+function refreshProgress() {
+  var total = 0;
+  ALL_SUBS.forEach(function (id) {
+    var on = !!done[id];
+    if (on) total++;
+    var seg = $('[data-seg="' + id + '"]'); if (seg) seg.classList.toggle('on', on);
+    var btn = $('[data-done="' + id + '"]'); if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  $('#pcount').textContent = total + '/' + ALL_SUBS.length;
+  TOPICS.forEach(function (t) {
+    var c = 0; t.subs.forEach(function (s) { if (done[s.id]) c++; });
+    var el = $('#tab-' + t.id + ' .cnt');
+    if (el) { el.textContent = c + '/' + t.subs.length; el.classList.toggle('full', c === t.subs.length); }
+  });
+}
+
+/* =====================================================================
+   Tabs & Navigation
+   ===================================================================== */
+var current = null;
+function showTab(id) {
+  var t = TOPICS.filter(function (x) { return x.id === id; })[0] || TOPICS[0];
+  current = t.id;
+  TOPICS.forEach(function (x) {
+    var on = x.id === t.id;
+    $('#panel-' + x.id).hidden = !on;
+    $('#tab-' + x.id).setAttribute('aria-selected', on ? 'true' : 'false');
+    $('#tab-' + x.id).tabIndex = on ? 0 : -1;
+  });
+  var act = $('#panel-' + t.id);
+  act.classList.remove('enter'); void act.offsetWidth; act.classList.add('enter');
+  $$('tr[data-row]').forEach(function (tr) { tr.classList.toggle('cur', tr.getAttribute('data-row') === t.id); });
+}
+
+function fromHash() {
+  var h = (location.hash || '').replace('#', '');
+  var t = TOPICS.filter(function (x) { return x.hash === h; })[0];
+  showTab(t ? t.id : TOPICS[0].id);
+}
+
+/* =====================================================================
+   App Bootstrapping
+   ===================================================================== */
+(function () {
+  $('#tabs').innerHTML = TOPICS.map(function (t) {
+    return '<button class="tab" role="tab" id="tab-' + t.id + '" aria-controls="panel-' + t.id + '" aria-selected="false" data-tab="' + t.id + '">' + esc(t.tab) + ' <span class="cnt">0/' + t.subs.length + '</span></button>';
+  }).join('');
+  $('#panels').innerHTML = TOPICS.map(panelHTML).join('');
+  buildBar();
+
+  TOPICS.forEach(function (t) {
+    var el = $('#panel-' + t.id);
+    var p = {
+      topic: t, el: el,
+      graph: makeStandardGraph(false),
+      viewFormat: 'matrix',
+      algo: 'bfs',
+      startNode: 'A',
+      spMode: 'dijkstra',
+      sourceNode: 'A',
+      canvas: $('[data-canvas]', el),
+      stats: $('[data-stats]', el),
+      aux: $('[data-aux]', el),
+      log: $('[data-log]', el)
+    };
+    panels[t.id] = p;
+
+    // Initial draw
+    if (t.id === 'mst-kruskal') {
+      p.kruskalState = {
+        dsu: new DisjointSet(p.graph.vertices),
+        sortedEdges: p.graph.edges.slice().sort(function (a, b) { return a.w - b.w; }),
+        curIdx: -1,
+        mst: [],
+        rejected: [],
+        totalWeight: 0,
+        steps: ['Ready to execute Kruskal\'s Algorithm. Click "Step Next Edge" to evaluate edges greedily.']
+      };
+      draw(p, { mstEdges: [], rejectEdges: [] });
+      hint(p, 'Weighted undirected graph loaded. Click "Step Next Edge" to trace Disjoint Set Union operations.');
+    } else if (t.id === 'shortest-path') {
+      p.lastDijkstra = runDijkstra(p.graph, 'A');
+      var badges = {};
+      p.graph.vertices.forEach(function (v) { badges[v] = 'd=' + (p.lastDijkstra.dist[v] === Infinity ? '∞' : p.lastDijkstra.dist[v]); });
+      draw(p, { visitedNodes: p.graph.vertices, nodeBadges: badges });
+      showLog(p, 'Dijkstra Shortest Paths from A', 'Computed', 'hit', p.lastDijkstra.steps);
+    } else {
+      draw(p);
+      hint(p, 'Interactive graph loaded. Choose an operation or click a Try button on the right to trace.');
+    }
+
+    // Click handler
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b || !el.contains(b)) return;
+      
+      // Topic done checkmark
+      if (b.hasAttribute('data-done')) {
+        var id = b.getAttribute('data-done');
+        done[id] = !done[id]; if (!done[id]) delete done[id];
+        save(); refreshProgress();
+        return;
+      }
+
+      // Tab 1: Graph Representations
+      if (b.hasAttribute('data-preset')) {
+        var pr = b.getAttribute('data-preset');
+        if (pr === 'standard') {
+          p.graph = makeStandardGraph(false);
+          draw(p); hint(p, 'Standard 6-vertex, 8-edge graph restored.');
+        } else if (pr === 'cycle') {
+          p.graph = new GraphModel(false);
+          p.graph.addEdge('A', 'B', 2); p.graph.addEdge('B', 'C', 4);
+          p.graph.addEdge('C', 'D', 1); p.graph.addEdge('D', 'E', 5);
+          p.graph.addEdge('E', 'F', 3); p.graph.addEdge('F', 'A', 6);
+          draw(p); hint(p, 'Loaded Cycle Graph C₆.');
+        } else if (pr === 'k4') {
+          p.graph = new GraphModel(false);
+          p.graph.vertices = ['A', 'B', 'C', 'D'];
+          p.graph.addEdge('A', 'B', 3); p.graph.addEdge('A', 'C', 2);
+          p.graph.addEdge('A', 'D', 5); p.graph.addEdge('B', 'C', 1);
+          p.graph.addEdge('B', 'D', 4); p.graph.addEdge('C', 'D', 2);
+          draw(p); hint(p, 'Loaded Complete Mesh K₄ (all 4 vertices mutually connected).');
+        } else if (pr === 'dag') {
+          p.graph = new GraphModel(true);
+          p.graph.addEdge('A', 'B', 2); p.graph.addEdge('A', 'F', 1);
+          p.graph.addEdge('F', 'E', 4); p.graph.addEdge('B', 'C', 3);
+          p.graph.addEdge('E', 'D', 5); p.graph.addEdge('C', 'D', 2);
+          draw(p); hint(p, 'Loaded Directed Acyclic Graph (DAG) with directional arrows.');
+        }
+        return;
+      }
+
+      if (b.hasAttribute('data-view')) {
+        p.viewFormat = b.getAttribute('data-view');
+        $$('[data-view]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        draw(p);
+        return;
+      }
+
+      // Tab 2: BFS & DFS
+      if (b.hasAttribute('data-algo')) {
+        p.algo = b.getAttribute('data-algo');
+        $$('[data-algo]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        return;
+      }
+
+      if (b.getAttribute('data-act') === 'run-traversal') {
+        var start = $('#start-' + t.id, el).value;
+        p.startNode = start;
+        if (p.algo === 'bfs') {
+          var res = runBFS(p.graph, start);
+          p.lastResult = res;
+          var badges = {};
+          p.graph.vertices.forEach(function (v) { badges[v] = res.dist[v] === Infinity ? 'd=∞' : 'd=' + res.dist[v]; });
+          draw(p, { activeNode: start, visitedNodes: res.order, nodeBadges: badges });
+          showLog(p, 'Breadth-First Search from ' + start, 'BFS Complete', 'hit', res.steps);
+        } else {
+          var res = runDFS(p.graph, start);
+          p.lastResult = res;
+          var badges = {};
+          p.graph.vertices.forEach(function (v) { badges[v] = res.dTime[v] ? res.dTime[v] + '/' + res.fTime[v] : '—'; });
+          draw(p, { activeNode: start, visitedNodes: res.order, nodeBadges: badges });
+          showLog(p, 'Depth-First Search from ' + start, 'DFS Complete', 'blue', res.steps);
+        }
+        return;
+      }
+
+      // Tab 3: Kruskal MST
+      if (b.getAttribute('data-act') === 'kruskal-step') {
+        var ks = p.kruskalState;
+        if (ks.curIdx + 1 >= ks.sortedEdges.length) {
+          hint(p, 'All edges evaluated. MST construction is complete.');
+          return;
+        }
+        ks.curIdx++;
+        var edge = ks.sortedEdges[ks.curIdx];
+        var rU = ks.dsu.find(edge.u);
+        var rV = ks.dsu.find(edge.v);
+        if (rU !== rV) {
+          ks.dsu.union(edge.u, edge.v);
+          ks.mst.push(edge);
+          ks.totalWeight += edge.w;
+          ks.steps.push('Step ' + (ks.curIdx + 1) + ': Edge (' + edge.u + '-' + edge.v + ' wt ' + edge.w + ') connects disjoint sets. ACCEPT into MST! Sets: ' + JSON.stringify(ks.dsu.sets(p.graph.vertices)));
+        } else {
+          ks.rejected.push(edge);
+          ks.steps.push('Step ' + (ks.curIdx + 1) + ': Edge (' + edge.u + '-' + edge.v + ' wt ' + edge.w + ') creates a cycle between existing component ' + rU + '. REJECT!');
+        }
+        draw(p, { mstEdges: ks.mst, rejectEdges: ks.rejected });
+        showLog(p, 'Kruskal Evaluation Step ' + (ks.curIdx + 1), (rU !== rV ? 'Accepted' : 'Cycle Rejected'), (rU !== rV ? 'hit' : 'miss'), ks.steps);
+        return;
+      }
+
+      if (b.getAttribute('data-act') === 'kruskal-all') {
+        var res = runKruskal(p.graph);
+        p.kruskalState = {
+          dsu: new DisjointSet(p.graph.vertices),
+          sortedEdges: res.sortedEdges,
+          curIdx: res.sortedEdges.length - 1,
+          mst: res.mst,
+          rejected: res.rejected,
+          totalWeight: res.totalWeight,
+          steps: res.steps
+        };
+        draw(p, { mstEdges: res.mst, rejectEdges: res.rejected });
+        showLog(p, 'Kruskal MST Complete', 'Weight: ' + res.totalWeight, 'hit', res.steps);
+        return;
+      }
+
+      if (b.getAttribute('data-act') === 'kruskal-reset') {
+        p.kruskalState = {
+          dsu: new DisjointSet(p.graph.vertices),
+          sortedEdges: p.graph.edges.slice().sort(function (a, b) { return a.w - b.w; }),
+          curIdx: -1,
+          mst: [],
+          rejected: [],
+          totalWeight: 0,
+          steps: ['Kruskal state reset. Click "Step Next Edge" to start over.']
+        };
+        draw(p, { mstEdges: [], rejectEdges: [] });
+        hint(p, 'MST reset. Click Step Next Edge to evaluate edges greedily.');
+        return;
+      }
+
+      // Tab 4: Shortest Paths
+      if (b.hasAttribute('data-sp')) {
+        p.spMode = b.getAttribute('data-sp');
+        $$('[data-sp]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        var stepBtn = $('[data-act="step-floyd"]', el);
+        if (stepBtn) stepBtn.hidden = p.spMode !== 'floyd';
+        if (p.spMode === 'dijkstra') {
+          var res = runDijkstra(p.graph, p.sourceNode);
+          p.lastDijkstra = res;
+          var badges = {};
+          p.graph.vertices.forEach(function (v) { badges[v] = 'd=' + (res.dist[v] === Infinity ? '∞' : res.dist[v]); });
+          draw(p, { visitedNodes: p.graph.vertices, nodeBadges: badges });
+          showLog(p, 'Dijkstra Shortest Paths from ' + p.sourceNode, 'SSSP Computed', 'hit', res.steps);
+        } else {
+          p.floydStep = 0;
+          p.lastFloyd = runFloydWarshall(p.graph, 0);
+          draw(p);
+          showLog(p, 'Floyd-Warshall (Initial Matrix D⁰)', 'Initialized', 'blue', p.lastFloyd.steps);
+        }
+        return;
+      }
+
+      if (b.getAttribute('data-act') === 'run-sp') {
+        var src = $('#source-' + t.id, el).value;
+        p.sourceNode = src;
+        if (p.spMode === 'dijkstra') {
+          var res = runDijkstra(p.graph, src);
+          p.lastDijkstra = res;
+          var badges = {};
+          p.graph.vertices.forEach(function (v) { badges[v] = 'd=' + (res.dist[v] === Infinity ? '∞' : res.dist[v]); });
+          draw(p, { activeNode: src, visitedNodes: p.graph.vertices, nodeBadges: badges });
+          showLog(p, 'Dijkstra SSSP from ' + src, 'Shortest Paths Found', 'hit', res.steps);
+        } else {
+          p.floydStep = p.graph.vertices.length;
+          p.lastFloyd = runFloydWarshall(p.graph, p.floydStep);
+          draw(p);
+          showLog(p, 'Floyd-Warshall All-Pairs Complete', 'O(V³) APSP Done', 'hit', p.lastFloyd.steps);
+        }
+        return;
+      }
+
+      if (b.getAttribute('data-act') === 'step-floyd') {
+        p.floydStep = ((p.floydStep || 0) % p.graph.vertices.length) + 1;
+        p.lastFloyd = runFloydWarshall(p.graph, p.floydStep);
+        var curK = p.graph.vertices[p.floydStep - 1];
+        draw(p, { activeNode: curK });
+        showLog(p, 'Floyd-Warshall Iteration k = ' + curK, 'Iteration ' + p.floydStep + '/6', 'blue', p.lastFloyd.steps);
+        return;
+      }
+
+      // "Try" worked examples
+      if (b.hasAttribute('data-try')) {
+        var parts = b.getAttribute('data-try').split(':');
+        var subId = parts[0], tryIdx = Number(parts[1]);
+        var sub = p.topic.subs.filter(function (s) { return s.id === subId; })[0];
+        if (!sub) return;
+        var tr = sub.tries[tryIdx];
+        if (tr.preset) {
+          var btnPr = $('[data-preset="' + tr.preset + '"]', el);
+          if (btnPr) btnPr.click();
+        } else if (tr.act) {
+          if (tr.act === 'bfs') {
+            p.algo = 'bfs';
+            $('[data-algo="bfs"]', el).click();
+            $('#start-' + t.id, el).value = 'A';
+            $('[data-act="run-traversal"]', el).click();
+          } else if (tr.act === 'dfs') {
+            p.algo = 'dfs';
+            $('[data-algo="dfs"]', el).click();
+            $('#start-' + t.id, el).value = 'A';
+            $('[data-act="run-traversal"]', el).click();
+          } else if (tr.act === 'bfs-c') {
+            p.algo = 'bfs';
+            $('[data-algo="bfs"]', el).click();
+            $('#start-' + t.id, el).value = 'C';
+            $('[data-act="run-traversal"]', el).click();
+          } else if (tr.act === 'kruskal-step') {
+            $('[data-act="kruskal-reset"]', el).click();
+            $('[data-act="kruskal-step"]', el).click();
+          } else if (tr.act === 'kruskal-all') {
+            $('[data-act="kruskal-all"]', el).click();
+          } else if (tr.act === 'dijkstra-a') {
+            p.spMode = 'dijkstra';
+            $('[data-sp="dijkstra"]', el).click();
+            $('#source-' + t.id, el).value = 'A';
+            $('[data-act="run-sp"]', el).click();
+          } else if (tr.act === 'floyd-1') {
+            p.spMode = 'floyd';
+            $('[data-sp="floyd"]', el).click();
+            $('[data-act="step-floyd"]', el).click();
+          } else if (tr.act === 'floyd-all') {
+            p.spMode = 'floyd';
+            $('[data-sp="floyd"]', el).click();
+            $('[data-act="run-sp"]', el).click();
+          }
+        }
+      }
+    });
+  });
+
+  $('#tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tab]'); if (!b) return;
+    var t = TOPICS.filter(function (x) { return x.id === b.getAttribute('data-tab'); })[0];
+    if (location.hash === '#' + t.hash) showTab(t.id); else location.hash = t.hash;
+  });
+
+  $('#tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var idx = TOPICS.map(function (t) { return t.id; }).indexOf(current);
+    var next = TOPICS[(idx + (e.key === 'ArrowRight' ? 1 : TOPICS.length - 1)) % TOPICS.length];
+    location.hash = next.hash;
+    var el = $('#tab-' + next.id); if (el) el.focus();
+  });
+
+  window.addEventListener('hashchange', fromHash);
+
+  $('#motion').addEventListener('click', function () {
+    motionOn = !motionOn;
+    try { localStorage.setItem(MSTORE, motionOn ? 'on' : 'off'); } catch (e) { /* storage error */ }
+    applyMotion();
+  });
+
+  applyMotion();
+  fromHash();
+  refreshProgress();
+})();
+</script>
+</body></html>

@@ -1,0 +1,1548 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Module 2 Hashing Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: syllabus header with a progress strip, one tab per topic,
+   a graph-paper workbench on the left and the concept notes on the right. */
+:root {
+  --bg: #edf1f4;
+  --surface: #fbfcfd;
+  --surface-2: #e2e9ee;
+  --ink: #10202c;
+  --muted: #526473;
+  --line: #cbd5dd;
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  --accent-soft: #d3eeea;
+  --visit: #b7791f;
+  --visit-soft: #f6e6c4;
+  --visit-ink: #774c06;
+  --bad: #b3372a;
+  --bad-soft: #f7dcd7;
+  --purple: #6b21a8;
+  --purple-soft: #f3e8ff;
+  --purple-ink: #4c1d95;
+  --grid: rgba(16, 32, 44, 0.06);
+  --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+    --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+    --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+    --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+    --grid: rgba(229, 237, 243, 0.06);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+  --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+  --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+  --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+  --grid: rgba(229, 237, 243, 0.06);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--font-body); }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); text-wrap: balance; }
+p { margin: 0; }
+
+.page {
+  max-width: 1200px; margin: 0 auto;
+  padding-block: 22px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* header */
+.top { display: flex; gap: 20px 32px; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; padding-bottom: 20px; }
+.top-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.eyebrow { font: 600 12px var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.navlink { font: 500 12px var(--font-mono); color: var(--muted); text-decoration: none; padding: 3px 9px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+.navlink:hover { color: var(--ink); border-color: var(--muted); }
+.navlink.next { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.navlink.next:hover { filter: brightness(1.1); }
+
+/* module progression stepper card */
+.module-stepper {
+  margin-top: 36px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.stepper-info { display: flex; flex-direction: column; gap: 4px; }
+.stepper-step { font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+.stepper-title { font-size: 16px; font-weight: 700; margin: 0; color: var(--ink); }
+.stepper-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+h1 { font-size: clamp(24px, 4.4vw, 40px); font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; line-height: 1.12; }
+.progress { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.pbar { display: flex; gap: 10px; flex-wrap: wrap; }
+.grp { display: flex; gap: 3px; }
+.seg { width: 22px; height: 8px; border-radius: 2px; background: var(--line); transition: background 0.2s; }
+.seg.on { background: var(--accent); }
+.progress p { font: 500 13px var(--font-mono); color: var(--muted); }
+.progress strong { color: var(--ink); font-weight: 600; }
+
+/* tabs */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; }
+.tab { appearance: none; background: none; border: 0; border-bottom: 3px solid transparent; border-radius: 0; margin-bottom: -1px; padding: 11px 14px; font: 600 14px var(--font-body); color: var(--muted); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 8px; align-items: center; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.cnt { font: 500 11px var(--font-mono); padding: 1px 7px; border-radius: 10px; background: var(--surface-2); color: var(--muted); }
+.cnt.full { background: var(--accent); color: var(--accent-ink); }
+
+/* panel */
+.panel { padding-top: 22px; }
+.lede { max-width: 72ch; color: var(--muted); margin-bottom: 18px; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 940px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* workbench */
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+.toolbar .sp { flex: 1 1 8px; }
+.keyfield { display: flex; flex-direction: column; gap: 3px; font: 500 11px var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.keyfield input { width: 112px; padding: 7px 9px; font: 500 15px var(--font-mono); border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.btn { appearance: none; font: 500 14px var(--font-body); padding: 8px 13px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; transition: transform 0.1s, border-color 0.15s, filter 0.15s; }
+.btn:hover { border-color: var(--muted); }
+.btn:active { transform: scale(0.96); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.sm { padding: 5px 10px; font-size: 13px; }
+.row2 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lbl { font: 500 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.segctl { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.segctl button { appearance: none; border: 0; border-radius: 0; padding: 5px 11px; font: 500 13px var(--font-body); background: var(--surface); color: var(--ink); cursor: pointer; }
+.segctl button + button { border-left: 1px solid var(--line); }
+.segctl button[aria-pressed="true"] { background: var(--ink); color: var(--bg); font-weight: 600; }
+select { font: 500 13px var(--font-body); padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); }
+button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visible, .navlink:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 4px 18px; font: 500 12px var(--font-mono); color: var(--muted); }
+.stats b { color: var(--ink); font-weight: 600; }
+.load-indicator { display: inline-flex; align-items: center; gap: 6px; }
+.meter { width: 56px; height: 7px; background: var(--line); border-radius: 4px; overflow: hidden; display: inline-block; }
+.meter-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s, background 0.3s; }
+.meter-fill.warn { background: var(--visit); }
+.meter-fill.danger { background: var(--bad); }
+
+.canvas { min-height: 290px; padding: 14px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.canvas svg { display: block; margin: auto; max-width: 100%; flex: none; }
+.empty { margin: auto; color: var(--muted); font: 500 13px var(--font-mono); text-align: center; padding: 40px 12px; }
+
+/* svg hashing visual styles */
+.slot-rect { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; transition: fill 0.2s, stroke 0.2s; }
+.slot-rect.occupied { fill: var(--surface-2); stroke: var(--muted); }
+.slot-rect.visit { fill: var(--visit-soft); stroke: var(--visit); stroke-width: 2.2; }
+.slot-rect.hit, .slot-rect.new { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5; }
+.slot-rect.del { fill: var(--bad-soft); stroke: var(--bad); stroke-dasharray: 4 2; }
+.slot-text { font: 600 13px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.slot-idx { font: 500 10px var(--font-mono); fill: var(--muted); text-anchor: middle; }
+.probe-arrow { fill: none; stroke: var(--visit); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 4 3; }
+.cuckoo-kick-arrow { fill: none; stroke: var(--purple); stroke-width: 2.2; stroke-dasharray: 5 3; animation: dash 1s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -16; } }
+
+/* step log */
+.log { border-top: 1px solid var(--line); padding-top: 12px; min-height: 120px; }
+.log-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.log-head h3 { font-size: 14px; font-weight: 600; font-family: var(--font-body); }
+.chip { font: 600 11px var(--font-mono); padding: 2px 8px; border-radius: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+.chip.hit, .chip.new { background: var(--accent-soft); color: var(--accent); }
+.chip.miss, .chip.dup { background: var(--bad-soft); color: var(--bad); }
+.chip.del { background: var(--visit-soft); color: var(--visit-ink); }
+.chip.cuckoo { background: var(--purple-soft); color: var(--purple); }
+.log ol { margin: 0; padding-left: 24px; font: 400 12.5px/1.65 var(--font-mono); }
+.log li { padding-left: 4px; overflow-wrap: anywhere; }
+.log .hint { font: 400 13px var(--font-body); color: var(--muted); }
+.log .err { color: var(--bad); font: 500 13px var(--font-mono); }
+
+/* concept column */
+.concept { display: flex; flex-direction: column; min-width: 0; }
+.topic { padding: 18px 0; border-top: 1px solid var(--line); }
+.topic:first-child { border-top: 0; padding-top: 0; }
+.topic-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.topic h3 { font-size: 18px; font-weight: 700; }
+.topic p { margin-top: 8px; }
+.topic ul { margin: 8px 0 0; padding-left: 18px; }
+.topic li { margin-top: 4px; }
+.topic li::marker { color: var(--accent); }
+.topic dl { margin: 8px 0 0; display: grid; gap: 8px; }
+.topic dt { font: 600 13px var(--font-mono); color: var(--accent); }
+.topic dd { margin: 0; }
+.tries { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.done { appearance: none; display: inline-flex; gap: 7px; align-items: center; font: 500 12px var(--font-mono); padding: 4px 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--muted); cursor: pointer; white-space: nowrap; }
+.done .box { width: 12px; height: 12px; border: 1.5px solid var(--muted); border-radius: 3px; display: grid; place-items: center; }
+.done[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.done[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); }
+.done[aria-pressed="true"] .box::after { content: ""; width: 3px; height: 6px; border: solid var(--accent-ink); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg) translate(-1px, -1px); }
+
+.tablewrap { overflow-x: auto; margin-top: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+td code, .code { font: 500 12.5px var(--font-mono); }
+.topic table { min-width: 340px; }
+
+/* comparison */
+.compare { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); }
+.compare h2 { font-size: 22px; font-weight: 700; }
+.compare .tablewrap table { min-width: 720px; }
+.compare td:first-child { font-weight: 600; white-space: nowrap; }
+.compare tr.cur td { background: var(--accent-soft); }
+.note { margin-top: 10px; color: var(--muted); font-size: 13px; }
+
+:root[data-motion="off"] * { transition: none !important; animation: none !important; }
+.mnote { max-width: 34ch; font-size: 12px; color: var(--muted); }
+#motion b { font-weight: 600; color: var(--accent); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes segpop { 0% { transform: scale(0.6); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+.panel.enter .lede, .panel.enter .bench, .panel.enter .topic { animation: rise 0.42s cubic-bezier(.2,.7,.2,1) both; }
+.panel.enter .bench { animation-delay: 0.05s; }
+.panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
+.log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
+.seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
+</style>
+<div class="page">
+  <header class="top">
+    <div>
+      <div class="top-nav">
+        <span class="eyebrow">Module 2 of 5</span>
+        <a href="Module 1 Tree Lab.html" class="navlink" title="Previous Module: Trees">&larr; Module 1</a>
+        <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="Module 3 Graph Lab.html" class="navlink next" title="Next Module: Graphs">Next: Module 3 (Graphs) &rarr;</a>
+      </div>
+      <h1>Hash Table, Collision Resolution, Cuckoo Hashing, Bloom Filters</h1>
+    </div>
+    <div class="progress">
+      <div class="pbar" id="pbar" aria-hidden="true"></div>
+      <p><strong id="pcount">0/4</strong> topics studied</p>
+      <button class="btn sm" id="motion" aria-pressed="true">Animations <b class="mstate">On</b></button>
+      <p class="mnote" id="mnote" hidden>Your device asks for reduced motion, so animations start off. Switch them on here.</p>
+    </div>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs" aria-label="Hashing Topics"></nav>
+  <div id="panels"></div>
+
+  <section class="compare" aria-labelledby="cmp-h">
+    <h2 id="cmp-h">Side by side comparison</h2>
+    <p class="note">n is the number of stored keys, m is table capacity (or bit array size), and k is the number of hash functions. Load factor &alpha; = n / m determines collision frequency and cache performance.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Technique</th><th>Search Avg</th><th>Search Worst</th><th>Insert Avg</th><th>Delete Support</th><th>Space &amp; Cache</th><th>Key Trade-off / Bottleneck</th><th>Typical Use</th></tr></thead>
+        <tbody>
+          <tr data-row="hash-table"><td>Hash Table (Division / Mult)</td><td class="code">O(1)</td><td class="code">O(n)</td><td class="code">O(1)</td><td>Yes (O(1) avg)</td><td>O(m) slots. Cache friendly.</td><td>Hash distribution quality dictates clustering. High load factor degrades to O(n).</td><td>Standard in-memory associative arrays (dict, HashMap)</td></tr>
+          <tr data-row="collision"><td>Separate Chaining</td><td class="code">O(1 + &alpha;)</td><td class="code">O(n)</td><td class="code">O(1)</td><td>Yes (easy unlink)</td><td>O(m + n). Pointer overhead; poor cache locality.</td><td>Degrades gracefully when &alpha; &gt; 1, but pointer chasing creates CPU cache misses.</td><td>Java HashMap, systems where keys cannot be dropped</td></tr>
+          <tr data-row="collision"><td>Open Addressing (Linear / Quad / Double)</td><td class="code">O(1/(1-&alpha;))</td><td class="code">O(n)</td><td class="code">O(1/(1-&alpha;))</td><td>Needs Tombstones (⚰️)</td><td>O(m). Strict &alpha; &lt; 0.75. Excellent cache locality.</td><td>Primary/secondary clustering; deletions leave tombstones that slow down searches until rehash.</td><td>High-performance cache tables, Python dict, C++ abseil flat_hash_map</td></tr>
+          <tr data-row="cuckoo"><td>Cuckoo Hashing</td><td class="code">O(1) guaranteed</td><td class="code">O(1) guaranteed (max 2 reads)</td><td class="code">O(1) amortized</td><td>Yes (O(1) worst-case)</td><td>2 tables of size m. &alpha; must stay &le; 0.50.</td><td>Inserts can enter infinite eviction loops, requiring complete table rehash with new seeds.</td><td>Hardware routers, high-speed packet inspection, real-time lookups</td></tr>
+          <tr data-row="bloom"><td>Bloom Filter</td><td class="code">O(k)</td><td class="code">O(k)</td><td class="code">O(k)</td><td>No deletions (unless Counting Bloom)</td><td>Extremely compact (bits, no keys stored).</td><td>Probabilistic: false positives possible (zero false negatives). Cannot retrieve original keys.</td><td>Cassandra SSTable skip, Chromium safe URL filter, web cache gatekeepers</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="module-stepper" aria-label="Course Progression">
+    <div class="stepper-info">
+      <span class="stepper-step">Step 2 of 5 &bull; Hashing &amp; Bloom Filters</span>
+      <h3 class="stepper-title">Finished with Hashing? Continue to Graphs</h3>
+    </div>
+    <div class="stepper-actions">
+      <a href="Module 1 Tree Lab.html" class="btn sm">&larr; Prev: Module 1 (Trees)</a>
+      <a href="index.html" class="btn sm">🏠 Course Hub</a>
+      <a href="Module 3 Graph Lab.html" class="btn primary" style="font-weight:600;">Next: Module 3 (Graphs) &rarr;</a>
+    </div>
+  </footer>
+</div>
+<script>
+'use strict';
+/* =====================================================================
+   Module 2: Hashing Core Logic & Visual State Models
+   ===================================================================== */
+
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+/* Helper Hash Calculations */
+function hashDiv(k, m) { return ((k % m) + m) % m; }
+function hashMult(k, m) {
+  var A = 0.6180339887; // Knuth's golden ratio fractional part
+  var frac = (k * A) % 1;
+  if (frac < 0) frac += 1;
+  return Math.floor(m * frac);
+}
+function hashMidSquare(k, m) {
+  var sq = Math.abs(k * k);
+  var s = String(sq);
+  var mid = 0;
+  if (s.length <= 2) mid = sq;
+  else {
+    var start = Math.floor((s.length - 2) / 2);
+    mid = Number(s.substr(start, 2));
+  }
+  return mid % m;
+}
+function hashDJB2(val, m) {
+  var s = String(val);
+  var h = 5381;
+  for (var i = 0; i < s.length; i++) {
+    h = ((h << 5) + h) + s.charCodeAt(i);
+    h = h & 0x7fffffff;
+  }
+  return h % m;
+}
+
+/* ---------------------------------------------------------------------
+   1. Basic Hash Table with Pluggable Hash Functions
+   --------------------------------------------------------------------- */
+class SimpleHashTable {
+  constructor(m, fnKind) {
+    this.m = m || 11;
+    this.fnKind = fnKind || 'div';
+    this.slots = new Array(this.m).fill(null);
+    this.count = 0;
+  }
+  hash(k) {
+    if (this.fnKind === 'mult') return hashMult(k, this.m);
+    if (this.fnKind === 'mid') return hashMidSquare(k, this.m);
+    if (this.fnKind === 'djb2') return hashDJB2(k, this.m);
+    return hashDiv(k, this.m);
+  }
+  hashDetail(k) {
+    if (this.fnKind === 'mult') {
+      var A = 0.6180339887;
+      var frac = ((k * A) % 1).toFixed(4);
+      return { fn: 'h(' + k + ') = ⌊' + this.m + ' × (' + k + ' × 0.6180... mod 1)⌋', val: hashMult(k, this.m), step: 'fractional part: ' + frac };
+    }
+    if (this.fnKind === 'mid') {
+      var sq = k * k;
+      return { fn: 'h(' + k + ') = mid(' + k + '² = ' + sq + ') mod ' + this.m, val: hashMidSquare(k, this.m), step: 'squared = ' + sq };
+    }
+    if (this.fnKind === 'djb2') {
+      return { fn: 'djb2("' + k + '") mod ' + this.m, val: hashDJB2(k, this.m), step: '33-multiplier bit-shift' };
+    }
+    return { fn: 'h(' + k + ') = ' + k + ' mod ' + this.m, val: hashDiv(k, this.m), step: k + ' % ' + this.m + ' = ' + hashDiv(k, this.m) };
+  }
+  insert(k) {
+    var steps = [];
+    var det = this.hashDetail(k);
+    var slot = det.val;
+    steps.push('Compute hash: ' + det.fn + ' &rarr; slot ' + slot + ' (' + det.step + ').');
+    if (this.slots[slot] === k) {
+      steps.push('Key ' + k + ' is already stored in slot ' + slot + '. Duplicate ignored.');
+      return { steps: steps, status: 'dup', key: k, slot: slot, path: [slot] };
+    }
+    if (this.slots[slot] !== null) {
+      steps.push('Collision! Slot ' + slot + ' is currently occupied by ' + this.slots[slot] + '. In a direct-mapped table, this overwrites or requires a collision resolver.');
+    }
+    this.slots[slot] = k;
+    this.count = this.slots.filter(function (x) { return x !== null; }).length;
+    steps.push('Stored key ' + k + ' into slot ' + slot + '. Current load factor &alpha; = ' + (this.count / this.m).toFixed(2) + '.');
+    return { steps: steps, status: 'new', key: k, slot: slot, path: [slot] };
+  }
+  search(k) {
+    var steps = [];
+    var det = this.hashDetail(k);
+    var slot = det.val;
+    steps.push('Compute hash: ' + det.fn + ' &rarr; check slot ' + slot + '.');
+    if (this.slots[slot] === k) {
+      steps.push('Found key ' + k + ' at slot ' + slot + ' in 1 probe (O(1)).');
+      return { steps: steps, status: 'hit', key: k, slot: slot, path: [slot] };
+    }
+    if (this.slots[slot] === null) {
+      steps.push('Slot ' + slot + ' is empty: ' + k + ' is not in the table.');
+    } else {
+      steps.push('Slot ' + slot + ' contains ' + this.slots[slot] + ' &ne; ' + k + ': ' + k + ' is not in this direct bucket.');
+    }
+    return { steps: steps, status: 'miss', key: k, slot: slot, path: [slot] };
+  }
+  delete(k) {
+    var steps = [];
+    var det = this.hashDetail(k);
+    var slot = det.val;
+    steps.push('Compute hash: ' + det.fn + ' &rarr; target slot ' + slot + '.');
+    if (this.slots[slot] === k) {
+      this.slots[slot] = null;
+      this.count = this.slots.filter(function (x) { return x !== null; }).length;
+      steps.push('Key ' + k + ' removed from slot ' + slot + '. Slot is now empty.');
+      return { steps: steps, status: 'del', key: k, slot: slot, path: [slot] };
+    }
+    steps.push('Key ' + k + ' was not found at slot ' + slot + '. Nothing to delete.');
+    return { steps: steps, status: 'miss', key: k, slot: slot, path: [slot] };
+  }
+  keys() { return this.slots.filter(function (x) { return x !== null; }); }
+}
+
+/* ---------------------------------------------------------------------
+   2. Collision Resolution Table: Chaining vs Open Addressing
+   --------------------------------------------------------------------- */
+class CollisionTable {
+  constructor(m, mode) {
+    this.m = m || 11;
+    this.mode = mode || 'chain'; // 'chain', 'linear', 'quad', 'double'
+    this.init();
+  }
+  init() {
+    if (this.mode === 'chain') {
+      this.table = [];
+      for (var i = 0; i < this.m; i++) this.table.push([]);
+    } else {
+      this.table = new Array(this.m).fill(null); // null = empty, { k, tomb: true/false }
+    }
+  }
+  h1(k) { return hashDiv(k, this.m); }
+  h2(k) { return 1 + (k % (this.m - 1 || 1)); } // coprime secondary step
+  probe(k, i) {
+    var h0 = this.h1(k);
+    if (this.mode === 'linear') return (h0 + i) % this.m;
+    if (this.mode === 'quad') return (h0 + i * i) % this.m;
+    if (this.mode === 'double') return (h0 + i * this.h2(k)) % this.m;
+    return h0;
+  }
+  insert(k) {
+    var steps = [], visited = [];
+    if (this.mode === 'chain') {
+      var slot = this.h1(k);
+      visited.push(slot);
+      steps.push('Compute hash: h(' + k + ') = ' + k + ' mod ' + this.m + ' = ' + slot + '. Inspect chain at bucket ' + slot + '.');
+      var chain = this.table[slot];
+      for (var idx = 0; idx < chain.length; idx++) {
+        if (chain[idx] === k) {
+          steps.push('Key ' + k + ' already exists in chain ' + slot + ' at index ' + idx + '.');
+          return { steps: steps, status: 'dup', key: k, slot: slot, path: visited };
+        }
+      }
+      if (chain.length > 0) {
+        steps.push('Collision! Bucket ' + slot + ' already holds ' + chain.length + ' key(s): [' + chain.join(' &rarr; ') + ']. Appending ' + k + ' to chain.');
+      } else {
+        steps.push('Bucket ' + slot + ' is empty: ' + k + ' becomes head of chain.');
+      }
+      chain.push(k);
+      return { steps: steps, status: 'new', key: k, slot: slot, path: visited };
+    }
+    // Open addressing
+    var firstTomb = -1;
+    for (var i = 0; i < this.m; i++) {
+      var s = this.probe(k, i);
+      visited.push(s);
+      var entry = this.table[s];
+      var formula = (this.mode === 'linear')
+        ? '(' + this.h1(k) + ' + ' + i + ') mod ' + this.m
+        : (this.mode === 'quad')
+          ? '(' + this.h1(k) + ' + ' + i + '²) mod ' + this.m
+          : '(' + this.h1(k) + ' + ' + i + ' × ' + this.h2(k) + ') mod ' + this.m;
+      if (entry === null) {
+        var target = firstTomb !== -1 ? firstTomb : s;
+        if (firstTomb !== -1) steps.push('Probe ' + i + ' checked slot ' + s + ' (empty). Reusing earlier Tombstone slot ' + firstTomb + ' for insert.');
+        else steps.push('Probe ' + i + ': ' + formula + ' = slot ' + s + ' is empty. Insert ' + k + ' here.');
+        this.table[target] = { k: k, tomb: false };
+        return { steps: steps, status: 'new', key: k, slot: target, path: visited };
+      }
+      if (entry.tomb) {
+        steps.push('Probe ' + i + ': ' + formula + ' = slot ' + s + ' has a Tombstone (⚰️ DEL). Remember slot for potential insertion and keep probing.');
+        if (firstTomb === -1) firstTomb = s;
+      } else if (entry.k === k) {
+        steps.push('Probe ' + i + ': ' + formula + ' = slot ' + s + ' already contains key ' + k + '. Duplicate ignored.');
+        return { steps: steps, status: 'dup', key: k, slot: s, path: visited };
+      } else {
+        steps.push('Probe ' + i + ': ' + formula + ' = slot ' + s + ' occupied by ' + entry.k + '. Collision &rarr; continue probing.');
+      }
+    }
+    if (firstTomb !== -1) {
+      this.table[firstTomb] = { k: k, tomb: false };
+      steps.push('Table is full of active/tombstone slots, but reused Tombstone at slot ' + firstTomb + ' for ' + k + '.');
+      return { steps: steps, status: 'new', key: k, slot: firstTomb, path: visited };
+    }
+    steps.push('Table overflow! All ' + this.m + ' slots probed without finding an empty slot or tombstone.');
+    return { steps: steps, status: 'miss', key: k, slot: null, path: visited };
+  }
+  search(k) {
+    var steps = [], visited = [];
+    if (this.mode === 'chain') {
+      var slot = this.h1(k);
+      visited.push(slot);
+      steps.push('Compute hash: h(' + k + ') = ' + k + ' mod ' + this.m + ' = ' + slot + '. Traverse bucket chain.');
+      var chain = this.table[slot];
+      for (var idx = 0; idx < chain.length; idx++) {
+        if (chain[idx] === k) {
+          steps.push('Key ' + k + ' found at chain index ' + idx + ' (took ' + (idx + 1) + ' node traversal(s)).');
+          return { steps: steps, status: 'hit', key: k, slot: slot, path: visited };
+        }
+      }
+      steps.push('Searched entire chain of length ' + chain.length + ' in bucket ' + slot + ': ' + k + ' is absent.');
+      return { steps: steps, status: 'miss', key: k, slot: slot, path: visited };
+    }
+    // Open addressing
+    for (var i = 0; i < this.m; i++) {
+      var s = this.probe(k, i);
+      visited.push(s);
+      var entry = this.table[s];
+      var formula = (this.mode === 'linear')
+        ? '(' + this.h1(k) + ' + ' + i + ') mod ' + this.m
+        : (this.mode === 'quad')
+          ? '(' + this.h1(k) + ' + ' + i + '²) mod ' + this.m
+          : '(' + this.h1(k) + ' + ' + i + ' × ' + this.h2(k) + ') mod ' + this.m;
+      if (entry === null) {
+        steps.push('Probe ' + i + ': ' + formula + ' = slot ' + s + ' is empty. Search terminates: ' + k + ' is not in table.');
+        return { steps: steps, status: 'miss', key: k, slot: s, path: visited };
+      }
+      if (entry.tomb) {
+        steps.push('Probe ' + i + ': ' + formula + ' = slot ' + s + ' is a Tombstone (⚰️ DEL). Cannot stop here; search must continue!');
+      } else if (entry.k === k) {
+        steps.push('Probe ' + i + ': ' + formula + ' = slot ' + s + ' matches key ' + k + '! Found in ' + (i + 1) + ' probe(s).');
+        return { steps: steps, status: 'hit', key: k, slot: s, path: visited };
+      } else {
+        steps.push('Probe ' + i + ': ' + formula + ' = slot ' + s + ' holds ' + entry.k + ' &ne; ' + k + '. Collision &rarr; continue probing.');
+      }
+    }
+    steps.push('Searched all ' + this.m + ' slots: ' + k + ' is not in table.');
+    return { steps: steps, status: 'miss', key: k, slot: null, path: visited };
+  }
+  delete(k) {
+    var steps = [], visited = [];
+    if (this.mode === 'chain') {
+      var slot = this.h1(k);
+      visited.push(slot);
+      steps.push('Compute hash: h(' + k + ') = ' + slot + '. Search chain.');
+      var chain = this.table[slot];
+      var idx = chain.indexOf(k);
+      if (idx !== -1) {
+        chain.splice(idx, 1);
+        steps.push('Unlinked key ' + k + ' from bucket ' + slot + ' chain. Remaining nodes: ' + chain.length + '.');
+        return { steps: steps, status: 'del', key: k, slot: slot, path: visited };
+      }
+      steps.push('Key ' + k + ' not found in bucket ' + slot + ' chain.');
+      return { steps: steps, status: 'miss', key: k, slot: slot, path: visited };
+    }
+    for (var i = 0; i < this.m; i++) {
+      var s = this.probe(k, i);
+      visited.push(s);
+      var entry = this.table[s];
+      if (entry === null) {
+        steps.push('Reached empty slot ' + s + ': ' + k + ' is not in table. Nothing deleted.');
+        return { steps: steps, status: 'miss', key: k, slot: s, path: visited };
+      }
+      if (!entry.tomb && entry.k === k) {
+        entry.tomb = true;
+        entry.k = '⚰️ DEL';
+        steps.push('Found ' + k + ' at slot ' + s + '. Replaced with Tombstone (⚰️ DEL) so subsequent probe sequences remain intact!');
+        return { steps: steps, status: 'del', key: k, slot: s, path: visited };
+      }
+    }
+    steps.push('Key ' + k + ' not found after probing table.');
+    return { steps: steps, status: 'miss', key: k, slot: null, path: visited };
+  }
+  keys() {
+    if (this.mode === 'chain') {
+      var all = [];
+      this.table.forEach(function (c) { all.push.apply(all, c); });
+      return all;
+    }
+    return this.table.filter(function (e) { return e && !e.tomb; }).map(function (e) { return e.k; });
+  }
+}
+
+/* ---------------------------------------------------------------------
+   3. Cuckoo Hashing: 2 Tables, O(1) Worst-Case Lookup, Displacement Loops
+   --------------------------------------------------------------------- */
+class CuckooTable {
+  constructor(m) {
+    this.m = m || 8;
+    this.t1 = new Array(this.m).fill(null);
+    this.t2 = new Array(this.m).fill(null);
+    this.maxKicks = 16;
+  }
+  h1(k) { return ((k * 3 + 1) % this.m + this.m) % this.m; }
+  h2(k) { return ((k * 5 + 3) % this.m + this.m) % this.m; }
+  search(k) {
+    var steps = [], visited = [];
+    var s1 = this.h1(k);
+    visited.push({ t: 1, s: s1 });
+    steps.push('Check Table 1: h₁(k) = (3×' + k + '+1) mod ' + this.m + ' = slot ' + s1 + '.');
+    if (this.t1[s1] === k) {
+      steps.push('Found ' + k + ' in Table 1 at slot ' + s1 + ' in 1 read.');
+      return { steps: steps, status: 'hit', key: k, t: 1, slot: s1, path: visited };
+    }
+    var s2 = this.h2(k);
+    visited.push({ t: 2, s: s2 });
+    steps.push('Not in T1[' + s1 + ']. Check Table 2: h₂(k) = (5×' + k + '+3) mod ' + this.m + ' = slot ' + s2 + '.');
+    if (this.t2[s2] === k) {
+      steps.push('Found ' + k + ' in Table 2 at slot ' + s2 + ' in 2 reads.');
+      return { steps: steps, status: 'hit', key: k, t: 2, slot: s2, path: visited };
+    }
+    steps.push('Neither T1[' + s1 + '] nor T2[' + s2 + '] contains ' + k + '. Search finishes in exactly 2 reads (guaranteed O(1) worst case!).');
+    return { steps: steps, status: 'miss', key: k, t: null, slot: null, path: visited };
+  }
+  delete(k) {
+    var steps = [], visited = [];
+    var s1 = this.h1(k);
+    visited.push({ t: 1, s: s1 });
+    if (this.t1[s1] === k) {
+      this.t1[s1] = null;
+      steps.push('Found ' + k + ' in T1[' + s1 + ']. Removed instantly (O(1)).');
+      return { steps: steps, status: 'del', key: k, t: 1, slot: s1, path: visited };
+    }
+    var s2 = this.h2(k);
+    visited.push({ t: 2, s: s2 });
+    if (this.t2[s2] === k) {
+      this.t2[s2] = null;
+      steps.push('Found ' + k + ' in T2[' + s2 + ']. Removed instantly (O(1)).');
+      return { steps: steps, status: 'del', key: k, t: 2, slot: s2, path: visited };
+    }
+    steps.push('Key ' + k + ' is not in either of its two possible locations.');
+    return { steps: steps, status: 'miss', key: k, t: null, slot: null, path: visited };
+  }
+  insert(k) {
+    var steps = [], visited = [], kicks = [];
+    // duplicate check
+    if (this.t1[this.h1(k)] === k || this.t2[this.h2(k)] === k) {
+      steps.push('Key ' + k + ' already exists in the Cuckoo hash table.');
+      return { steps: steps, status: 'dup', key: k, path: visited, kicks: kicks };
+    }
+    var cur = k;
+    var tbl = 1;
+    for (var step = 0; step < this.maxKicks; step++) {
+      var slot = (tbl === 1) ? this.h1(cur) : this.h2(cur);
+      visited.push({ t: tbl, s: slot, k: cur });
+      var targetTable = (tbl === 1) ? this.t1 : this.t2;
+      var curName = 'T' + tbl + '[' + slot + ']';
+      if (targetTable[slot] === null) {
+        targetTable[slot] = cur;
+        steps.push('Placed key ' + cur + ' into empty slot ' + curName + '. Insertion complete.');
+        return { steps: steps, status: 'new', key: k, finalKey: cur, path: visited, kicks: kicks };
+      }
+      // Eviction!
+      var evicted = targetTable[slot];
+      targetTable[slot] = cur;
+      kicks.push({ fromT: tbl, fromS: slot, toT: (tbl === 1 ? 2 : 1), key: evicted, by: cur });
+      steps.push('Slot ' + curName + ' holds ' + evicted + '. Key ' + cur + ' kicks out ' + evicted + ' (Cuckoo displacement)!');
+      cur = evicted;
+      tbl = (tbl === 1) ? 2 : 1;
+    }
+    // Infinite cycle detected!
+    steps.push('⚠️ Cycle limit exceeded (' + this.maxKicks + ' displacements). An infinite eviction cycle occurred!');
+    steps.push('In production, this triggers an automatic Rehash: allocate new tables and pick fresh random hash seeds.');
+    return { steps: steps, status: 'miss', key: k, cycle: true, path: visited, kicks: kicks };
+  }
+  keys() {
+    var a = this.t1.filter(function (x) { return x !== null; });
+    var b = this.t2.filter(function (x) { return x !== null; });
+    return a.concat(b);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   4. Bloom Filter: Probabilistic Membership, No False Negatives
+   --------------------------------------------------------------------- */
+class BloomFilter {
+  constructor(m, k) {
+    this.m = m || 24;
+    this.k = k || 3;
+    this.bits = new Array(this.m).fill(0);
+    this.items = [];
+  }
+  hashSeeds(val) {
+    var s = String(val);
+    var num = 0;
+    for (var i = 0; i < s.length; i++) num = (num * 31 + s.charCodeAt(i)) & 0x7fffffff;
+    var res = [];
+    var primes = [7, 13, 17, 23, 29];
+    var offsets = [3, 5, 11, 19, 31];
+    for (var idx = 0; idx < this.k; idx++) {
+      var p = primes[idx % primes.length];
+      var o = offsets[idx % offsets.length];
+      res.push(((num * p + o) % this.m + this.m) % this.m);
+    }
+    return res;
+  }
+  add(val) {
+    var steps = [];
+    var hashes = this.hashSeeds(val);
+    steps.push('Hashing item "' + val + '" with ' + this.k + ' hash functions:');
+    var newlySet = 0;
+    for (var i = 0; i < hashes.length; i++) {
+      var bitIdx = hashes[i];
+      var was = this.bits[bitIdx];
+      this.bits[bitIdx] = 1;
+      if (was === 0) newlySet++;
+      steps.push('• h' + (i + 1) + '("' + val + '") &rarr; bit ' + bitIdx + (was === 1 ? ' (already 1)' : ' (flipped 0 &rarr; 1)'));
+    }
+    if (this.items.indexOf(String(val)) === -1) this.items.push(String(val));
+    var n = this.items.length;
+    var fpr = Math.pow(1 - Math.exp(-this.k * n / this.m), this.k);
+    steps.push('Added item. Filter now holds ~' + n + ' items with estimated False Positive Rate: ' + (fpr * 100).toFixed(2) + '%.');
+    return { steps: steps, status: 'new', key: val, hashes: hashes };
+  }
+  query(val) {
+    var steps = [];
+    var hashes = this.hashSeeds(val);
+    steps.push('Testing membership for "' + val + '" using ' + this.k + ' hash functions:');
+    var allOnes = true;
+    var zeroBits = [];
+    for (var i = 0; i < hashes.length; i++) {
+      var bitIdx = hashes[i];
+      var isOne = this.bits[bitIdx] === 1;
+      steps.push('• h' + (i + 1) + '("' + val + '") &rarr; bit ' + bitIdx + ': ' + (isOne ? '1 (set)' : '0 (UNSET)'));
+      if (!isOne) { allOnes = false; zeroBits.push(bitIdx); }
+    }
+    var actuallyIn = this.items.indexOf(String(val)) !== -1;
+    if (!allOnes) {
+      steps.push('&rarr; Result: DEFINITELY NOT IN SET (Bit ' + zeroBits.join(', ') + ' is 0). Zero false negatives guarantee!');
+      return { steps: steps, status: 'miss', key: val, hashes: hashes, fp: false };
+    }
+    if (actuallyIn) {
+      steps.push('&rarr; Result: PROBABLY IN SET (All ' + this.k + ' bits are 1). True positive: Item was previously inserted.');
+      return { steps: steps, status: 'hit', key: val, hashes: hashes, fp: false };
+    }
+    // False positive!
+    steps.push('⚠️ FALSE POSITIVE DETECTED! All ' + this.k + ' bits happen to be set to 1 by other items, even though "' + val + '" was never added.');
+    return { steps: steps, status: 'hit', key: val, hashes: hashes, fp: true };
+  }
+  keys() { return this.items.slice(); }
+}
+
+/* =====================================================================
+   SVG Rendering Engines
+   ===================================================================== */
+
+function renderSimpleTable(ht, res) {
+  var m = ht.m;
+  var slotW = 54, slotH = 46, pad = 8;
+  var totalW = m * (slotW + pad) + pad;
+  var totalH = 150;
+  var svg = '<svg width="' + totalW + '" height="' + totalH + '" viewBox="0 0 ' + totalW + ' ' + totalH + '" role="img" aria-label="Hash Table Array">';
+  
+  // Formula banner
+  var det = res && res.key !== undefined ? ht.hashDetail(res.key) : null;
+  if (det) {
+    svg += '<g transform="translate(' + (totalW / 2) + ', 22)">' +
+      '<rect x="-180" y="-16" width="360" height="28" rx="6" fill="var(--surface-2)" stroke="var(--line)" />' +
+      '<text x="0" y="2" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="600" fill="var(--accent)">' + esc(det.fn) + '</text>' +
+      '</g>';
+  } else {
+    svg += '<text x="' + (totalW / 2) + '" y="24" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--muted)">Hash Table Capacity m = ' + m + ' | Function: ' + ht.fnKind.toUpperCase() + '</text>';
+  }
+
+  // Draw Slots
+  var startY = 64;
+  for (var i = 0; i < m; i++) {
+    var x = pad + i * (slotW + pad);
+    var val = ht.slots[i];
+    var isHit = res && res.slot === i && (res.status === 'hit' || res.status === 'new');
+    var isMiss = res && res.slot === i && res.status === 'miss';
+    var isDup = res && res.slot === i && res.status === 'dup';
+    var cls = 'slot-rect' + (val !== null ? ' occupied' : '');
+    if (isHit) cls += ' hit';
+    if (isMiss) cls += ' visit';
+    if (isDup) cls += ' del';
+
+    svg += '<g class="ht-cell" data-slot="' + i + '" transform="translate(' + x + ',' + startY + ')">' +
+      '<rect class="' + cls + '" width="' + slotW + '" height="' + slotH + '" rx="6" />' +
+      '<text class="slot-idx" x="' + (slotW / 2) + '" y="-7">[' + i + ']</text>' +
+      '<text class="slot-text" x="' + (slotW / 2) + '" y="' + (slotH / 2) + '">' + (val !== null ? esc(val) : '<tspan fill="var(--muted)" font-size="11">—</tspan>') + '</text>' +
+      '</g>';
+
+    if (res && res.slot === i) {
+      // connecting indicator
+      svg += '<path d="M ' + (totalW / 2) + ' 36 Q ' + (x + slotW / 2) + ' 48 ' + (x + slotW / 2) + ' ' + (startY - 14) + '" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="3 2" marker-end="url(#arrow)" />';
+    }
+  }
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderCollisionTable(ct, res) {
+  var m = ct.m;
+  if (ct.mode === 'chain') {
+    var rowH = 42, slotW = 56, nodeW = 56, pad = 10;
+    var maxChain = 0;
+    for (var i = 0; i < m; i++) if (ct.table[i].length > maxChain) maxChain = ct.table[i].length;
+    var totalW = Math.max(480, slotW + (maxChain + 1) * (nodeW + 36) + 40);
+    var totalH = m * rowH + 30;
+    var svg = '<svg width="' + totalW + '" height="' + totalH + '" viewBox="0 0 ' + totalW + ' ' + totalH + '" role="img" aria-label="Separate Chaining Table">';
+    
+    for (var i = 0; i < m; i++) {
+      var y = 16 + i * rowH;
+      var chain = ct.table[i];
+      var isTargetSlot = res && res.slot === i;
+      
+      svg += '<g transform="translate(16,' + y + ')">' +
+        '<rect class="slot-rect' + (chain.length ? ' occupied' : '') + (isTargetSlot ? ' hit' : '') + '" width="' + slotW + '" height="32" rx="4" />' +
+        '<text class="slot-idx" x="' + (slotW / 2) + '" y="-3">[' + i + ']</text>' +
+        '<text class="slot-text" x="' + (slotW / 2) + '" y="16">' + (chain.length ? '&bull;' : '⊘') + '</text>' +
+        '</g>';
+
+      var currX = 16 + slotW;
+      for (var j = 0; j < chain.length; j++) {
+        var k = chain[j];
+        var isNodeHit = isTargetSlot && res.key === k;
+        svg += '<line x1="' + currX + '" y1="' + (y + 16) + '" x2="' + (currX + 26) + '" y2="' + (y + 16) + '" stroke="var(--muted)" stroke-width="1.8" />';
+        svg += '<polygon points="' + (currX + 26) + ',' + (y + 16) + ' ' + (currX + 20) + ',' + (y + 12) + ' ' + (currX + 20) + ',' + (y + 20) + '" fill="var(--muted)" />';
+        currX += 26;
+
+        svg += '<g transform="translate(' + currX + ',' + y + ')">' +
+          '<rect class="slot-rect' + (isNodeHit ? ' hit' : '') + '" width="' + nodeW + '" height="32" rx="4" />' +
+          '<text class="slot-text" x="' + (nodeW / 2) + '" y="16">' + esc(k) + '</text>' +
+          '</g>';
+        currX += nodeW;
+      }
+      // null terminator
+      svg += '<line x1="' + currX + '" y1="' + (y + 16) + '" x2="' + (currX + 18) + '" y2="' + (y + 16) + '" stroke="var(--line)" stroke-width="1.5" />';
+      svg += '<text x="' + (currX + 24) + '" y="' + (y + 20) + '" font-family="var(--font-mono)" font-size="12" fill="var(--muted)">NULL</text>';
+    }
+    svg += '</svg>';
+    return svg;
+  }
+
+  // Open Addressing (Linear, Quadratic, Double Hashing)
+  var slotW = 54, slotH = 46, pad = 8;
+  var totalW = m * (slotW + pad) + pad;
+  var totalH = 175;
+  var svg = '<svg width="' + totalW + '" height="' + totalH + '" viewBox="0 0 ' + totalW + ' ' + totalH + '" role="img" aria-label="Open Addressing Table">';
+  
+  var startY = 88;
+  for (var i = 0; i < m; i++) {
+    var x = pad + i * (slotW + pad);
+    var entry = ct.table[i];
+    var isHit = res && res.slot === i && (res.status === 'hit' || res.status === 'new');
+    var isDel = entry && entry.tomb;
+    var cls = 'slot-rect' + (entry && !entry.tomb ? ' occupied' : '') + (isDel ? ' del' : '') + (isHit ? ' hit' : '');
+
+    var textVal = '—';
+    if (entry) textVal = entry.tomb ? '⚰️' : entry.k;
+
+    svg += '<g transform="translate(' + x + ',' + startY + ')">' +
+      '<rect class="' + cls + '" width="' + slotW + '" height="' + slotH + '" rx="6" />' +
+      '<text class="slot-idx" x="' + (slotW / 2) + '" y="-7">[' + i + ']</text>' +
+      '<text class="slot-text" x="' + (slotW / 2) + '" y="' + (slotH / 2) + '" font-size="' + (isDel ? '14' : '13') + '">' + esc(textVal) + '</text>' +
+      '</g>';
+  }
+
+  // Draw Probe Arcs if present
+  if (res && res.path && res.path.length > 1) {
+    for (var p = 0; p < res.path.length - 1; p++) {
+      var fromSlot = res.path[p];
+      var toSlot = res.path[p + 1];
+      var x1 = pad + fromSlot * (slotW + pad) + slotW / 2;
+      var x2 = pad + toSlot * (slotW + pad) + slotW / 2;
+      var arcHeight = 30 + Math.min(45, Math.abs(toSlot - fromSlot) * 6);
+      var midX = (x1 + x2) / 2;
+      svg += '<path class="probe-arrow" d="M ' + x1 + ' ' + (startY - 12) + ' Q ' + midX + ' ' + (startY - 12 - arcHeight) + ' ' + x2 + ' ' + (startY - 12) + '" />';
+      svg += '<circle cx="' + midX + '" cy="' + (startY - 12 - arcHeight / 2) + '" r="9" fill="var(--visit-soft)" stroke="var(--visit)" stroke-width="1.2" />';
+      svg += '<text x="' + midX + '" y="' + (startY - 8 - arcHeight / 2) + '" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" font-weight="600" fill="var(--visit-ink)">' + (p + 1) + '</text>';
+    }
+  }
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderCuckoo(ct, res) {
+  var m = ct.m;
+  var slotW = 50, slotH = 44, pad = 6;
+  var tableW = m * (slotW + pad) + pad;
+  var totalW = Math.max(540, tableW);
+  var totalH = 260;
+  var svg = '<svg width="' + totalW + '" height="' + totalH + '" viewBox="0 0 ' + totalW + ' ' + totalH + '" role="img" aria-label="Cuckoo Hash Tables">';
+
+  // Table 1
+  svg += '<text x="14" y="24" font-family="var(--font-mono)" font-size="12" font-weight="600" fill="var(--accent)">Table 1: h₁(k) = (3k + 1) mod ' + m + '</text>';
+  var y1 = 44;
+  for (var i = 0; i < m; i++) {
+    var x = 14 + i * (slotW + pad);
+    var val = ct.t1[i];
+    var isHit = res && res.t === 1 && res.slot === i;
+    var cls = 'slot-rect' + (val !== null ? ' occupied' : '') + (isHit ? ' hit' : '');
+    svg += '<g transform="translate(' + x + ',' + y1 + ')">' +
+      '<rect class="' + cls + '" width="' + slotW + '" height="' + slotH + '" rx="5" />' +
+      '<text class="slot-idx" x="' + (slotW / 2) + '" y="-6">T1[' + i + ']</text>' +
+      '<text class="slot-text" x="' + (slotW / 2) + '" y="' + (slotH / 2) + '">' + (val !== null ? esc(val) : '<tspan fill="var(--muted)">—</tspan>') + '</text>' +
+      '</g>';
+  }
+
+  // Table 2
+  var y2 = 160;
+  svg += '<text x="14" y="' + (y2 - 20) + '" font-family="var(--font-mono)" font-size="12" font-weight="600" fill="var(--purple)">Table 2: h₂(k) = (5k + 3) mod ' + m + '</text>';
+  for (var j = 0; j < m; j++) {
+    var x = 14 + j * (slotW + pad);
+    var val = ct.t2[j];
+    var isHit = res && res.t === 2 && res.slot === j;
+    var cls = 'slot-rect' + (val !== null ? ' occupied' : '') + (isHit ? ' hit' : '');
+    svg += '<g transform="translate(' + x + ',' + y2 + ')">' +
+      '<rect class="' + cls + '" width="' + slotW + '" height="' + slotH + '" rx="5" />' +
+      '<text class="slot-idx" x="' + (slotW / 2) + '" y="-6">T2[' + j + ']</text>' +
+      '<text class="slot-text" x="' + (slotW / 2) + '" y="' + (slotH / 2) + '">' + (val !== null ? esc(val) : '<tspan fill="var(--muted)">—</tspan>') + '</text>' +
+      '</g>';
+  }
+
+  // Displacement Kicks Arrows
+  if (res && res.kicks && res.kicks.length > 0) {
+    for (var k = 0; k < res.kicks.length; k++) {
+      var kick = res.kicks[k];
+      var xStart = 14 + kick.fromS * (slotW + pad) + slotW / 2;
+      var yStart = (kick.fromT === 1) ? (y1 + slotH) : y2;
+      var xEnd = 14 + (kick.toT === 1 ? ct.h1(kick.key) : ct.h2(kick.key)) * (slotW + pad) + slotW / 2;
+      var yEnd = (kick.toT === 1) ? (y1 + slotH) : y2;
+      var midY = (y1 + y2 + slotH) / 2;
+      svg += '<path class="cuckoo-kick-arrow" d="M ' + xStart + ' ' + yStart + ' C ' + xStart + ' ' + midY + ', ' + xEnd + ' ' + midY + ', ' + xEnd + ' ' + yEnd + '" />';
+    }
+  }
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderBloom(bf, res) {
+  var m = bf.m;
+  var bitW = 28, bitH = 36, pad = 4;
+  var totalW = m * (bitW + pad) + pad + 20;
+  var totalH = 180;
+  var svg = '<svg width="' + totalW + '" height="' + totalH + '" viewBox="0 0 ' + totalW + ' ' + totalH + '" role="img" aria-label="Bloom Filter Bit Array">';
+
+  // Hash emitter badges
+  var hashY = 24;
+  var colors = ['var(--accent)', 'var(--purple)', 'var(--visit)', '#2563eb'];
+  var hxStep = totalW / (bf.k + 1);
+  for (var k = 0; k < bf.k; k++) {
+    var hx = (k + 1) * hxStep;
+    svg += '<g transform="translate(' + hx + ',' + hashY + ')">' +
+      '<rect x="-30" y="-14" width="60" height="26" rx="13" fill="var(--surface-2)" stroke="' + colors[k % colors.length] + '" stroke-width="1.8" />' +
+      '<text x="0" y="4" text-anchor="middle" font-family="var(--font-mono)" font-size="11" font-weight="600" fill="' + colors[k % colors.length] + '">h' + (k + 1) + '(x)</text>' +
+      '</g>';
+
+    if (res && res.hashes && res.hashes[k] !== undefined) {
+      var targetBit = res.hashes[k];
+      var bx = 10 + pad + targetBit * (bitW + pad) + bitW / 2;
+      svg += '<line x1="' + hx + '" y1="' + (hashY + 14) + '" x2="' + bx + '" y2="92" stroke="' + colors[k % colors.length] + '" stroke-width="1.8" stroke-dasharray="3 2" />';
+    }
+  }
+
+  // Bit Array
+  var bitY = 104;
+  for (var i = 0; i < m; i++) {
+    var bx = 10 + pad + i * (bitW + pad);
+    var bitVal = bf.bits[i];
+    var isTarget = res && res.hashes && res.hashes.indexOf(i) !== -1;
+    var fill = bitVal === 1 ? 'var(--accent-soft)' : 'var(--surface)';
+    var stroke = bitVal === 1 ? 'var(--accent)' : 'var(--line)';
+    if (isTarget) {
+      fill = bitVal === 1 ? 'var(--accent)' : 'var(--bad-soft)';
+      stroke = bitVal === 1 ? 'var(--accent-ink)' : 'var(--bad)';
+    }
+
+    svg += '<g transform="translate(' + bx + ',' + bitY + ')">' +
+      '<rect width="' + bitW + '" height="' + bitH + '" rx="4" fill="' + fill + '" stroke="' + stroke + '" stroke-width="1.5" />' +
+      '<text x="' + (bitW / 2) + '" y="-5" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--muted)">' + i + '</text>' +
+      '<text x="' + (bitW / 2) + '" y="' + (bitH / 2 + 1) + '" text-anchor="middle" dominant-baseline="central" font-family="var(--font-mono)" font-size="14" font-weight="600" fill="' + (isTarget && bitVal === 1 ? 'var(--accent-ink)' : 'var(--ink)') + '">' + bitVal + '</text>' +
+      '</g>';
+  }
+
+  // Verdict banner if query
+  if (res && res.fp !== undefined) {
+    var vText = res.status === 'hit' ? (res.fp ? '⚠️ FALSE POSITIVE: All bits match, but key was never added!' : '✓ PROBABLY PRESENT: All bits are 1') : '✕ DEFINITELY ABSENT: Contains at least one 0 bit';
+    var vFill = res.status === 'hit' ? (res.fp ? 'var(--visit)' : 'var(--accent)') : 'var(--bad)';
+    svg += '<text x="' + (totalW / 2) + '" y="166" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="600" fill="' + vFill + '">' + vText + '</text>';
+  }
+
+  svg += '</svg>';
+  return svg;
+}
+
+/* =====================================================================
+   Topics Definition & Curriculum Specification (0/4 Total)
+   ===================================================================== */
+
+var HASH_FUNC_TABLE = '<div class="tablewrap"><table><thead><tr><th>Hash Method</th><th>Formula</th><th>Key Characteristics</th><th>Best Suited For</th></tr></thead><tbody>' +
+  '<tr><td>Division</td><td class="code">h(k) = k mod m</td><td>Fastest. Best when m is prime not near power of 2.</td><td>General integer keys</td></tr>' +
+  '<tr><td>Multiplication</td><td class="code">⌊m(k·A mod 1)⌋</td><td>Knuth A ≈ 0.618033. Good spread regardless of m.</td><td>Non-prime table sizes</td></tr>' +
+  '<tr><td>Mid-Square</td><td class="code">mid(k²) mod m</td><td>Squares key, extracts middle r bits. Avalanching.</td><td>Keys with shared prefixes</td></tr>' +
+  '<tr><td>DJB2 (Strings)</td><td class="code">hash×33 + c</td><td>Daniel J. Bernstein algorithm. Excellent bit mix.</td><td>ASCII / UTF-8 Strings</td></tr>' +
+  '</tbody></table></div>';
+
+var COLLISION_TABLE = '<div class="tablewrap"><table><thead><tr><th>Strategy</th><th>Formula</th><th>Clustering Tendency</th><th>Deletion Cost</th></tr></thead><tbody>' +
+  '<tr><td>Separate Chaining</td><td class="code">bucket[h(k)] &rarr; linked list</td><td>None. &alpha; can exceed 1.0.</td><td>O(1) unlink</td></tr>' +
+  '<tr><td>Linear Probing</td><td class="code">(h(k) + i) mod m</td><td>Severe Primary Clustering (long continuous runs).</td><td>Tombstone required</td></tr>' +
+  '<tr><td>Quadratic Probing</td><td class="code">(h(k) + i²) mod m</td><td>Secondary Clustering (identical initial hashes).</td><td>Tombstone required</td></tr>' +
+  '<tr><td>Double Hashing</td><td class="code">(h₁(k) + i·h₂(k)) mod m</td><td>Virtually zero clustering. Best open addressing.</td><td>Tombstone required</td></tr>' +
+  '</tbody></table></div>';
+
+var CUCKOO_CASES = '<div class="tablewrap"><table><thead><tr><th>Feature</th><th>Cuckoo Hashing Property</th><th>Production Guarantee</th></tr></thead><tbody>' +
+  '<tr><td>Worst-Case Search</td><td>O(1) &mdash; Exactly at most 2 slot reads</td><td>Deterministic hardware bounds</td></tr>' +
+  '<tr><td>Worst-Case Deletion</td><td>O(1) &mdash; Locate in T1 or T2, set to null</td><td>No tombstones needed</td></tr>' +
+  '<tr><td>Insertion Dynamics</td><td>Displacement cascade (kicking keys)</td><td>Rehash if cycle exceeds threshold</td></tr>' +
+  '<tr><td>Load Threshold</td><td>&alpha; &le; 0.50 (for 2 tables)</td><td>Requires ~50% reserve capacity</td></tr>' +
+  '</tbody></table></div>';
+
+var BLOOM_FORMULAS = '<div class="tablewrap"><table><thead><tr><th>Metric</th><th>Mathematical Formula</th><th>Rule of Thumb</th></tr></thead><tbody>' +
+  '<tr><td>Optimal Hashes k</td><td class="code">k = (m/n) · ln(2)</td><td>k ≈ 0.693 × (bits per item)</td></tr>' +
+  '<tr><td>False Positive Rate p</td><td class="code">p ≈ (1 - e<sup>-kn/m</sup>)<sup>k</sup></td><td>~1% at 10 bits/item (k=7)</td></tr>' +
+  '<tr><td>False Negatives</td><td class="code">Strictly 0.00%</td><td>Guaranteed impossible</td></tr>' +
+  '<tr><td>Deletion Rule</td><td>Impossible in standard filter</td><td>Use Counting Bloom Filter (CBF)</td></tr>' +
+  '</tbody></table></div>';
+
+var TOPICS = [
+  {
+    id: 'hash-table', hash: 'hash-table', tab: 'Hash Table & Functions', kind: 'hash-table',
+    lede: 'A hash table maps arbitrary keys into fixed table indices in O(1) expected time. The hash function must distribute keys uniformly to prevent clustering.',
+    subs: [
+      {
+        id: 'ht-func', title: 'Hash Table & Hash Functions',
+        lead: 'Direct addressing requires massive memory for sparse universes. Hashing compresses the key space into 0...m-1 via deterministic mathematical reduction.',
+        points: [
+          'Uniform Hashing Assumption: Each key is equally likely to hash into any of the m slots.',
+          'Division Method: h(k) = k mod m. Fast, but m must be a prime number away from powers of 2.',
+          'Knuth Multiplication: h(k) = ⌊m(kA mod 1)⌋ with A ≈ 0.6180339887 (Golden Ratio). Insensitive to choice of m.',
+          'Load Factor &alpha; = n / m. When &alpha; exceeds 0.75, table capacity should double (Rehash).'
+        ],
+        extra: HASH_FUNC_TABLE,
+        tries: [
+          { label: 'Insert 45 (mod 11 = 1)', reset: true, seq: [['insert', 45]] },
+          { label: 'Insert 34 (mod 11 = 1 Collision)', reset: false, seq: [['insert', 34]] },
+          { label: 'Search 45 (1 probe)', reset: false, seq: [['search', 45]] }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'collision', hash: 'collision-resolution', tab: 'Collision Resolution', kind: 'collision',
+    lede: 'By the Pigeonhole Principle, collisions are mathematically inevitable. Separate Chaining stores linked lists outside the table, while Open Addressing probes internal slots.',
+    subs: [
+      {
+        id: 'col-res', title: 'Collision Resolution Strategies',
+        lead: 'Compare linked list chaining against open addressing (Linear Probing, Quadratic Probing, and Double Hashing).',
+        points: [
+          'Separate Chaining: Buckets store linked lists. Easy deletion and &alpha; can exceed 1, but pointer chasing hurts CPU cache.',
+          'Linear Probing: h(k, i) = (h₀ + i) mod m. Suffers from Primary Clustering (contiguous blocks merge and snowball).',
+          'Quadratic Probing: h(k, i) = (h₀ + i²) mod m. Jumps over clusters, but keys with identical initial hashes still collide (Secondary Clustering).',
+          'Double Hashing: h(k, i) = (h₁(k) + i·h₂(k)) mod m. The secondary hash h₂(k) ensures distinct probe sequences for each key.',
+          'Tombstones (⚰️ DEL): Open addressing cannot simply erase deleted slots; searches must probe past tombstones, while insertions can reuse them.'
+        ],
+        extra: COLLISION_TABLE,
+        tries: [
+          { label: 'Primary Cluster (12, 23, 34)', reset: true, seq: [['insert', 12], ['insert', 23], ['insert', 34]] },
+          { label: 'Tombstone Delete 23 then Search 34', reset: false, seq: [['delete', 23], ['search', 34]] },
+          { label: 'Search 34 (Double Hashing)', reset: false, seq: [['search', 34]] }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'cuckoo', hash: 'cuckoo-hashing', tab: 'Cuckoo Hashing', kind: 'cuckoo',
+    lede: 'Named after the cuckoo bird that evicts other eggs from nests, Cuckoo Hashing uses two tables and two hash functions to guarantee O(1) worst-case lookup in at most 2 reads.',
+    subs: [
+      {
+        id: 'cuckoo-hash', title: 'Cuckoo Hashing & Displacements',
+        lead: 'A key can ONLY reside in T1[h₁(k)] or T2[h₂(k)]. Lookup checks at most 2 slots. Insertions displace resident keys in cascading eviction chains.',
+        points: [
+          'Guaranteed O(1) Worst-Case Lookup: Look at T1[h₁(k)], then T2[h₂(k)]. If neither matches, the key is absent. Never more than 2 reads.',
+          'Cuckoo Displacement: If T1[h₁(k)] is occupied by key Y, the new key displaces Y. Key Y must now move to its alternate spot in T2[h₂(Y)].',
+          'Cycle Detection: If a cascade exceeds a displacement threshold (e.g. 16 kicks), an infinite eviction cycle has occurred.',
+          'Rehash: On cycle detection, new hash function seeds are chosen and the entire table is rehashed.',
+          'Load Factor Limit: Table capacity is typically kept at &alpha; &le; 0.50 to prevent frequent displacement cycles.'
+        ],
+        extra: CUCKOO_CASES,
+        tries: [
+          { label: 'Direct Placements (10, 15)', reset: true, seq: [['insert', 10], ['insert', 15]] },
+          { label: 'Single Kick (Insert 18 &rarr; kicks 10 to T2)', reset: false, seq: [['insert', 18]] },
+          { label: 'Cascade Kicks (Insert 26)', reset: false, seq: [['insert', 26]] }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'bloom', hash: 'bloom-filter', tab: 'Bloom Filters', kind: 'bloom',
+    lede: 'A space-efficient probabilistic data structure used to test set membership. It answers "Definitely Not in Set" or "Probably in Set", with zero false negatives.',
+    subs: [
+      {
+        id: 'bloom-filter', title: 'Bloom Filters & Probabilistic Sets',
+        lead: 'Instead of storing full keys, a Bloom Filter uses an m-bit array and k independent hash functions. Ideal for disk-read and network pre-filters.',
+        points: [
+          'Zero False Negatives: If any of the k hashed bits is 0, the item is 100% definitely NOT in the set.',
+          'False Positives Possible: If all k bits are 1, the item is PROBABLY present. Bits might have been set by other overlapping keys.',
+          'No Deletions Allowed: Clearing a 1 bit risks deleting other items that also hash to that index (Counting Bloom Filters use 4-bit counters to allow deletion).',
+          'Production Architectures: Google Bigtable, Apache Cassandra (skip disk reads for absent rows), Chromium (malicious URL blocklists), Akamai CDN.'
+        ],
+        extra: BLOOM_FORMULAS,
+        tries: [
+          { label: 'Add {10, 25, 42}', reset: true, seq: [['insert', 10], ['insert', 25], ['insert', 42]] },
+          { label: 'Query 10 (True Positive)', reset: false, seq: [['search', 10]] },
+          { label: 'Query 99 (Definite Negative)', reset: false, seq: [['search', 99]] }
+        ]
+      }
+    ]
+  }
+];
+
+var ALL_SUBS = [];
+TOPICS.forEach(function (t) { t.subs.forEach(function (s) { ALL_SUBS.push(s.id); }); });
+
+/* =====================================================================
+   App State & Persistence
+   ===================================================================== */
+var STORE = 'hashing_module_done';
+var MSTORE = 'hashing_module_motion';
+var done = {};
+try { done = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) { done = {}; }
+function save() { try { localStorage.setItem(STORE, JSON.stringify(done)); } catch (e) { /* storage disabled */ } }
+
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var motionOn = true;
+try {
+  var savedM = localStorage.getItem(MSTORE);
+  if (savedM !== null) motionOn = savedM === 'on';
+  else if (reduce) motionOn = false;
+} catch (e) { /* no storage */ }
+
+function applyMotion() {
+  document.documentElement.setAttribute('data-motion', motionOn ? 'on' : 'off');
+  var b = document.getElementById('motion');
+  if (b) {
+    b.setAttribute('aria-pressed', motionOn ? 'true' : 'false');
+    b.querySelector('.mstate').textContent = motionOn ? 'On' : 'Off';
+  }
+  var mn = document.getElementById('mnote');
+  if (mn) mn.hidden = !reduce;
+}
+
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+/* =====================================================================
+   Panel HTML Generation
+   ===================================================================== */
+var panels = {};
+
+function panelHTML(t) {
+  var id = t.id;
+  var extras = '';
+  if (id === 'hash-table') {
+    extras = '<div class="row2"><span class="lbl">Function</span>' +
+      '<span class="segctl" role="group" aria-label="Hash Function">' +
+      '<button data-fn="div" aria-pressed="true">Division (mod m)</button>' +
+      '<button data-fn="mult" aria-pressed="false">Multiplication (Knuth A)</button>' +
+      '<button data-fn="mid" aria-pressed="false">Mid-Square</button>' +
+      '<button data-fn="djb2" aria-pressed="false">DJB2</button></span>' +
+      '<label class="lbl" for="size-' + id + '">Size m</label>' +
+      '<select id="size-' + id + '" data-size><option value="7">7</option><option value="11" selected>11</option><option value="13">13</option><option value="17">17</option></select>' +
+      '<button class="btn sm" data-preset="ht-dist">Preset: 5 keys</button></div>';
+  } else if (id === 'collision') {
+    extras = '<div class="row2"><span class="lbl">Resolution</span>' +
+      '<span class="segctl" role="group" aria-label="Collision Strategy">' +
+      '<button data-mode="chain" aria-pressed="true">Chaining</button>' +
+      '<button data-mode="linear" aria-pressed="false">Linear</button>' +
+      '<button data-mode="quad" aria-pressed="false">Quadratic</button>' +
+      '<button data-mode="double" aria-pressed="false">Double Hashing</button></span>' +
+      '<label class="lbl" for="size-' + id + '">Size m</label>' +
+      '<select id="size-' + id + '" data-size><option value="7">7</option><option value="11" selected>11</option><option value="13">13</option></select>' +
+      '<button class="btn sm" data-preset="col-cluster">Cluster Demo (12, 23, 34)</button></div>';
+  } else if (id === 'cuckoo') {
+    extras = '<div class="row2"><span class="lbl">Table Size</span>' +
+      '<select id="size-' + id + '" data-size><option value="6">6 slots each</option><option value="8" selected>8 slots each</option><option value="10">10 slots each</option></select>' +
+      '<button class="btn sm" data-preset="cuckoo-kick">Kick Demo (10, 18, 26)</button>' +
+      '<button class="btn sm" data-preset="cuckoo-cycle">Cycle Demo</button></div>';
+  } else if (id === 'bloom') {
+    extras = '<div class="row2"><span class="lbl">Bits m</span>' +
+      '<select id="size-' + id + '" data-size><option value="16">16 bits</option><option value="24" selected>24 bits</option><option value="32">32 bits</option></select>' +
+      '<label class="lbl" for="k-' + id + '">Hashes k</label>' +
+      '<select id="k-' + id + '" data-k><option value="2">k = 2</option><option value="3" selected>k = 3</option><option value="4">k = 4</option></select>' +
+      '<button class="btn sm" data-preset="bloom-fp">False Positive Demo</button></div>';
+  }
+
+  var concept = t.subs.map(function (s, si) {
+    var pts = s.points && s.points.length ? '<ul>' + s.points.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '';
+    var tries = s.tries && s.tries.length ? '<div class="tries">' + s.tries.map(function (tr, i) {
+      return '<button class="btn sm" data-try="' + s.id + ':' + i + '">Try: ' + esc(tr.label) + '</button>';
+    }).join('') + '</div>' : '';
+    return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
+      '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
+      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+  }).join('');
+
+  var actionLabel = id === 'bloom' ? 'Add' : 'Insert';
+  var queryLabel = id === 'bloom' ? 'Query' : 'Search';
+  var delBtn = id === 'bloom' ? '' : '<button class="btn" data-act="delete">Delete</button>';
+
+  return '<section class="panel" id="panel-' + id + '" role="tabpanel" aria-labelledby="tab-' + id + '" hidden>' +
+    '<p class="lede">' + esc(t.lede) + '</p>' +
+    '<div class="layout"><div class="bench">' +
+    '<div class="toolbar">' +
+    '<label class="keyfield">Key<input id="key-' + id + '" type="text" placeholder="Number or text" value="' + (id === 'bloom' ? 'apple' : '34') + '"></label>' +
+    '<button class="btn primary" data-act="insert">' + actionLabel + '</button>' +
+    delBtn +
+    '<button class="btn" data-act="search">' + queryLabel + '</button>' +
+    '<span class="sp"></span>' +
+    '<button class="btn" data-act="random">Random</button>' +
+    '<button class="btn" data-act="reset">Reset</button>' +
+    '<button class="btn" data-act="clear">Clear</button></div>' +
+    extras +
+    '<div class="stats" data-stats></div>' +
+    '<div class="canvas" data-canvas></div>' +
+    '<div class="log" data-log aria-live="polite"></div>' +
+    '</div><div class="concept">' + concept + '</div></div></section>';
+}
+
+/* =====================================================================
+   Workbench Engine: State, Render, Step-by-Step Traversal
+   ===================================================================== */
+
+function makeModel(p) {
+  if (p.topic.id === 'hash-table') return new SimpleHashTable(p.m || 11, p.fnKind || 'div');
+  if (p.topic.id === 'collision') return new CollisionTable(p.m || 11, p.mode || 'chain');
+  if (p.topic.id === 'cuckoo') return new CuckooTable(p.m || 8);
+  if (p.topic.id === 'bloom') return new BloomFilter(p.m || 24, p.k || 3);
+  return null;
+}
+
+function statsHTML(p) {
+  var id = p.topic.id;
+  var items = [];
+  if (id === 'hash-table') {
+    var n = p.model.count, m = p.model.m;
+    var alpha = (n / m).toFixed(2);
+    var meterCls = alpha > 0.75 ? 'danger' : (alpha > 0.5 ? 'warn' : '');
+    items = [
+      ['Stored Keys', n],
+      ['Capacity m', m],
+      ['Load Factor &alpha;', '<span class="load-indicator">' + alpha + ' <span class="meter"><span class="meter-fill ' + meterCls + '" style="width:' + Math.min(100, Math.round(alpha * 100)) + '%"></span></span></span>'],
+      ['Hash Function', p.fnKind.toUpperCase()]
+    ];
+  } else if (id === 'collision') {
+    var k = p.model.keys();
+    var alpha = (k.length / p.model.m).toFixed(2);
+    items = [
+      ['Strategy', p.mode.toUpperCase()],
+      ['Capacity m', p.model.m],
+      ['Active Keys', k.length],
+      ['Load Factor &alpha;', alpha]
+    ];
+  } else if (id === 'cuckoo') {
+    var k1 = p.model.t1.filter(function (x) { return x !== null; }).length;
+    var k2 = p.model.t2.filter(function (x) { return x !== null; }).length;
+    var alpha = ((k1 + k2) / (p.model.m * 2)).toFixed(2);
+    items = [
+      ['T1 Keys', k1 + '/' + p.model.m],
+      ['T2 Keys', k2 + '/' + p.model.m],
+      ['Total Keys', k1 + k2],
+      ['Combined &alpha;', alpha],
+      ['Worst-Case Lookup', '<b>2 reads</b> (O(1))']
+    ];
+  } else if (id === 'bloom') {
+    var n = p.model.items.length, m = p.model.m, k = p.model.k;
+    var ones = p.model.bits.filter(function (b) { return b === 1; }).length;
+    var fpr = (Math.pow(1 - Math.exp(-k * n / m), k) * 100).toFixed(2);
+    items = [
+      ['Bit Array m', m],
+      ['Hash Count k', k],
+      ['Items Added', n],
+      ['Bits Set', ones + '/' + m + ' (' + Math.round(ones / m * 100) + '%)'],
+      ['Estimated FPR', fpr + '%']
+    ];
+  }
+  return items.map(function (x) { return x[0] + ' <b>' + x[1] + '</b>'; }).join('<span aria-hidden="true"> &bull; </span>');
+}
+
+function draw(p, res) {
+  var id = p.topic.id;
+  var svg = '';
+  if (id === 'hash-table') svg = renderSimpleTable(p.model, res);
+  else if (id === 'collision') svg = renderCollisionTable(p.model, res);
+  else if (id === 'cuckoo') svg = renderCuckoo(p.model, res);
+  else if (id === 'bloom') svg = renderBloom(p.model, res);
+  p.canvas.innerHTML = svg;
+  p.stats.innerHTML = statsHTML(p);
+}
+
+var LABEL = { hit: 'Found', 'new': 'Inserted', miss: 'Not found', del: 'Deleted', dup: 'Already exists' };
+var VERB = { insert: 'Insert', delete: 'Delete', search: 'Search' };
+
+function showLog(p, act, key, res) {
+  var verb = (p.topic.id === 'bloom') ? (act === 'insert' ? 'Add' : 'Query') : VERB[act];
+  var chipClass = res.status;
+  var chipLabel = LABEL[res.status];
+  if (p.topic.id === 'bloom' && res.fp !== undefined) {
+    if (res.fp) { chipClass = 'cuckoo'; chipLabel = 'False Positive'; }
+    else if (res.status === 'hit') { chipClass = 'hit'; chipLabel = 'Probable Match'; }
+    else { chipClass = 'miss'; chipLabel = 'Definite Negative'; }
+  } else if (res.cycle) {
+    chipClass = 'dup';
+    chipLabel = 'Cycle Detected';
+  }
+  p.log.innerHTML = '<div class="log-head"><h3>' + verb + ' "' + esc(key) + '"</h3><span class="chip ' + chipClass + '">' + chipLabel + '</span></div>' +
+    '<ol>' + res.steps.map(function (s, i) { return '<li style="--i:' + i + '">' + s + '</li>'; }).join('') + '</ol>';
+}
+
+function hint(p, msg, err) {
+  p.log.innerHTML = '<p class="' + (err ? 'err' : 'hint') + '">' + esc(msg) + '</p>';
+}
+
+function exec(p, act, key, silent) {
+  var res = (p.topic.id === 'bloom')
+    ? (act === 'insert' ? p.model.add(key) : p.model.query(key))
+    : p.model[act](key);
+  if (!silent) {
+    draw(p, res);
+    showLog(p, act, key, res);
+  }
+  return res;
+}
+
+function runSeq(p, seq) {
+  seq.forEach(function (st, i) {
+    var last = i === seq.length - 1;
+    exec(p, st[0], st[1], !last);
+  });
+  var lastKey = seq[seq.length - 1][1];
+  p.input.value = lastKey;
+}
+
+function readKey(p) {
+  var raw = p.input.value.trim();
+  if (raw === '') {
+    hint(p, 'Enter a key (number or short text).', true);
+    p.input.focus();
+    return null;
+  }
+  var n = Number(raw);
+  if (!isNaN(n) && isFinite(n)) return n;
+  return raw;
+}
+
+function seed(p) {
+  p.model = makeModel(p);
+  var id = p.topic.id;
+  if (id === 'hash-table') {
+    [12, 25, 45, 68].forEach(function (k) { p.model.insert(k); });
+  } else if (id === 'collision') {
+    [11, 22, 33, 44].forEach(function (k) { p.model.insert(k); });
+  } else if (id === 'cuckoo') {
+    [10, 15, 22].forEach(function (k) { p.model.insert(k); });
+  } else if (id === 'bloom') {
+    ['apple', 'banana', 'cherry'].forEach(function (k) { p.model.add(k); });
+  }
+}
+
+function onAct(p, act) {
+  if (act === 'reset') {
+    seed(p); draw(p);
+    hint(p, 'Example table restored. Choose Insert, Search or Delete to trace execution.');
+    return;
+  }
+  if (act === 'clear') {
+    p.model = makeModel(p); draw(p);
+    hint(p, 'Table cleared. Enter a key to start.');
+    return;
+  }
+  if (act === 'random') {
+    var k = Math.floor(10 + Math.random() * 89);
+    p.input.value = k;
+    exec(p, 'insert', k);
+    return;
+  }
+  var key = readKey(p);
+  if (key === null) return;
+  exec(p, act, key);
+}
+
+function onPreset(p, name) {
+  if (name === 'ht-dist') {
+    p.model = makeModel(p);
+    [14, 25, 36, 47, 58].forEach(function (k) { p.model.insert(k); });
+    draw(p); hint(p, 'Loaded 5 keys across table slots.');
+  } else if (name === 'col-cluster') {
+    p.model = makeModel(p);
+    runSeq(p, [['insert', 12], ['insert', 23], ['insert', 34]]);
+    hint(p, 'Inserted keys 12, 23, 34 (all congruent mod 11 = 1). Demonstrates probe cluster.');
+  } else if (name === 'cuckoo-kick') {
+    p.model = makeModel(p);
+    runSeq(p, [['insert', 10], ['insert', 18], ['insert', 26]]);
+    hint(p, 'Inserted 10, 18, 26 with identical h₁: observe eviction displacement kick into Table 2.');
+  } else if (name === 'cuckoo-cycle') {
+    p.model = makeModel(p);
+    runSeq(p, [['insert', 8], ['insert', 16], ['insert', 24], ['insert', 32], ['insert', 40]]);
+    hint(p, 'Displacement chain triggered. Highlights cycle detection limit.');
+  } else if (name === 'bloom-fp') {
+    p.model = new BloomFilter(16, 2);
+    p.m = 16; p.k = 2;
+    p.model.add('alpha'); p.model.add('beta'); p.model.add('gamma'); p.model.add('delta');
+    p.input.value = 'omega';
+    exec(p, 'search', 'omega');
+  }
+}
+
+function onTry(p, spec) {
+  var parts = spec.split(':');
+  var sub = null;
+  p.topic.subs.forEach(function (s) { if (s.id === parts[0]) sub = s; });
+  if (!sub) return;
+  var tr = sub.tries[Number(parts[1])];
+  if (tr.reset) seed(p);
+  runSeq(p, tr.seq);
+  var bench = $('.bench', p.el);
+  if (bench && bench.scrollIntoView && window.innerWidth <= 940) {
+    bench.scrollIntoView({ block: 'nearest', behavior: motionOn ? 'smooth' : 'auto' });
+  }
+}
+
+/* =====================================================================
+   Progress Bar & Checkmarks (4 Topics Total: 0/4)
+   ===================================================================== */
+var GROUPS = [1, 1, 1, 1]; // 4 topics total
+
+function buildBar() {
+  var html = '', i = 0;
+  GROUPS.forEach(function (g) {
+    html += '<div class="grp">';
+    for (var j = 0; j < g; j++, i++) html += '<span class="seg" data-seg="' + ALL_SUBS[i] + '"></span>';
+    html += '</div>';
+  });
+  $('#pbar').innerHTML = html;
+}
+
+function refreshProgress() {
+  var total = 0;
+  ALL_SUBS.forEach(function (id) {
+    var on = !!done[id];
+    if (on) total++;
+    var seg = $('[data-seg="' + id + '"]'); if (seg) seg.classList.toggle('on', on);
+    var btn = $('[data-done="' + id + '"]'); if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  $('#pcount').textContent = total + '/' + ALL_SUBS.length;
+  TOPICS.forEach(function (t) {
+    var c = 0; t.subs.forEach(function (s) { if (done[s.id]) c++; });
+    var el = $('#tab-' + t.id + ' .cnt');
+    if (el) { el.textContent = c + '/' + t.subs.length; el.classList.toggle('full', c === t.subs.length); }
+  });
+}
+
+/* =====================================================================
+   Tabs & Navigation
+   ===================================================================== */
+var current = null;
+function showTab(id) {
+  var t = TOPICS.filter(function (x) { return x.id === id; })[0] || TOPICS[0];
+  current = t.id;
+  TOPICS.forEach(function (x) {
+    var on = x.id === t.id;
+    $('#panel-' + x.id).hidden = !on;
+    $('#tab-' + x.id).setAttribute('aria-selected', on ? 'true' : 'false');
+    $('#tab-' + x.id).tabIndex = on ? 0 : -1;
+  });
+  var act = $('#panel-' + t.id);
+  act.classList.remove('enter'); void act.offsetWidth; act.classList.add('enter');
+  $$('tr[data-row]').forEach(function (tr) { tr.classList.toggle('cur', tr.getAttribute('data-row') === t.id); });
+}
+
+function fromHash() {
+  var h = (location.hash || '').replace('#', '');
+  var t = TOPICS.filter(function (x) { return x.hash === h; })[0];
+  showTab(t ? t.id : TOPICS[0].id);
+}
+
+/* =====================================================================
+   App Bootstrapping
+   ===================================================================== */
+(function () {
+  $('#tabs').innerHTML = TOPICS.map(function (t) {
+    return '<button class="tab" role="tab" id="tab-' + t.id + '" aria-controls="panel-' + t.id + '" aria-selected="false" data-tab="' + t.id + '">' + esc(t.tab) + ' <span class="cnt">0/' + t.subs.length + '</span></button>';
+  }).join('');
+  $('#panels').innerHTML = TOPICS.map(panelHTML).join('');
+  buildBar();
+
+  TOPICS.forEach(function (t) {
+    var el = $('#panel-' + t.id);
+    var p = {
+      topic: t, el: el,
+      m: (t.id === 'bloom' ? 24 : (t.id === 'cuckoo' ? 8 : 11)),
+      k: (t.id === 'bloom' ? 3 : null),
+      fnKind: 'div',
+      mode: 'chain',
+      input: $('#key-' + t.id),
+      canvas: $('[data-canvas]', el),
+      stats: $('[data-stats]', el),
+      log: $('[data-log]', el)
+    };
+    panels[t.id] = p;
+    seed(p); draw(p);
+    hint(p, 'Example data loaded. Click an operation or choose a "Try" button on the right to trace.');
+
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b || !el.contains(b)) return;
+      if (b.hasAttribute('data-act')) onAct(p, b.getAttribute('data-act'));
+      else if (b.hasAttribute('data-preset')) onPreset(p, b.getAttribute('data-preset'));
+      else if (b.hasAttribute('data-try')) onTry(p, b.getAttribute('data-try'));
+      else if (b.hasAttribute('data-done')) {
+        var id = b.getAttribute('data-done');
+        done[id] = !done[id]; if (!done[id]) delete done[id];
+        save(); refreshProgress();
+      } else if (b.hasAttribute('data-fn')) {
+        p.fnKind = b.getAttribute('data-fn');
+        $$('[data-fn]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        p.model.fnKind = p.fnKind; draw(p);
+        hint(p, 'Switched hash function to ' + p.fnKind.toUpperCase() + '. Recomputed slot mappings.');
+      } else if (b.hasAttribute('data-mode')) {
+        p.mode = b.getAttribute('data-mode');
+        $$('[data-mode]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        seed(p); draw(p);
+        hint(p, 'Switched collision strategy to ' + p.mode.toUpperCase() + '.');
+      }
+    });
+
+    p.input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); onAct(p, 'insert'); }
+    });
+
+    var selSize = $('[data-size]', el);
+    if (selSize) selSize.addEventListener('change', function () {
+      p.m = Number(selSize.value);
+      seed(p); draw(p);
+      hint(p, 'Capacity m updated to ' + p.m + '. Rebuilt table.');
+    });
+
+    var selK = $('[data-k]', el);
+    if (selK) selK.addEventListener('change', function () {
+      p.k = Number(selK.value);
+      p.model.k = p.k;
+      draw(p);
+      hint(p, 'Hash function count k set to ' + p.k + '.');
+    });
+  });
+
+  $('#tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tab]'); if (!b) return;
+    var t = TOPICS.filter(function (x) { return x.id === b.getAttribute('data-tab'); })[0];
+    if (location.hash === '#' + t.hash) showTab(t.id); else location.hash = t.hash;
+  });
+
+  $('#tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var idx = TOPICS.map(function (t) { return t.id; }).indexOf(current);
+    var next = TOPICS[(idx + (e.key === 'ArrowRight' ? 1 : TOPICS.length - 1)) % TOPICS.length];
+    location.hash = next.hash;
+    var el = $('#tab-' + next.id); if (el) el.focus();
+  });
+
+  window.addEventListener('hashchange', fromHash);
+
+  $('#motion').addEventListener('click', function () {
+    motionOn = !motionOn;
+    try { localStorage.setItem(MSTORE, motionOn ? 'on' : 'off'); } catch (e) { /* storage error */ }
+    applyMotion();
+  });
+
+  applyMotion();
+  fromHash();
+  refreshProgress();
+})();
+</script>
+</body></html>

@@ -1,0 +1,1550 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Module 1 Tree Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: syllabus header with a progress strip, one tab per topic,
+   a graph-paper workbench on the left and the concept notes on the right. */
+:root {
+  --bg: #edf1f4;
+  --surface: #fbfcfd;
+  --surface-2: #e2e9ee;
+  --ink: #10202c;
+  --muted: #526473;
+  --line: #cbd5dd;
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  --accent-soft: #d3eeea;
+  --visit: #b7791f;
+  --visit-soft: #f6e6c4;
+  --visit-ink: #774c06;
+  --bad: #b3372a;
+  --bad-soft: #f7dcd7;
+  --grid: rgba(16, 32, 44, 0.06);
+  --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+    --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+    --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+    --bad: #f07a66; --bad-soft: #471f19; --grid: rgba(229, 237, 243, 0.06);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+  --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+  --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+  --bad: #f07a66; --bad-soft: #471f19; --grid: rgba(229, 237, 243, 0.06);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--font-body); }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); text-wrap: balance; }
+p { margin: 0; }
+
+.page {
+  max-width: 1200px; margin: 0 auto;
+  padding-block: 22px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* header */
+.top { display: flex; gap: 20px 32px; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; padding-bottom: 20px; }
+.top-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.eyebrow { font: 600 12px var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.navlink { font: 500 12px var(--font-mono); color: var(--muted); text-decoration: none; padding: 3px 9px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+.navlink:hover { color: var(--ink); border-color: var(--muted); }
+.navlink.next { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.navlink.next:hover { filter: brightness(1.1); }
+
+/* module progression stepper card */
+.module-stepper {
+  margin-top: 36px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.stepper-info { display: flex; flex-direction: column; gap: 4px; }
+.stepper-step { font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+.stepper-title { font-size: 16px; font-weight: 700; margin: 0; color: var(--ink); }
+.stepper-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+h1 { font-size: clamp(24px, 4.4vw, 40px); font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; line-height: 1.12; }
+.progress { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.pbar { display: flex; gap: 10px; flex-wrap: wrap; }
+.grp { display: flex; gap: 3px; }
+.seg { width: 22px; height: 8px; border-radius: 2px; background: var(--line); transition: background 0.2s; }
+.seg.on { background: var(--accent); }
+.progress p { font: 500 13px var(--font-mono); color: var(--muted); }
+.progress strong { color: var(--ink); font-weight: 600; }
+
+/* tabs */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; }
+.tab { appearance: none; background: none; border: 0; border-bottom: 3px solid transparent; border-radius: 0; margin-bottom: -1px; padding: 11px 14px; font: 600 14px var(--font-body); color: var(--muted); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 8px; align-items: center; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.cnt { font: 500 11px var(--font-mono); padding: 1px 7px; border-radius: 10px; background: var(--surface-2); color: var(--muted); }
+.cnt.full { background: var(--accent); color: var(--accent-ink); }
+
+/* panel */
+.panel { padding-top: 22px; }
+.lede { max-width: 72ch; color: var(--muted); margin-bottom: 18px; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 940px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* workbench */
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+.toolbar .sp { flex: 1 1 8px; }
+.keyfield { display: flex; flex-direction: column; gap: 3px; font: 500 11px var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.keyfield input { width: 96px; padding: 7px 9px; font: 500 15px var(--font-mono); border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.btn { appearance: none; font: 500 14px var(--font-body); padding: 8px 13px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.sm { padding: 5px 10px; font-size: 13px; }
+.row2 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lbl { font: 500 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.segctl { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.segctl button { appearance: none; border: 0; border-radius: 0; padding: 5px 11px; font: 500 13px var(--font-body); background: var(--surface); color: var(--ink); cursor: pointer; }
+.segctl button + button { border-left: 1px solid var(--line); }
+.segctl button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+select { font: 500 13px var(--font-body); padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); }
+button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 4px 18px; font: 500 12px var(--font-mono); color: var(--muted); }
+.stats b { color: var(--ink); font-weight: 600; }
+
+.canvas { min-height: 270px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: flex; }
+.canvas svg { display: block; margin: auto; max-width: none; flex: none; }
+.empty { margin: auto; color: var(--muted); font: 500 13px var(--font-mono); text-align: center; padding: 40px 12px; }
+
+/* svg tree styles */
+.edge { stroke: var(--muted); stroke-width: 1.5; fill: none; transition: stroke 0.2s; }
+.edge.visit { stroke: var(--visit); stroke-width: 2.4; }
+.node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; transition: fill 0.2s, stroke 0.2s; }
+.node.isroot circle { stroke: var(--accent); stroke-width: 3; }
+.node text { text-anchor: middle; dominant-baseline: central; }
+.node text.k { font: 600 14px var(--font-mono); fill: var(--ink); }
+.node text.bf { font: 500 9px var(--font-mono); fill: var(--muted); }
+.node circle { transform-box: fill-box; transform-origin: center; }
+.node:hover circle { stroke: var(--accent); }
+.bnode:hover .bbox { stroke: var(--accent); }
+.edge.draw { animation: draw 0.24s linear backwards; }
+.node.visit circle { animation: ping 0.4s ease-out; }
+.panel.enter .lede, .panel.enter .bench, .panel.enter .topic { animation: rise 0.42s cubic-bezier(.2,.7,.2,1) both; }
+.panel.enter .bench { animation-delay: 0.05s; }
+.panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
+.log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 70ms); }
+.log .hint, .log .err { animation: rise 0.3s ease-out both; }
+.chip { animation: segpop 0.4s ease-out; }
+.seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
+.btn { transition: transform 0.1s, border-color 0.15s, filter 0.15s; }
+.btn:active { transform: scale(0.96); }
+.cnt { transition: background 0.2s, color 0.2s; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes draw { from { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); } to { stroke-dasharray: var(--len); stroke-dashoffset: 0; } }
+@keyframes ping { 0% { transform: scale(1); } 45% { transform: scale(1.14); } 100% { transform: scale(1); } }
+@keyframes segpop { 0% { transform: scale(0.6); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+.node.visit circle { fill: var(--visit-soft); stroke: var(--visit); }
+.node.hit circle, .node.new circle { animation: bump 0.55s cubic-bezier(.3,1.5,.5,1); }
+.cell.hit, .cell.new { animation: flash 0.7s ease-out; }
+.ghost { pointer-events: none; }
+@keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.28); } 100% { transform: scale(1); } }
+@keyframes flash { 0% { opacity: 0.2; } 100% { opacity: 1; } }
+.node.hit circle, .node.new circle { fill: var(--accent); stroke: var(--accent); }
+.node.hit text, .node.new text { fill: var(--accent-ink); }
+.node.miss circle { fill: var(--bad-soft); stroke: var(--bad); }
+
+.bbox { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; transition: fill 0.2s, stroke 0.2s; }
+.bnode.route .bbox { fill: var(--surface-2); }
+.bdiv { stroke: var(--line); stroke-width: 1; }
+.cell { fill: transparent; transition: fill 0.2s; }
+.bk { font: 600 13px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.bnode.visit .bbox { fill: var(--visit-soft); stroke: var(--visit); }
+.bnode.miss .bbox { fill: var(--bad-soft); stroke: var(--bad); }
+.cell.hit, .cell.new { fill: var(--accent); }
+.bk.hit, .bk.new { fill: var(--accent-ink); }
+.chain { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 2; fill: none; }
+.arrowhead { fill: var(--muted); }
+
+/* step log */
+.log { border-top: 1px solid var(--line); padding-top: 12px; min-height: 120px; }
+.log-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.log-head h3 { font-size: 14px; font-weight: 600; font-family: var(--font-body); }
+.chip { font: 600 11px var(--font-mono); padding: 2px 8px; border-radius: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+.chip.hit, .chip.new { background: var(--accent-soft); color: var(--accent); }
+.chip.miss, .chip.dup { background: var(--bad-soft); color: var(--bad); }
+.chip.del { background: var(--visit-soft); color: var(--visit-ink); }
+.log ol { margin: 0; padding-left: 24px; font: 400 12.5px/1.65 var(--font-mono); }
+.log li { padding-left: 4px; overflow-wrap: anywhere; }
+.log .hint { font: 400 13px var(--font-body); color: var(--muted); }
+.log .err { color: var(--bad); font: 500 13px var(--font-mono); }
+
+/* concept column */
+.concept { display: flex; flex-direction: column; min-width: 0; }
+.topic { padding: 18px 0; border-top: 1px solid var(--line); }
+.topic:first-child { border-top: 0; padding-top: 0; }
+.topic-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.topic h3 { font-size: 18px; font-weight: 700; }
+.topic p { margin-top: 8px; }
+.topic ul { margin: 8px 0 0; padding-left: 18px; }
+.topic li { margin-top: 4px; }
+.topic li::marker { color: var(--accent); }
+.topic dl { margin: 8px 0 0; display: grid; gap: 8px; }
+.topic dt { font: 600 13px var(--font-mono); color: var(--accent); }
+.topic dd { margin: 0; }
+.tries { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.done { appearance: none; display: inline-flex; gap: 7px; align-items: center; font: 500 12px var(--font-mono); padding: 4px 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--muted); cursor: pointer; white-space: nowrap; }
+.done .box { width: 12px; height: 12px; border: 1.5px solid var(--muted); border-radius: 3px; display: grid; place-items: center; }
+.done[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.done[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); }
+.done[aria-pressed="true"] .box::after { content: ""; width: 3px; height: 6px; border: solid var(--accent-ink); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg) translate(-1px, -1px); }
+
+.tablewrap { overflow-x: auto; margin-top: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+td code, .code { font: 500 12.5px var(--font-mono); }
+.topic table { min-width: 340px; }
+
+/* comparison */
+.compare { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); }
+.compare h2 { font-size: 22px; font-weight: 700; }
+.compare .tablewrap table { min-width: 720px; }
+.compare td:first-child { font-weight: 600; white-space: nowrap; }
+.compare tr.cur td { background: var(--accent-soft); }
+.note { margin-top: 10px; color: var(--muted); font-size: 13px; }
+
+:root[data-motion="off"] * { transition: none !important; animation: none !important; }
+.mnote { max-width: 34ch; font-size: 12px; color: var(--muted); }
+#motion b { font-weight: 600; color: var(--accent); }
+</style>
+<div class="page">
+  <header class="top">
+    <div>
+      <div class="top-nav">
+        <span class="eyebrow">Module 1 of 5</span>
+        <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="Module 2 Hashing Lab.html" class="navlink next" title="Next Module: Hashing">Next: Module 2 (Hashing) &rarr;</a>
+      </div>
+      <h1>Binary Tree, AVL, Splay, B-Tree</h1>
+    </div>
+    <div class="progress">
+      <div class="pbar" id="pbar" aria-hidden="true"></div>
+      <p><strong id="pcount">0/8</strong> topics studied</p>
+      <button class="btn sm" id="motion" aria-pressed="true">Animations <b class="mstate">On</b></button>
+      <p class="mnote" id="mnote" hidden>Your device asks for reduced motion, so animations start off. Switch them on here.</p>
+    </div>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs" aria-label="Topics"></nav>
+  <div id="panels"></div>
+
+  <section class="compare" aria-labelledby="cmp-h">
+    <h2 id="cmp-h">Side by side</h2>
+    <p class="note">n is the number of keys. Splay costs are amortized, so a single operation can still be slow. B-Tree and B+ Tree logs use base m, where m is the order.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Structure</th><th>Search</th><th>Insert</th><th>Delete</th><th>Balance rule</th><th>Typical use</th></tr></thead>
+        <tbody>
+          <tr data-row="bst"><td>Binary search tree</td><td class="code">O(log n) avg, O(n) worst</td><td class="code">O(log n) avg, O(n) worst</td><td class="code">O(log n) avg, O(n) worst</td><td>None. Sorted input makes it a chain.</td><td>Simple ordered lookups</td></tr>
+          <tr data-row="avl"><td>AVL tree</td><td class="code">O(log n)</td><td class="code">O(log n)</td><td class="code">O(log n)</td><td>Balance factor stays in -1, 0, +1</td><td>Lookup-heavy data in memory</td></tr>
+          <tr data-row="splay"><td>Splay tree</td><td class="code">O(log n) amortized</td><td class="code">O(log n) amortized</td><td class="code">O(log n) amortized</td><td>None stored. Accessed keys move to the root.</td><td>Caches, skewed access patterns</td></tr>
+          <tr data-row="btree"><td>B-Tree</td><td class="code">O(log<sub>m</sub> n)</td><td class="code">O(log<sub>m</sub> n)</td><td class="code">O(log<sub>m</sub> n)</td><td>All leaves at the same depth, nodes at least half full</td><td>File systems, disk indexes</td></tr>
+          <tr data-row="btree"><td>B+ Tree</td><td class="code">O(log<sub>m</sub> n)</td><td class="code">O(log<sub>m</sub> n)</td><td class="code">O(log<sub>m</sub> n)</td><td>Same as B-Tree, with all keys in linked leaves</td><td>Database indexes, range scans</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="module-stepper" aria-label="Course Progression">
+    <div class="stepper-info">
+      <span class="stepper-step">Step 1 of 5 &bull; Trees &amp; B-Trees</span>
+      <h3 class="stepper-title">Finished with Trees? Continue to Hashing</h3>
+    </div>
+    <div class="stepper-actions">
+      <a href="index.html" class="btn sm">🏠 Course Hub</a>
+      <a href="Module 2 Hashing Lab.html" class="btn primary" style="font-weight:600;">Next: Module 2 (Hashing) &rarr;</a>
+    </div>
+  </footer>
+</div>
+<script>
+'use strict';
+/* =====================================================================
+   Tree logic and SVG renderers (no DOM access, so it can be tested in node)
+   ===================================================================== */
+
+function inorderBin(n, out) { if (!n) return out; inorderBin(n.l, out); out.push(n.k); inorderBin(n.r, out); return out; }
+function heightBin(n) { return n ? 1 + Math.max(heightBin(n.l), heightBin(n.r)) : 0; }
+function countBin(n) { return n ? 1 + countBin(n.l) + countBin(n.r) : 0; }
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+/* ---------------------------------------------------------------------
+   Binary search tree
+   --------------------------------------------------------------------- */
+class BST {
+  constructor() { this.root = null; this.kind = 'bst'; }
+  keys() { return inorderBin(this.root, []); }
+
+  insert(k) {
+    const steps = [], path = [];
+    if (!this.root) {
+      this.root = { k, l: null, r: null };
+      steps.push('The tree is empty, so ' + k + ' becomes the root.');
+      return { steps, path: [k], status: 'new', key: k, focus: k };
+    }
+    let n = this.root;
+    for (;;) {
+      path.push(n.k);
+      if (k === n.k) {
+        steps.push(k + ' is already in the tree, so nothing is inserted.');
+        return { steps, path, status: 'dup', key: k, focus: k };
+      }
+      const left = k < n.k;
+      steps.push(k + (left ? ' < ' : ' > ') + n.k + ': go ' + (left ? 'left' : 'right') + '.');
+      const c = left ? n.l : n.r;
+      if (!c) {
+        const nn = { k, l: null, r: null };
+        if (left) n.l = nn; else n.r = nn;
+        steps.push('The ' + (left ? 'left' : 'right') + ' slot of ' + n.k + ' is empty: insert ' + k + ' here.');
+        path.push(k);
+        return { steps, path, status: 'new', key: k, focus: k };
+      }
+      n = c;
+    }
+  }
+
+  search(k) {
+    const steps = [], path = [];
+    let n = this.root, last = null;
+    if (!n) { steps.push('The tree is empty.'); return { steps, path, status: 'miss', key: k, focus: null }; }
+    while (n) {
+      path.push(n.k); last = n.k;
+      if (k === n.k) { steps.push(k + ' = ' + n.k + ': found.'); return { steps, path, status: 'hit', key: k, focus: k }; }
+      const left = k < n.k;
+      steps.push(k + (left ? ' < ' : ' > ') + n.k + ': go ' + (left ? 'left' : 'right') + '.');
+      n = left ? n.l : n.r;
+    }
+    steps.push('Reached an empty link: ' + k + ' is not in the tree.');
+    return { steps, path, status: 'miss', key: k, focus: last };
+  }
+
+  delete(k) {
+    const steps = [], path = [];
+    let found = false, focus = null, last = null;
+    const removeMin = (n) => { if (!n.l) return n.r; n.l = removeMin(n.l); return n; };
+    const del = (n) => {
+      if (!n) { steps.push('Reached an empty link: ' + k + ' is not in the tree.'); return null; }
+      path.push(n.k); last = n.k;
+      if (k < n.k) { steps.push(k + ' < ' + n.k + ': go left.'); n.l = del(n.l); return n; }
+      if (k > n.k) { steps.push(k + ' > ' + n.k + ': go right.'); n.r = del(n.r); return n; }
+      found = true;
+      if (!n.l && !n.r) { steps.push(k + ' is a leaf: remove it.'); return null; }
+      if (!n.l) { steps.push(k + ' has one child (' + n.r.k + '): replace ' + k + ' with it.'); return n.r; }
+      if (!n.r) { steps.push(k + ' has one child (' + n.l.k + '): replace ' + k + ' with it.'); return n.l; }
+      let s = n.r; path.push(s.k);
+      while (s.l) { s = s.l; path.push(s.k); }
+      steps.push(k + ' has two children. Its inorder successor is ' + s.k + ', the smallest key in the right subtree.');
+      steps.push('Copy ' + s.k + ' into this node, then remove the original ' + s.k + ' from the right subtree.');
+      n.k = s.k; focus = s.k;
+      n.r = removeMin(n.r);
+      return n;
+    };
+    this.root = del(this.root);
+    return { steps, path, status: found ? 'del' : 'miss', key: k, focus: found ? focus : last };
+  }
+}
+
+/* ---------------------------------------------------------------------
+   AVL tree
+   --------------------------------------------------------------------- */
+class AVL extends BST {
+  constructor() { super(); this.kind = 'avl'; this.rotations = 0; }
+  _h(n) { return n ? n.h : 0; }
+  _upd(n) { n.h = 1 + Math.max(this._h(n.l), this._h(n.r)); }
+  _bf(n) { return this._h(n.l) - this._h(n.r); }
+  _rotR(y) { const x = y.l; y.l = x.r; x.r = y; this._upd(y); this._upd(x); this.rotations++; return x; }
+  _rotL(x) { const y = x.r; x.r = y.l; y.l = x; this._upd(x); this._upd(y); this.rotations++; return y; }
+  _rebalance(n, steps) {
+    this._upd(n);
+    const b = this._bf(n), f = (b > 0 ? '+' : '') + b;
+    if (b > 1) {
+      if (this._bf(n.l) >= 0) {
+        steps.push('Node ' + n.k + ' has balance factor ' + f + ': Left-Left case, rotate right at ' + n.k + '.');
+        return this._rotR(n);
+      }
+      steps.push('Node ' + n.k + ' has balance factor ' + f + ': Left-Right case, rotate left at ' + n.l.k + ', then right at ' + n.k + '.');
+      n.l = this._rotL(n.l);
+      return this._rotR(n);
+    }
+    if (b < -1) {
+      if (this._bf(n.r) <= 0) {
+        steps.push('Node ' + n.k + ' has balance factor ' + f + ': Right-Right case, rotate left at ' + n.k + '.');
+        return this._rotL(n);
+      }
+      steps.push('Node ' + n.k + ' has balance factor ' + f + ': Right-Left case, rotate right at ' + n.r.k + ', then left at ' + n.k + '.');
+      n.r = this._rotR(n.r);
+      return this._rotL(n);
+    }
+    return n;
+  }
+
+  insert(k) {
+    const steps = [], path = [];
+    let dup = false;
+    const before = this.rotations;
+    const ins = (n) => {
+      if (!n) { path.push(k); steps.push('Found an empty slot: insert ' + k + '.'); return { k, l: null, r: null, h: 1 }; }
+      path.push(n.k);
+      if (k === n.k) { dup = true; steps.push(k + ' is already in the tree, so nothing is inserted.'); return n; }
+      if (k < n.k) { steps.push(k + ' < ' + n.k + ': go left.'); n.l = ins(n.l); }
+      else { steps.push(k + ' > ' + n.k + ': go right.'); n.r = ins(n.r); }
+      if (dup) return n;
+      return this._rebalance(n, steps);
+    };
+    this.root = ins(this.root);
+    if (!dup && this.rotations === before) steps.push('Every balance factor on the way back up is -1, 0 or +1, so no rotation is needed.');
+    return { steps, path, status: dup ? 'dup' : 'new', key: k, focus: k };
+  }
+
+  delete(k) {
+    const steps = [], path = [];
+    let found = false, focus = null, last = null;
+    const before = this.rotations;
+    const removeMin = (n) => {
+      if (!n.l) return n.r;
+      n.l = removeMin(n.l);
+      return this._rebalance(n, steps);
+    };
+    const del = (n) => {
+      if (!n) { steps.push('Reached an empty link: ' + k + ' is not in the tree.'); return null; }
+      path.push(n.k); last = n.k;
+      if (k < n.k) { steps.push(k + ' < ' + n.k + ': go left.'); n.l = del(n.l); }
+      else if (k > n.k) { steps.push(k + ' > ' + n.k + ': go right.'); n.r = del(n.r); }
+      else {
+        found = true;
+        if (!n.l && !n.r) { steps.push(k + ' is a leaf: remove it.'); return null; }
+        if (!n.l) { steps.push(k + ' has one child (' + n.r.k + '): replace ' + k + ' with it.'); return n.r; }
+        if (!n.r) { steps.push(k + ' has one child (' + n.l.k + '): replace ' + k + ' with it.'); return n.l; }
+        let s = n.r; path.push(s.k);
+        while (s.l) { s = s.l; path.push(s.k); }
+        steps.push(k + ' has two children. Its inorder successor is ' + s.k + ', the smallest key in the right subtree.');
+        steps.push('Copy ' + s.k + ' into this node, then remove the original ' + s.k + ' from the right subtree.');
+        n.k = s.k; focus = s.k;
+        n.r = removeMin(n.r);
+      }
+      return this._rebalance(n, steps);
+    };
+    this.root = del(this.root);
+    if (found && this.rotations === before) steps.push('Every balance factor on the way back up is -1, 0 or +1, so no rotation is needed.');
+    return { steps, path, status: found ? 'del' : 'miss', key: k, focus: found ? focus : last };
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Splay tree
+   --------------------------------------------------------------------- */
+class Splay {
+  constructor() { this.root = null; this.kind = 'splay'; }
+  keys() { return inorderBin(this.root, []); }
+  _rotR(y) { const x = y.l; y.l = x.r; x.r = y; return x; }
+  _rotL(x) { const y = x.r; x.r = y.l; y.l = x; return y; }
+  _descend(k) {
+    const path = []; let n = this.root;
+    while (n) { path.push(n.k); if (k === n.k) break; n = k < n.k ? n.l : n.r; }
+    return path;
+  }
+  _splay(n, k, steps) {
+    if (!n || n.k === k) return n;
+    if (k < n.k) {
+      if (!n.l) return n;
+      if (k < n.l.k) {
+        n.l.l = this._splay(n.l.l, k, steps);
+        if (n.l.l) steps.push('Zig-zig: ' + n.l.l.k + ' and its parent ' + n.l.k + ' are both left children. Rotate right at the grandparent ' + n.k + ', then at ' + n.l.k + '.');
+        else steps.push('Zig: rotate right at ' + n.k + ' to lift ' + n.l.k + '.');
+        n = this._rotR(n);
+      } else if (k > n.l.k) {
+        n.l.r = this._splay(n.l.r, k, steps);
+        if (n.l.r) {
+          steps.push('Zig-zag: ' + n.l.r.k + ' is the right child of the left child ' + n.l.k + '. Rotate left at ' + n.l.k + ', then right at ' + n.k + '.');
+          n.l = this._rotL(n.l);
+        } else steps.push('Zig: rotate right at ' + n.k + ' to lift ' + n.l.k + '.');
+      } else {
+        steps.push('Zig: ' + k + ' is the left child of ' + n.k + '. One right rotation brings it to the top.');
+      }
+      return n.l ? this._rotR(n) : n;
+    }
+    if (!n.r) return n;
+    if (k > n.r.k) {
+      n.r.r = this._splay(n.r.r, k, steps);
+      if (n.r.r) steps.push('Zig-zig: ' + n.r.r.k + ' and its parent ' + n.r.k + ' are both right children. Rotate left at the grandparent ' + n.k + ', then at ' + n.r.k + '.');
+      else steps.push('Zig: rotate left at ' + n.k + ' to lift ' + n.r.k + '.');
+      n = this._rotL(n);
+    } else if (k < n.r.k) {
+      n.r.l = this._splay(n.r.l, k, steps);
+      if (n.r.l) {
+        steps.push('Zig-zag: ' + n.r.l.k + ' is the left child of the right child ' + n.r.k + '. Rotate right at ' + n.r.k + ', then left at ' + n.k + '.');
+        n.r = this._rotR(n.r);
+      } else steps.push('Zig: rotate left at ' + n.k + ' to lift ' + n.r.k + '.');
+    } else {
+      steps.push('Zig: ' + k + ' is the right child of ' + n.k + '. One left rotation brings it to the top.');
+    }
+    return n.r ? this._rotL(n) : n;
+  }
+
+  insert(k) {
+    const steps = [];
+    if (!this.root) {
+      this.root = { k, l: null, r: null };
+      steps.push('The tree is empty, so ' + k + ' becomes the root.');
+      return { steps, path: [k], status: 'new', key: k, focus: k };
+    }
+    const path = this._descend(k);
+    steps.push('Walk down looking for ' + k + ': ' + path.join(' → ') + '.');
+    this.root = this._splay(this.root, k, steps);
+    if (this.root.k === k) {
+      steps.push(k + ' already exists. It is now the root.');
+      return { steps, path, status: 'dup', key: k, focus: k };
+    }
+    const n = { k, l: null, r: null };
+    if (k < this.root.k) { n.r = this.root; n.l = this.root.l; this.root.l = null; }
+    else { n.l = this.root; n.r = this.root.r; this.root.r = null; }
+    steps.push('The closest key ' + this.root.k + ' is now the root. Split the tree around ' + k + ' and make ' + k + ' the new root.');
+    this.root = n;
+    path.push(k);
+    return { steps, path, status: 'new', key: k, focus: k };
+  }
+
+  search(k) {
+    const steps = [];
+    if (!this.root) { steps.push('The tree is empty.'); return { steps, path: [], status: 'miss', key: k, focus: null }; }
+    const path = this._descend(k);
+    steps.push('Walk down looking for ' + k + ': ' + path.join(' → ') + '.');
+    this.root = this._splay(this.root, k, steps);
+    if (this.root.k === k) {
+      steps.push(k + ' is found and is now the root.');
+      return { steps, path, status: 'hit', key: k, focus: k };
+    }
+    steps.push(k + ' is not in the tree. The last node visited, ' + this.root.k + ', is splayed to the root anyway.');
+    return { steps, path, status: 'miss', key: k, focus: this.root.k };
+  }
+
+  delete(k) {
+    const steps = [];
+    if (!this.root) { steps.push('The tree is empty.'); return { steps, path: [], status: 'miss', key: k, focus: null }; }
+    const path = this._descend(k);
+    steps.push('Walk down looking for ' + k + ': ' + path.join(' → ') + '.');
+    this.root = this._splay(this.root, k, steps);
+    if (this.root.k !== k) {
+      steps.push(k + ' is not in the tree. The last node visited, ' + this.root.k + ', is splayed to the root anyway.');
+      return { steps, path, status: 'miss', key: k, focus: this.root.k };
+    }
+    steps.push(k + ' is now the root. Remove it, leaving a left and a right subtree.');
+    if (!this.root.l) {
+      this.root = this.root.r;
+      steps.push('There is no left subtree, so the right subtree becomes the tree.');
+    } else {
+      const right = this.root.r;
+      steps.push('Splay the largest key of the left subtree to its root, then attach the right subtree.');
+      this.root = this._splay(this.root.l, k, steps);
+      this.root.r = right;
+    }
+    return { steps, path, status: 'del', key: k, focus: this.root ? this.root.k : null };
+  }
+}
+
+/* ---------------------------------------------------------------------
+   B-Tree of order m (max m children, max m-1 keys)
+   --------------------------------------------------------------------- */
+class BTree {
+  constructor(m) {
+    this.m = m; this.max = m - 1; this.min = Math.ceil(m / 2) - 1;
+    this.root = { keys: [], kids: [] }; this.kind = 'btree';
+  }
+  keys() {
+    const out = [];
+    (function walk(n) {
+      for (let i = 0; i < n.keys.length; i++) { if (n.kids.length) walk(n.kids[i]); out.push(n.keys[i]); }
+      if (n.kids.length) walk(n.kids[n.keys.length]);
+    })(this.root);
+    return out;
+  }
+  locate(k) {
+    let n = this.root;
+    while (n) {
+      let i = 0; while (i < n.keys.length && n.keys[i] < k) i++;
+      if (i < n.keys.length && n.keys[i] === k) return n;
+      if (!n.kids.length) return null;
+      n = n.kids[i];
+    }
+    return null;
+  }
+
+  insert(k) {
+    const steps = [], visited = [];
+    let dup = false;
+    const ins = (n) => {
+      visited.push(n);
+      let i = 0; while (i < n.keys.length && n.keys[i] < k) i++;
+      if (i < n.keys.length && n.keys[i] === k) { dup = true; steps.push(k + ' is already stored in [' + n.keys.join(', ') + '].'); return null; }
+      if (!n.kids.length) {
+        n.keys.splice(i, 0, k);
+        steps.push('Reached a leaf: insert ' + k + ' to get [' + n.keys.join(', ') + '].');
+      } else {
+        steps.push('Between ' + (i > 0 ? n.keys[i - 1] : '-∞') + ' and ' + (i < n.keys.length ? n.keys[i] : '+∞') + ': follow child ' + (i + 1) + '.');
+        const res = ins(n.kids[i]);
+        if (!res) return null;
+        n.keys.splice(i, 0, res.mid);
+        n.kids.splice(i + 1, 0, res.right);
+        steps.push('The child split, so its median ' + res.mid + ' moves up: [' + n.keys.join(', ') + '].');
+      }
+      if (n.keys.length > this.max) {
+        const mid = Math.floor(n.keys.length / 2);
+        const midKey = n.keys[mid];
+        const right = { keys: n.keys.slice(mid + 1), kids: n.kids.slice(mid + 1) };
+        n.keys.length = mid;
+        if (n.kids.length) n.kids.length = mid + 1;
+        steps.push('This node now has more than ' + this.max + ' keys: split it around the median ' + midKey + '.');
+        return { mid: midKey, right };
+      }
+      return null;
+    };
+    const res = ins(this.root);
+    if (res) {
+      this.root = { keys: [res.mid], kids: [this.root, res.right] };
+      steps.push('The root split, so a new root is created and the tree grows one level taller.');
+    }
+    return { steps, visited, status: dup ? 'dup' : 'new', key: k, focus: k };
+  }
+
+  search(k) {
+    const steps = [], visited = [];
+    let n = this.root;
+    if (!n.keys.length) { steps.push('The tree is empty.'); return { steps, visited, status: 'miss', key: k }; }
+    while (n) {
+      visited.push(n);
+      let i = 0; while (i < n.keys.length && n.keys[i] < k) i++;
+      if (i < n.keys.length && n.keys[i] === k) { steps.push('Found ' + k + ' in [' + n.keys.join(', ') + '].'); return { steps, visited, status: 'hit', key: k }; }
+      if (!n.kids.length) { steps.push(k + ' is not in the leaf [' + n.keys.join(', ') + ']: it is not in the tree.'); return { steps, visited, status: 'miss', key: k }; }
+      steps.push('Not in [' + n.keys.join(', ') + ']. It lies between ' + (i > 0 ? n.keys[i - 1] : '-∞') + ' and ' + (i < n.keys.length ? n.keys[i] : '+∞') + ': follow child ' + (i + 1) + '.');
+      n = n.kids[i];
+    }
+    return { steps, visited, status: 'miss', key: k };
+  }
+
+  delete(k) {
+    const steps = [], visited = [];
+    let found = false;
+    const fix = (n, i) => {
+      const c = n.kids[i];
+      if (c.keys.length >= this.min) return;
+      const L = i > 0 ? n.kids[i - 1] : null, R = i < n.kids.length - 1 ? n.kids[i + 1] : null;
+      if (L && L.keys.length > this.min) {
+        c.keys.unshift(n.keys[i - 1]); n.keys[i - 1] = L.keys.pop();
+        if (L.kids.length) c.kids.unshift(L.kids.pop());
+        steps.push('A child has too few keys. Borrow from the left sibling through the parent (rotate right).');
+      } else if (R && R.keys.length > this.min) {
+        c.keys.push(n.keys[i]); n.keys[i] = R.keys.shift();
+        if (R.kids.length) c.kids.push(R.kids.shift());
+        steps.push('A child has too few keys. Borrow from the right sibling through the parent (rotate left).');
+      } else if (L) {
+        const sep = n.keys[i - 1];
+        L.keys.push(sep, ...c.keys); L.kids.push(...c.kids);
+        n.keys.splice(i - 1, 1); n.kids.splice(i, 1);
+        steps.push('A child has too few keys and no sibling can lend one. Merge with the left sibling, pulling ' + sep + ' down from the parent.');
+      } else {
+        const sep = n.keys[i];
+        c.keys.push(sep, ...R.keys); c.kids.push(...R.kids);
+        n.keys.splice(i, 1); n.kids.splice(i + 1, 1);
+        steps.push('A child has too few keys and no sibling can lend one. Merge with the right sibling, pulling ' + sep + ' down from the parent.');
+      }
+    };
+    const del = (n, key) => {
+      visited.push(n);
+      let i = 0; while (i < n.keys.length && n.keys[i] < key) i++;
+      const here = i < n.keys.length && n.keys[i] === key;
+      if (!n.kids.length) {
+        if (here) { n.keys.splice(i, 1); found = true; steps.push('Remove ' + key + ' from the leaf: [' + n.keys.join(', ') + '].'); }
+        else steps.push(key + ' is not in the leaf [' + n.keys.join(', ') + '].');
+        return;
+      }
+      if (here) {
+        found = true;
+        let p = n.kids[i];
+        while (p.kids.length) p = p.kids[p.kids.length - 1];
+        const pk = p.keys[p.keys.length - 1];
+        steps.push(key + ' sits in an internal node. Replace it with its predecessor ' + pk + ' (the largest key in the left subtree), then delete ' + pk + ' from its leaf.');
+        n.keys[i] = pk;
+        del(n.kids[i], pk);
+      } else {
+        steps.push('Not in [' + n.keys.join(', ') + ']: follow child ' + (i + 1) + '.');
+        del(n.kids[i], key);
+      }
+      fix(n, i);
+    };
+    del(this.root, k);
+    if (!this.root.keys.length && this.root.kids.length) {
+      this.root = this.root.kids[0];
+      steps.push('The old root is empty, so the tree shrinks by one level.');
+    }
+    return { steps, visited, status: found ? 'del' : 'miss', key: k };
+  }
+}
+
+/* ---------------------------------------------------------------------
+   B+ Tree of order m: all keys live in the linked leaves
+   --------------------------------------------------------------------- */
+class BPlus {
+  constructor(m) {
+    this.m = m; this.max = m - 1;
+    this.minLeaf = Math.ceil(this.max / 2);
+    this.minInt = Math.ceil(m / 2) - 1;
+    this.root = { leaf: true, keys: [], kids: [], next: null }; this.kind = 'bplus';
+  }
+  _child(n, k) { let i = 0; while (i < n.keys.length && k >= n.keys[i]) i++; return i; }
+  keys() {
+    let n = this.root; while (!n.leaf) n = n.kids[0];
+    const out = [];
+    for (; n; n = n.next) out.push(...n.keys);
+    return out;
+  }
+  locate(k) {
+    let n = this.root;
+    while (!n.leaf) n = n.kids[this._child(n, k)];
+    return n.keys.indexOf(k) >= 0 ? n : null;
+  }
+
+  insert(k) {
+    const steps = [], visited = [];
+    let dup = false;
+    const ins = (n) => {
+      visited.push(n);
+      if (n.leaf) {
+        let i = 0; while (i < n.keys.length && n.keys[i] < k) i++;
+        if (i < n.keys.length && n.keys[i] === k) { dup = true; steps.push(k + ' is already stored in the leaf [' + n.keys.join(', ') + '].'); return null; }
+        n.keys.splice(i, 0, k);
+        steps.push('Reached a leaf: insert ' + k + ' to get [' + n.keys.join(', ') + '].');
+        if (n.keys.length > this.max) {
+          const mid = Math.ceil(n.keys.length / 2);
+          const right = { leaf: true, keys: n.keys.splice(mid), kids: [], next: n.next };
+          n.next = right;
+          steps.push('The leaf overflows: split it into [' + n.keys.join(', ') + '] and [' + right.keys.join(', ') + ']. Copy ' + right.keys[0] + ' up to the parent; it also stays in the right leaf.');
+          return { sep: right.keys[0], right };
+        }
+        return null;
+      }
+      const i = this._child(n, k);
+      steps.push('Routing keys [' + n.keys.join(', ') + ']: follow child ' + (i + 1) + '.');
+      const res = ins(n.kids[i]);
+      if (!res) return null;
+      n.keys.splice(i, 0, res.sep);
+      n.kids.splice(i + 1, 0, res.right);
+      steps.push('The parent receives the separator ' + res.sep + ': [' + n.keys.join(', ') + '].');
+      if (n.keys.length > this.max) {
+        const mid = Math.floor(n.keys.length / 2);
+        const sep = n.keys[mid];
+        const right = { leaf: false, keys: n.keys.slice(mid + 1), kids: n.kids.slice(mid + 1), next: null };
+        n.keys.length = mid; n.kids.length = mid + 1;
+        steps.push('This internal node overflows: the median ' + sep + ' moves up (it is not copied).');
+        return { sep, right };
+      }
+      return null;
+    };
+    const res = ins(this.root);
+    if (res) {
+      this.root = { leaf: false, keys: [res.sep], kids: [this.root, res.right], next: null };
+      steps.push('The root split, so a new root is created and the tree grows one level taller.');
+    }
+    return { steps, visited, status: dup ? 'dup' : 'new', key: k, focus: k };
+  }
+
+  search(k) {
+    const steps = [], visited = [];
+    let n = this.root;
+    if (!n.keys.length) { steps.push('The tree is empty.'); return { steps, visited, status: 'miss', key: k }; }
+    while (!n.leaf) {
+      visited.push(n);
+      const i = this._child(n, k);
+      steps.push('Routing keys [' + n.keys.join(', ') + ']: follow child ' + (i + 1) + '. Internal nodes only route; the data is in the leaves.');
+      n = n.kids[i];
+    }
+    visited.push(n);
+    if (n.keys.indexOf(k) >= 0) { steps.push('Found ' + k + ' in the leaf [' + n.keys.join(', ') + '].'); return { steps, visited, status: 'hit', key: k }; }
+    steps.push(k + ' is not in the leaf [' + n.keys.join(', ') + ']: it is not in the tree.');
+    return { steps, visited, status: 'miss', key: k };
+  }
+
+  _internalHas(k) {
+    let found = false;
+    (function walk(n) { if (n.leaf) return; if (n.keys.indexOf(k) >= 0) found = true; n.kids.forEach(walk); })(this.root);
+    return found;
+  }
+
+  delete(k) {
+    const steps = [], visited = [];
+    let found = false;
+    const fix = (n, i) => {
+      const c = n.kids[i];
+      const need = c.leaf ? this.minLeaf : this.minInt;
+      if (c.keys.length >= need) return;
+      const L = i > 0 ? n.kids[i - 1] : null, R = i < n.kids.length - 1 ? n.kids[i + 1] : null;
+      if (L && L.keys.length > need) {
+        if (c.leaf) { c.keys.unshift(L.keys.pop()); n.keys[i - 1] = c.keys[0]; }
+        else { c.keys.unshift(n.keys[i - 1]); c.kids.unshift(L.kids.pop()); n.keys[i - 1] = L.keys.pop(); }
+        steps.push('A node has too few keys. Borrow from the left sibling and update the separator in the parent.');
+      } else if (R && R.keys.length > need) {
+        if (c.leaf) { c.keys.push(R.keys.shift()); n.keys[i] = R.keys[0]; }
+        else { c.keys.push(n.keys[i]); c.kids.push(R.kids.shift()); n.keys[i] = R.keys.shift(); }
+        steps.push('A node has too few keys. Borrow from the right sibling and update the separator in the parent.');
+      } else {
+        let target, src, sepIdx;
+        if (L) { target = L; src = c; sepIdx = i - 1; } else { target = c; src = R; sepIdx = i; }
+        if (c.leaf) { target.keys.push(...src.keys); target.next = src.next; }
+        else { target.keys.push(n.keys[sepIdx], ...src.keys); target.kids.push(...src.kids); }
+        n.keys.splice(sepIdx, 1); n.kids.splice(sepIdx + 1, 1);
+        steps.push('A node has too few keys and no sibling can lend one. Merge it with its ' + (L ? 'left' : 'right') + ' sibling and drop the separator from the parent.');
+      }
+    };
+    const del = (n) => {
+      visited.push(n);
+      if (n.leaf) {
+        const i = n.keys.indexOf(k);
+        if (i >= 0) { n.keys.splice(i, 1); found = true; steps.push('Remove ' + k + ' from the leaf: [' + n.keys.join(', ') + '].'); }
+        else steps.push(k + ' is not in the leaf [' + n.keys.join(', ') + '].');
+        return;
+      }
+      const i = this._child(n, k);
+      steps.push('Routing keys [' + n.keys.join(', ') + ']: follow child ' + (i + 1) + '.');
+      del(n.kids[i]);
+      fix(n, i);
+    };
+    del(this.root);
+    if (!this.root.leaf && !this.root.keys.length) {
+      this.root = this.root.kids[0];
+      steps.push('The old root is empty, so the tree shrinks by one level.');
+    }
+    if (found && this._internalHas(k)) steps.push(k + ' may still appear in an internal node. That is fine: separators only route searches and need not be stored keys.');
+    return { steps, visited, status: found ? 'del' : 'miss', key: k };
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Stats
+   --------------------------------------------------------------------- */
+function bStats(tree) {
+  let keys = 0, nodes = 0, height = 0;
+  const plus = tree.kind === 'bplus';
+  (function walk(n, d) {
+    nodes++; if (d > height) height = d;
+    if (!plus || n.leaf) keys += n.keys.length;
+    (n.kids || []).forEach(function (c) { walk(c, d + 1); });
+  })(tree.root, 1);
+  if (!tree.root.keys.length) { nodes = 0; height = 0; }
+  return { keys, nodes, height };
+}
+
+/* ---------------------------------------------------------------------
+   SVG renderers
+   --------------------------------------------------------------------- */
+function renderBinary(root, o) {
+  o = o || {};
+  if (!root) return { svg: '', w: 0, h: 0 };
+  const DX = 50, DY = 66, R = 20, PX = 34, PT = 30, PB = 26;
+  const pos = new Map();
+  let i = 0, maxD = 0;
+  (function walk(n, d) {
+    if (!n) return;
+    walk(n.l, d + 1);
+    pos.set(n, { x: i++, d });
+    if (d > maxD) maxD = d;
+    walk(n.r, d + 1);
+  })(root, 0);
+  const span = (i - 1) * DX;
+  const w = Math.max(320, span + PX * 2), h = maxD * DY + PT + R + PB;
+  const off = (w - span) / 2;
+  const px = function (n) { return off + pos.get(n).x * DX; };
+  const py = function (n) { return PT + pos.get(n).d * DY; };
+  let edges = '', nodes = '';
+  pos.forEach(function (p, n) {
+    [n.l, n.r].forEach(function (c) {
+      if (c) edges += '<line class="edge" data-k="' + c.k + '" x1="' + px(n) + '" y1="' + py(n) + '" x2="' + px(c) + '" y2="' + py(c) + '"/>';
+    });
+  });
+  pos.forEach(function (p, n) {
+    let bf = '';
+    if (o.bf) {
+      const hl = n.l ? n.l.h : 0, hr = n.r ? n.r.h : 0, b = hl - hr;
+      bf = '<text class="bf" x="0" y="11">bf ' + (b > 0 ? '+' : '') + b + '</text>';
+    }
+    const cls = 'node' + (o.rootMark && n === root ? ' isroot' : '');
+    nodes += '<g class="' + cls + '" data-k="' + n.k + '" transform="translate(' + px(n) + ',' + py(n) + ')">' +
+      '<circle r="' + R + '"/><text class="k" x="0" y="' + (o.bf ? -4 : 0) + '">' + n.k + '</text>' + bf + '</g>';
+  });
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="' + w + '" height="' + h + '" role="img" aria-label="Tree diagram with ' + i + ' nodes">' + edges + nodes + '</svg>';
+  return { svg, w, h };
+}
+
+function renderB(tree) {
+  const root = tree.root;
+  if (!root.keys.length) return { svg: '', w: 0, h: 0, ids: new Map() };
+  const plus = tree.kind === 'bplus';
+  const CW = 32, CH = 32, GX = 16, DY = 78, PAD = 26;
+  const ids = new Map(), info = new Map();
+  let nid = 0, maxD = 0;
+  function measure(n) {
+    const nw = Math.max(1, n.keys.length) * CW;
+    if (!n.kids.length) { info.set(n, { nw, sw: nw }); return nw; }
+    let tot = 0;
+    n.kids.forEach(function (c) { tot += measure(c); });
+    tot += GX * (n.kids.length - 1);
+    const sw = Math.max(nw, tot);
+    info.set(n, { nw, sw, tot });
+    return sw;
+  }
+  function place(n, left, d) {
+    ids.set(n, nid++);
+    const inf = info.get(n);
+    inf.cx = left + inf.sw / 2; inf.d = d;
+    if (d > maxD) maxD = d;
+    if (n.kids.length) {
+      let x = left + (inf.sw - inf.tot) / 2;
+      n.kids.forEach(function (c) { place(c, x, d + 1); x += info.get(c).sw + GX; });
+    }
+  }
+  const total = measure(root);
+  place(root, 0, 0);
+  const w = total + PAD * 2, h = maxD * DY + CH + PAD * 2;
+  const X = function (n) { return PAD + info.get(n).cx; };
+  const Y = function (n) { return PAD + info.get(n).d * DY; };
+  let edges = '', nodes = '', chain = '';
+  info.forEach(function (inf, n) {
+    if (!n.kids.length) return;
+    const x0 = X(n) - inf.nw / 2, y = Y(n) + CH;
+    n.kids.forEach(function (c, i) {
+      const sx = x0 + i * CW, ex = X(c), ey = Y(c);
+      edges += '<path class="edge" data-n="' + ids.get(c) + '" d="M' + sx + ' ' + y + ' C' + sx + ' ' + (y + DY * 0.38) + ' ' + ex + ' ' + (ey - DY * 0.38) + ' ' + ex + ' ' + ey + '"/>';
+    });
+  });
+  info.forEach(function (inf, n) {
+    const x0 = X(n) - inf.nw / 2, y = Y(n);
+    const isLeaf = !n.kids.length;
+    let g = '<g class="bnode' + (isLeaf ? ' leaf' : '') + (plus && !isLeaf ? ' route' : '') + '" data-n="' + ids.get(n) + '">';
+    g += '<rect class="bbox" x="' + x0 + '" y="' + y + '" width="' + inf.nw + '" height="' + CH + '" rx="5"/>';
+    n.keys.forEach(function (k, i) {
+      const cx = x0 + i * CW;
+      g += '<rect class="cell" data-key="' + k + '" x="' + (cx + 1) + '" y="' + (y + 1) + '" width="' + (CW - 2) + '" height="' + (CH - 2) + '" rx="4"/>';
+      if (i > 0) g += '<line class="bdiv" x1="' + cx + '" y1="' + (y + 5) + '" x2="' + cx + '" y2="' + (y + CH - 5) + '"/>';
+      g += '<text class="bk" data-key="' + k + '" x="' + (cx + CW / 2) + '" y="' + (y + CH / 2) + '">' + k + '</text>';
+    });
+    g += '</g>';
+    nodes += g;
+  });
+  if (plus) {
+    let n = root; while (!n.leaf) n = n.kids[0];
+    for (; n && n.next; n = n.next) {
+      const a = info.get(n), b = info.get(n.next);
+      const x1 = X(n) + a.nw / 2, x2 = X(n.next) - b.nw / 2, ym = Y(n) + CH / 2;
+      chain += '<path class="chain" d="M' + (x1 + 1) + ' ' + ym + ' L' + (x2 - 4) + ' ' + ym + '" marker-end="url(#arr)"/>';
+    }
+  }
+  const defs = '<defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrowhead" d="M0 0 L8 4 L0 8 z"/></marker></defs>';
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="' + w + '" height="' + h + '" role="img" aria-label="' + (plus ? 'B+ tree' : 'B-tree') + ' diagram">' + defs + edges + chain + nodes + '</svg>';
+  const pos = new Map();
+  info.forEach(function (inf, n) { pos.set(n, { x: X(n) - inf.nw / 2, y: Y(n) }); });
+  return { svg, w, h, ids, pos };
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = { BST, AVL, Splay, BTree, BPlus, renderBinary, renderB, bStats, heightBin, countBin };
+}
+</script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var MSTORE = 'mod1-tree-lab-motion';
+  var sysReduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var motionOn = !sysReduce, motionPref = null;
+  try { motionPref = localStorage.getItem(MSTORE); } catch (e) { motionPref = null; }
+  if (motionPref === 'on') motionOn = true; else if (motionPref === 'off') motionOn = false;
+  var reduce = !motionOn;
+  function applyMotion() {
+    reduce = !motionOn;
+    document.documentElement.setAttribute('data-motion', motionOn ? 'on' : 'off');
+    var b = $('#motion');
+    if (b) { b.setAttribute('aria-pressed', motionOn ? 'true' : 'false'); $('.mstate', b).textContent = motionOn ? 'On' : 'Off'; }
+    var n = $('#mnote'); if (n) n.hidden = !(sysReduce && !motionOn);
+  }
+
+  /* ---------- progress storage ---------- */
+  var STORE = 'mod1-tree-lab-progress';
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { done = {}; }
+  function save() { try { localStorage.setItem(STORE, JSON.stringify(done)); } catch (e) { /* storage unavailable */ } }
+
+  /* ---------- content ---------- */
+  var SEEDS = {
+    bst: [50, 30, 70, 20, 40, 60, 80],
+    avl: [30, 20, 40, 10, 25, 35, 50],
+    splay: [10, 20, 30, 40, 50],
+    b: [10, 20, 5, 6, 12, 30, 7, 17, 25, 40, 3, 15]
+  };
+
+  var ROT_TABLE =
+    '<div class="tablewrap"><table><thead><tr><th>Case</th><th>What went wrong</th><th>Fix</th></tr></thead><tbody>' +
+    '<tr><td class="code">LL</td><td>Left child\'s left subtree is too tall</td><td>Rotate right at the node</td></tr>' +
+    '<tr><td class="code">RR</td><td>Right child\'s right subtree is too tall</td><td>Rotate left at the node</td></tr>' +
+    '<tr><td class="code">LR</td><td>Left child\'s right subtree is too tall</td><td>Rotate left at the child, then right at the node</td></tr>' +
+    '<tr><td class="code">RL</td><td>Right child\'s left subtree is too tall</td><td>Rotate right at the child, then left at the node</td></tr>' +
+    '</tbody></table></div>';
+
+  var BCMP =
+    '<div class="tablewrap"><table><thead><tr><th></th><th>B-Tree</th><th>B+ Tree</th></tr></thead><tbody>' +
+    '<tr><td>Where keys live</td><td>In every node</td><td>Only in the leaves. Internal nodes hold routing copies.</td></tr>' +
+    '<tr><td>Search ends</td><td>At any level</td><td>Always at a leaf</td></tr>' +
+    '<tr><td>Leaf split</td><td>Median moves up</td><td>First key of the right leaf is copied up</td></tr>' +
+    '<tr><td>Range scan</td><td>In-order traversal</td><td>Follow the leaf links</td></tr>' +
+    '</tbody></table></div>';
+
+  var SPLAY_CASES =
+    '<dl>' +
+    '<div><dt>Zig</dt><dd>The parent is the root. One rotation finishes the job.</dd></div>' +
+    '<div><dt>Zig-zig</dt><dd>The node and its parent are children on the same side. Rotate the grandparent first, then the parent.</dd></div>' +
+    '<div><dt>Zig-zag</dt><dd>They are on opposite sides. Rotate the parent, then the grandparent, in opposite directions.</dd></div>' +
+    '</dl>';
+
+  var TOPICS = [
+    {
+      id: 'bst', hash: 'binary-tree', tab: 'Binary Tree', kind: 'bst',
+      lede: 'A binary tree gives every node at most two children. The version practised here is the binary search tree: smaller keys go left, larger keys go right.',
+      subs: [
+        { id: 'bt-ins', title: 'Insertion',
+          lead: 'Compare the new key with the root. Go left if it is smaller, right if it is larger, and attach it as a leaf at the first empty slot.',
+          points: ['Duplicate keys are rejected.', 'Cost is O(h), where h is the height of the tree.', 'Keys that arrive already sorted make h equal to n, so the tree becomes a linked list.'],
+          tries: [{ label: 'Insert 45', reset: true, seq: [['insert', 45]] }] },
+        { id: 'bt-del', title: 'Deletion',
+          lead: 'Three cases, depending on how many children the node has.',
+          points: ['Leaf: remove it.', 'One child: replace the node with that child.', 'Two children: copy the inorder successor (the smallest key in the right subtree) into the node, then remove the successor.'],
+          tries: [{ label: 'Delete 20 (leaf)', reset: true, seq: [['delete', 20]] }, { label: 'Delete 30 (two children)', reset: true, seq: [['delete', 30]] }] },
+        { id: 'bt-srch', title: 'Searching',
+          lead: 'Follow the same left or right comparisons from the root until the key matches or the path ends at an empty link.',
+          points: ['O(log n) on a balanced tree, O(n) on a skewed one.', 'An inorder traversal visits the keys in sorted order.'],
+          tries: [{ label: 'Search 60', reset: true, seq: [['search', 60]] }, { label: 'Search 55 (absent)', reset: true, seq: [['search', 55]] }] }
+      ]
+    },
+    {
+      id: 'avl', hash: 'avl-tree', tab: 'AVL Tree', kind: 'avl',
+      lede: 'An AVL tree is a binary search tree that repairs itself. After every insert or delete, no node may have subtrees whose heights differ by more than one.',
+      subs: [
+        { id: 'avl-id', title: 'Insertion & Deletion',
+          lead: 'Do the normal BST operation, then walk back up the path. At each node update its height and compute the balance factor: height of left subtree minus height of right subtree.',
+          points: ['Allowed balance factors are -1, 0 and +1. At +2 or -2 the node is rotated.', 'An insertion needs at most one rotation (single or double).', 'A deletion can need a rotation at several levels on the way up.'],
+          tries: [{ label: 'Insert 5, then 3', reset: true, seq: [['insert', 5], ['insert', 3]] }, { label: 'Delete 50, 35, then 40', reset: true, seq: [['delete', 50], ['delete', 35], ['delete', 40]] }] },
+        { id: 'avl-rot', title: 'Rotations',
+          lead: 'A rotation changes which node sits on top of a small group while keeping the inorder sequence intact. Four imbalance cases exist.',
+          extra: ROT_TABLE,
+          points: ['Use the rotation buttons above the diagram to trigger each case from an empty tree.'],
+          tries: [] },
+        { id: 'avl-srch', title: 'Searching',
+          lead: 'Identical to BST search. An AVL tree\'s height never exceeds about 1.44 log₂(n + 2), so the worst case stays O(log n).',
+          points: ['Compare the height reading here with the same keys in a plain BST after sorted input.'],
+          tries: [{ label: 'Search 25', reset: true, seq: [['search', 25]] }] }
+      ]
+    },
+    {
+      id: 'splay', hash: 'splay-tree', tab: 'Splay Tree', kind: 'splay',
+      lede: 'A splay tree stores no balance data. Instead, every access rotates the touched key up to the root, so recently used keys stay close to the top.',
+      subs: [
+        { id: 'splay', title: 'Splay Tree',
+          lead: 'Insert, search and delete all begin by splaying. The node moves up in steps, each one of three kinds.',
+          extra: SPLAY_CASES,
+          points: ['Amortized O(log n) per operation, although a single operation can take O(n).', 'A search that fails still splays the last node it visited.'],
+          tries: [{ label: 'Search 10 (deepest)', reset: true, seq: [['search', 10]] }, { label: 'Search 30, then 30 again', reset: true, seq: [['search', 30], ['search', 30]] }] }
+      ]
+    },
+    {
+      id: 'btree', hash: 'b-tree', tab: 'B-Tree & B+ Tree', kind: 'btree',
+      lede: 'B-Trees are wide, shallow and balanced, built for storage where each node read is expensive. A node is sized to hold many keys, so the tree stays only a few levels tall.',
+      subs: [
+        { id: 'btree', title: 'B-Tree & B+ Tree',
+          lead: 'In a tree of order m, every node has at most m children (m - 1 keys) and every non-root node is at least half full. All leaves sit at the same depth.',
+          points: ['Insert: add the key to a leaf. If the leaf overflows, split it at the median and push the median up. Splits can cascade to the root.', 'Delete: remove the key. If a node underflows, borrow from a sibling through the parent, or merge with a sibling.', 'Height is O(logₘ n), so a lookup touches very few nodes.'],
+          extra: BCMP,
+          tries: [{ label: 'Insert 35', reset: true, seq: [['insert', 35]] }, { label: 'Delete 7', reset: true, seq: [['delete', 7]] }, { label: 'Delete 3, then 5', reset: true, seq: [['delete', 3], ['delete', 5]] }] }
+      ]
+    }
+  ];
+  var ALL_SUBS = [];
+  TOPICS.forEach(function (t) { t.subs.forEach(function (s) { ALL_SUBS.push(s.id); }); });
+
+  /* ---------- helpers ---------- */
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function makeTree(kind, m) {
+    if (kind === 'bst') return new BST();
+    if (kind === 'avl') return new AVL();
+    if (kind === 'splay') return new Splay();
+    if (kind === 'bplus') return new BPlus(m);
+    return new BTree(m);
+  }
+  function isB(p) { return p.topic.id === 'btree'; }
+  function isEmpty(p) { return isB(p) ? !p.tree.root.keys.length : !p.tree.root; }
+  function seedKeys(p) { return isB(p) ? SEEDS.b : SEEDS[p.topic.id]; }
+  function seed(p) {
+    p.tree = makeTree(p.kind, p.m);
+    seedKeys(p).forEach(function (k) { p.tree.insert(k); });
+    if (p.tree.rotations !== undefined) p.tree.rotations = 0;
+  }
+  function deepestKey(root) {
+    var best = null, bd = -1;
+    (function walk(n, d) { if (!n) return; if (d > bd) { bd = d; best = n.k; } walk(n.l, d + 1); walk(n.r, d + 1); })(root, 0);
+    return best;
+  }
+
+  /* ---------- panel markup ---------- */
+  var panels = {};
+  function panelHTML(t) {
+    var id = t.id;
+    var extras = '';
+    if (id === 'bst') {
+      extras = '<div class="row2"><span class="lbl">Shape</span>' +
+        '<button class="btn sm" data-preset="sorted">Sorted input 10 to 50</button>' +
+        '<button class="btn sm" data-preset="balanced">Balanced example</button></div>';
+    } else if (id === 'avl') {
+      extras = '<div class="row2"><span class="lbl">Rotation lab</span>' +
+        '<button class="btn sm" data-rot="LL">LL: 30, 20, 10</button>' +
+        '<button class="btn sm" data-rot="RR">RR: 10, 20, 30</button>' +
+        '<button class="btn sm" data-rot="LR">LR: 30, 10, 20</button>' +
+        '<button class="btn sm" data-rot="RL">RL: 10, 30, 20</button></div>';
+    } else if (id === 'splay') {
+      extras = '<div class="row2"><span class="lbl">Try</span>' +
+        '<button class="btn sm" data-preset="deepest">Search the deepest key</button></div>';
+    } else {
+      extras = '<div class="row2"><span class="lbl">Tree</span>' +
+        '<span class="segctl" role="group" aria-label="Tree type">' +
+        '<button data-kind="btree" aria-pressed="true">B-Tree</button>' +
+        '<button data-kind="bplus" aria-pressed="false">B+ Tree</button></span>' +
+        '<label class="lbl" for="order-' + id + '">Order m</label>' +
+        '<select id="order-' + id + '" data-order><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select>' +
+        '<button class="btn sm" data-preset="seq">Insert 1 to 12 in order</button></div>';
+    }
+    var concept = t.subs.map(function (s, si) {
+      var pts = s.points && s.points.length ? '<ul>' + s.points.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '';
+      var tries = s.tries && s.tries.length ? '<div class="tries">' + s.tries.map(function (tr, i) {
+        return '<button class="btn sm" data-try="' + s.id + ':' + i + '">Try: ' + esc(tr.label) + '</button>';
+      }).join('') + '</div>' : '';
+      return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
+        '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
+        '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+    }).join('');
+    return '<section class="panel" id="panel-' + id + '" role="tabpanel" aria-labelledby="tab-' + id + '" hidden>' +
+      '<p class="lede">' + esc(t.lede) + '</p>' +
+      '<div class="layout"><div class="bench">' +
+      '<div class="toolbar">' +
+      '<label class="keyfield">Key<input id="key-' + id + '" type="number" inputmode="numeric" min="1" max="999" placeholder="1 to 999"></label>' +
+      '<button class="btn primary" data-act="insert">Insert</button>' +
+      '<button class="btn" data-act="delete">Delete</button>' +
+      '<button class="btn" data-act="search">Search</button>' +
+      '<span class="sp"></span>' +
+      '<button class="btn" data-act="random">Random</button>' +
+      '<button class="btn" data-act="reset">Reset</button>' +
+      '<button class="btn" data-act="clear">Clear</button></div>' +
+      extras +
+      '<div class="stats" data-stats></div>' +
+      '<div class="canvas" data-canvas></div>' +
+      '<div class="log" data-log aria-live="polite"></div>' +
+      '</div><div class="concept">' + concept + '</div></div></section>';
+  }
+
+  /* ---------- drawing ---------- */
+  function statsHTML(p) {
+    var t = p.tree, items;
+    if (isB(p)) {
+      var s = bStats(t);
+      items = [['Keys', s.keys], ['Nodes', s.nodes], ['Height', s.height], ['Order m', p.m + ' (max ' + (p.m - 1) + ' keys)']];
+    } else {
+      var n = countBin(t.root), h = heightBin(t.root);
+      items = [['Nodes', n], ['Height', h]];
+      if (p.kind === 'bst') items.push(['Best possible height', n ? Math.ceil(Math.log2(n + 1)) : 0]);
+      if (p.kind === 'avl') items.push(['Rotations so far', t.rotations]);
+      if (p.kind === 'splay') items.push(['Root', t.root ? t.root.k : 'none']);
+    }
+    return items.map(function (x) { return x[0] + ' <b>' + esc(x[1]) + '</b>'; }).join('<span aria-hidden="true"></span>');
+  }
+
+  var token = 0;
+  /* ---- node motion: glide, pop in, fade out ---- */
+  var EASE = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  var MOVE = 480;
+  var TR = /translate\(([-\d.]+),([-\d.]+)\)/;
+
+  function snapBin(p) {
+    if (isB(p)) return null;
+    var s = { nodes: {}, edges: {}, nodeHTML: {}, edgeHTML: {} };
+    $$('g.node', p.canvas).forEach(function (g) {
+      var m = g.getAttribute('transform').match(TR), k = g.getAttribute('data-k');
+      s.nodes[k] = { x: +m[1], y: +m[2] }; s.nodeHTML[k] = g.outerHTML;
+    });
+    $$('line.edge', p.canvas).forEach(function (l) {
+      var k = l.getAttribute('data-k');
+      s.edges[k] = { x1: +l.getAttribute('x1'), y1: +l.getAttribute('y1'), x2: +l.getAttribute('x2'), y2: +l.getAttribute('y2') };
+      s.edgeHTML[k] = l.outerHTML;
+    });
+    return s;
+  }
+  function popIn(g) {
+    if (!g.animate) return;
+    var c = g.querySelector('circle');
+    g.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay: 240, fill: 'backwards' });
+    if (c) c.animate([{ transform: 'scale(0.2)' }, { transform: 'scale(1)' }], { duration: 420, delay: 240, easing: 'cubic-bezier(.2,.9,.3,1.35)', fill: 'backwards' });
+  }
+  function ghost(svg, html) {
+    svg.insertAdjacentHTML('beforeend', html);
+    var el = svg.lastElementChild;
+    if (!el || !el.animate) return;
+    el.classList.add('ghost');
+    el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 380, fill: 'forwards' }).onfinish = function () { el.remove(); };
+  }
+  function tweenBin(p, snap) {
+    if (reduce || !snap) return;
+    var svg = $('svg', p.canvas); if (!svg) return;
+    var items = [], seenN = {}, seenE = {};
+    $$('g.node', svg).forEach(function (g) {
+      var k = g.getAttribute('data-k'), m = g.getAttribute('transform').match(TR), to = { x: +m[1], y: +m[2] }, o = snap.nodes[k];
+      seenN[k] = 1;
+      if (!o) { popIn(g); return; }
+      if (o.x !== to.x || o.y !== to.y) { items.push({ g: g, o: o, t: to }); g.setAttribute('transform', 'translate(' + o.x + ',' + o.y + ')'); }
+    });
+    $$('line.edge', svg).forEach(function (l) {
+      var k = l.getAttribute('data-k'), o = snap.edges[k];
+      var to = { x1: +l.getAttribute('x1'), y1: +l.getAttribute('y1'), x2: +l.getAttribute('x2'), y2: +l.getAttribute('y2') };
+      seenE[k] = 1;
+      if (!o) { if (l.animate) l.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 260, fill: 'backwards' }); return; }
+      if (o.x1 !== to.x1 || o.y1 !== to.y1 || o.x2 !== to.x2 || o.y2 !== to.y2) {
+        items.push({ l: l, o: o, t: to });
+        ['x1', 'y1', 'x2', 'y2'].forEach(function (a) { l.setAttribute(a, o[a]); });
+      }
+    });
+    Object.keys(snap.edges).forEach(function (k) { if (!seenE[k]) ghost(svg, snap.edgeHTML[k]); });
+    Object.keys(snap.nodes).forEach(function (k) { if (!seenN[k]) ghost(svg, snap.nodeHTML[k]); });
+    if (!items.length) return;
+    var t0 = null;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var u = Math.min(1, (ts - t0) / MOVE), e = EASE(u);
+      items.forEach(function (it) {
+        if (it.g) it.g.setAttribute('transform', 'translate(' + (it.o.x + (it.t.x - it.o.x) * e) + ',' + (it.o.y + (it.t.y - it.o.y) * e) + ')');
+        else ['x1', 'y1', 'x2', 'y2'].forEach(function (a) { it.l.setAttribute(a, it.o[a] + (it.t[a] - it.o[a]) * e); });
+      });
+      if (u < 1) p.raf = requestAnimationFrame(step);
+    }
+    p.raf = requestAnimationFrame(step);
+  }
+  function tweenB(p, r, prev) {
+    if (reduce || !prev || !r) return;
+    var svg = $('svg', p.canvas); if (!svg) return;
+    var changed = false;
+    r.pos.forEach(function (pos, node) {
+      var g = $('g[data-n="' + r.ids.get(node) + '"]', svg), o = prev.get(node);
+      if (!g || !g.animate) return;
+      if (o) {
+        var dx = o.x - pos.x, dy = o.y - pos.y;
+        if (dx || dy) { changed = true; g.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'translate(0px,0px)' }], { duration: MOVE, easing: 'cubic-bezier(.45,0,.2,1)' }); }
+      } else {
+        changed = true;
+        g.animate([{ opacity: 0, transform: 'translateY(-12px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 360, delay: 240, easing: 'ease-out', fill: 'backwards' });
+      }
+    });
+    if (changed) $$('path.edge', svg).forEach(function (e) {
+      if (e.animate) e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, delay: MOVE * 0.5, fill: 'backwards' });
+    });
+  }
+
+  function draw(p, res) {
+    if (p.raf) cancelAnimationFrame(p.raf);
+    var snap = p.drawn ? snapBin(p) : null, prevB = p.drawn ? (p.bpos || new Map()) : null;
+    var r = null;
+    if (isEmpty(p)) {
+      p.canvas.innerHTML = '<p class="empty">Empty tree. Type a key and press Insert.</p>';
+    } else if (isB(p)) {
+      r = renderB(p.tree); p.canvas.innerHTML = r.svg;
+    } else {
+      r = renderBinary(p.tree.root, { bf: p.kind === 'avl', rootMark: p.kind === 'splay' });
+      p.canvas.innerHTML = r.svg;
+    }
+    p.bpos = isB(p) && r ? r.pos : null;
+    p.drawn = true;
+    p.stats.innerHTML = statsHTML(p);
+    if (isB(p)) tweenB(p, r, prevB); else tweenBin(p, snap);
+    if (res && r) play(p, res, r);
+  }
+
+  function play(p, res, r) {
+    var my = ++token;
+    var svg = $('svg', p.canvas);
+    if (!svg) return;
+    var b = isB(p);
+    var attr = b ? 'data-n' : 'data-k';
+    var ids = b
+      ? res.visited.map(function (n) { return r.ids.get(n); }).filter(function (v) { return v !== undefined; })
+      : res.path;
+    var delay = reduce ? 0 : 230;
+    ids.forEach(function (id, i) {
+      setTimeout(function () {
+        if (my !== token) return;
+        $$('[' + attr + '="' + id + '"]', svg).forEach(function (e) {
+          e.classList.add('visit');
+          if (e.classList.contains('edge') && e.getTotalLength) {
+            try { e.style.setProperty('--len', e.getTotalLength()); e.classList.add('draw'); } catch (x) { /* no length available */ }
+          }
+        });
+      }, i * delay);
+    });
+    setTimeout(function () {
+      if (my !== token) return;
+      var cls = { hit: 'hit', 'new': 'new', dup: 'miss', miss: 'miss', del: 'new' }[res.status];
+      if (b) {
+        var node = null;
+        if (res.status === 'hit' || res.status === 'new' || res.status === 'dup') node = p.tree.locate(res.key);
+        if (node) {
+          var nid = r.ids.get(node);
+          $$('[data-n="' + nid + '"] [data-key="' + res.key + '"]', svg).forEach(function (e) { e.classList.add(res.status === 'dup' ? 'new' : cls); });
+        } else if (res.status === 'miss' && res.visited.length) {
+          var lastId = r.ids.get(res.visited[res.visited.length - 1]);
+          var g = $('g[data-n="' + lastId + '"]', svg);
+          if (g) g.classList.add('miss');
+        }
+      } else if (res.focus !== null && res.focus !== undefined && cls) {
+        var tg = $('g.node[data-k="' + res.focus + '"]', svg);
+        if (tg) { tg.classList.remove('visit'); tg.classList.add(cls); }
+      }
+    }, ids.length * delay);
+  }
+
+  var LABEL = { hit: 'Found', 'new': 'Inserted', miss: 'Not found', del: 'Deleted', dup: 'Already exists' };
+  var VERB = { insert: 'Insert', delete: 'Delete', search: 'Search' };
+  function showLog(p, act, key, res) {
+    p.log.innerHTML = '<div class="log-head"><h3>' + VERB[act] + ' ' + esc(key) + '</h3><span class="chip ' + res.status + '">' + LABEL[res.status] + '</span></div>' +
+      '<ol>' + res.steps.map(function (s, i) { return '<li style="--i:' + i + '">' + esc(s) + '</li>'; }).join('') + '</ol>';
+  }
+  function hint(p, msg, err) {
+    p.log.innerHTML = '<p class="' + (err ? 'err' : 'hint') + '">' + esc(msg) + '</p>';
+  }
+
+  /* ---------- operations ---------- */
+  function exec(p, act, key, silent) {
+    var res = p.tree[act](key);
+    if (!silent) { draw(p, res); showLog(p, act, key, res); }
+    return res;
+  }
+  function runSeq(p, seq) {
+    seq.forEach(function (st, i) {
+      var last = i === seq.length - 1;
+      exec(p, st[0], st[1], !last);
+    });
+    var lastKey = seq[seq.length - 1][1];
+    p.input.value = lastKey;
+  }
+  function readKey(p) {
+    var raw = p.input.value.trim();
+    var k = Number(raw);
+    if (raw === '' || !isFinite(k) || Math.floor(k) !== k || k < 1 || k > 999) {
+      hint(p, 'Enter a whole number from 1 to 999.', true);
+      p.input.focus();
+      return null;
+    }
+    return k;
+  }
+  function onAct(p, act) {
+    if (act === 'reset') {
+      seed(p); draw(p);
+      hint(p, 'Example tree restored. Pick an operation to see each step explained here.');
+      return;
+    }
+    if (act === 'clear') {
+      p.tree = makeTree(p.kind, p.m); draw(p);
+      hint(p, 'Tree cleared. Insert a key to start building.');
+      return;
+    }
+    if (act === 'random') {
+      var have = {}; p.tree.keys().forEach(function (k) { have[k] = 1; });
+      var k, tries = 0;
+      do { k = 1 + Math.floor(Math.random() * 99); tries++; } while (have[k] && tries < 400);
+      p.input.value = k;
+      exec(p, 'insert', k);
+      return;
+    }
+    var key = readKey(p);
+    if (key === null) return;
+    exec(p, act, key);
+  }
+
+  function onPreset(p, name) {
+    if (name === 'sorted') {
+      p.tree = makeTree('bst'); [10, 20, 30, 40, 50].forEach(function (k) { p.tree.insert(k); });
+      draw(p);
+      hint(p, 'Keys arrived in sorted order, so every key went right. Height equals the node count: the tree is a linked list and search is O(n).');
+    } else if (name === 'balanced') {
+      seed(p); draw(p);
+      hint(p, 'The same seven keys, inserted in a different order, give a tree of height 3.');
+    } else if (name === 'deepest') {
+      var k = deepestKey(p.tree.root);
+      if (k === null) { hint(p, 'The tree is empty. Insert a few keys first.', true); return; }
+      p.input.value = k; exec(p, 'search', k);
+    } else if (name === 'seq') {
+      p.tree = makeTree(p.kind, p.m);
+      var last;
+      for (var i = 1; i <= 12; i++) last = p.tree.insert(i);
+      draw(p, last); showLog(p, 'insert', 12, last);
+      p.input.value = 12;
+    }
+  }
+
+  var ROT = { LL: [30, 20, 10], RR: [10, 20, 30], LR: [30, 10, 20], RL: [10, 30, 20] };
+  function onRot(p, name) {
+    p.tree = makeTree('avl');
+    var seq = ROT[name].map(function (k) { return ['insert', k]; });
+    runSeq(p, seq);
+  }
+
+  function onTry(p, spec) {
+    var parts = spec.split(':');
+    var sub = null;
+    p.topic.subs.forEach(function (s) { if (s.id === parts[0]) sub = s; });
+    if (!sub) return;
+    var tr = sub.tries[Number(parts[1])];
+    if (tr.reset) seed(p);
+    runSeq(p, tr.seq);
+    var bench = $('.bench', p.el);
+    if (bench && bench.scrollIntoView && window.innerWidth <= 940) bench.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+  }
+
+  /* ---------- progress ---------- */
+  var GROUPS = [3, 3, 1, 1];
+  function buildBar() {
+    var html = '', i = 0;
+    GROUPS.forEach(function (g) {
+      html += '<div class="grp">';
+      for (var j = 0; j < g; j++, i++) html += '<span class="seg" data-seg="' + ALL_SUBS[i] + '"></span>';
+      html += '</div>';
+    });
+    $('#pbar').innerHTML = html;
+  }
+  function refreshProgress() {
+    var total = 0;
+    ALL_SUBS.forEach(function (id) {
+      var on = !!done[id];
+      if (on) total++;
+      var seg = $('[data-seg="' + id + '"]'); if (seg) seg.classList.toggle('on', on);
+      var btn = $('[data-done="' + id + '"]'); if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    $('#pcount').textContent = total + '/' + ALL_SUBS.length;
+    TOPICS.forEach(function (t) {
+      var c = 0; t.subs.forEach(function (s) { if (done[s.id]) c++; });
+      var el = $('#tab-' + t.id + ' .cnt');
+      if (el) { el.textContent = c + '/' + t.subs.length; el.classList.toggle('full', c === t.subs.length); }
+    });
+  }
+
+  /* ---------- tabs ---------- */
+  var current = null;
+  function showTab(id) {
+    var t = TOPICS.filter(function (x) { return x.id === id; })[0] || TOPICS[0];
+    current = t.id;
+    TOPICS.forEach(function (x) {
+      var on = x.id === t.id;
+      $('#panel-' + x.id).hidden = !on;
+      $('#tab-' + x.id).setAttribute('aria-selected', on ? 'true' : 'false');
+      $('#tab-' + x.id).tabIndex = on ? 0 : -1;
+    });
+    var act = $('#panel-' + t.id);
+    act.classList.remove('enter'); void act.offsetWidth; act.classList.add('enter');
+    $$('tr[data-row]').forEach(function (tr) { tr.classList.toggle('cur', tr.getAttribute('data-row') === t.id); });
+  }
+  function fromHash() {
+    var h = (location.hash || '').replace('#', '');
+    var t = TOPICS.filter(function (x) { return x.hash === h; })[0];
+    showTab(t ? t.id : TOPICS[0].id);
+  }
+
+  /* ---------- boot ---------- */
+  $('#tabs').innerHTML = TOPICS.map(function (t) {
+    return '<button class="tab" role="tab" id="tab-' + t.id + '" aria-controls="panel-' + t.id + '" aria-selected="false" data-tab="' + t.id + '">' + esc(t.tab) + ' <span class="cnt">0/' + t.subs.length + '</span></button>';
+  }).join('');
+  $('#panels').innerHTML = TOPICS.map(panelHTML).join('');
+  buildBar();
+
+  TOPICS.forEach(function (t) {
+    var el = $('#panel-' + t.id);
+    var p = { topic: t, el: el, kind: t.kind, m: 4, input: $('#key-' + t.id), canvas: $('[data-canvas]', el), stats: $('[data-stats]', el), log: $('[data-log]', el) };
+    panels[t.id] = p;
+    seed(p); draw(p);
+    hint(p, 'Example tree loaded. Choose Insert, Delete or Search, or press a Try button on the right to watch a worked example.');
+
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b || !el.contains(b)) return;
+      if (b.hasAttribute('data-act')) onAct(p, b.getAttribute('data-act'));
+      else if (b.hasAttribute('data-preset')) onPreset(p, b.getAttribute('data-preset'));
+      else if (b.hasAttribute('data-rot')) onRot(p, b.getAttribute('data-rot'));
+      else if (b.hasAttribute('data-try')) onTry(p, b.getAttribute('data-try'));
+      else if (b.hasAttribute('data-done')) {
+        var id = b.getAttribute('data-done');
+        done[id] = !done[id]; if (!done[id]) delete done[id];
+        save(); refreshProgress();
+      } else if (b.hasAttribute('data-kind')) {
+        p.kind = b.getAttribute('data-kind');
+        $$('[data-kind]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        seed(p); draw(p);
+        hint(p, 'Rebuilt as a ' + (p.kind === 'bplus' ? 'B+ Tree' : 'B-Tree') + ' of order ' + p.m + ' from the same twelve keys.');
+      }
+    });
+    p.input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); onAct(p, 'insert'); } });
+    var sel = $('[data-order]', el);
+    if (sel) sel.addEventListener('change', function () {
+      p.m = Number(sel.value); seed(p); draw(p);
+      hint(p, 'Order set to ' + p.m + ': each node holds at most ' + (p.m - 1) + ' keys. Rebuilt from the same twelve keys.');
+    });
+  });
+
+  $('#tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tab]'); if (!b) return;
+    var t = TOPICS.filter(function (x) { return x.id === b.getAttribute('data-tab'); })[0];
+    if (location.hash === '#' + t.hash) showTab(t.id); else location.hash = t.hash;
+  });
+  $('#tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var idx = TOPICS.map(function (t) { return t.id; }).indexOf(current);
+    var next = TOPICS[(idx + (e.key === 'ArrowRight' ? 1 : TOPICS.length - 1)) % TOPICS.length];
+    location.hash = next.hash;
+    var el = $('#tab-' + next.id); if (el) el.focus();
+  });
+  window.addEventListener('hashchange', fromHash);
+  $('#motion').addEventListener('click', function () {
+    motionOn = !motionOn;
+    try { localStorage.setItem(MSTORE, motionOn ? 'on' : 'off'); } catch (e) { /* storage unavailable */ }
+    applyMotion();
+    if (motionOn && current && panels[current]) {
+      var p = panels[current];
+      var key = p.tree.keys()[0];
+      if (key !== undefined) { p.input.value = key; exec(p, 'search', key); }
+    }
+  });
+  applyMotion();
+  fromHash();
+  refreshProgress();
+})();
+</script>
+
+</body></html>

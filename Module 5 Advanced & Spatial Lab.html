@@ -1,0 +1,1324 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Module 5 Advanced &amp; Spatial Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: syllabus header with a progress strip, one tab per topic,
+   a graph-paper workbench on the left and the concept notes on the right. */
+:root {
+  --bg: #edf1f4;
+  --surface: #fbfcfd;
+  --surface-2: #e2e9ee;
+  --ink: #10202c;
+  --muted: #526473;
+  --line: #cbd5dd;
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  --accent-soft: #d3eeea;
+  --visit: #b7791f;
+  --visit-soft: #f6e6c4;
+  --visit-ink: #774c06;
+  --bad: #b3372a;
+  --bad-soft: #f7dcd7;
+  --purple: #6b21a8;
+  --purple-soft: #f3e8ff;
+  --purple-ink: #4c1d95;
+  --blue: #1d4ed8;
+  --blue-soft: #dbeafe;
+  --blue-ink: #1e3a8a;
+  --grid: rgba(16, 32, 44, 0.06);
+  --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+    --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+    --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+    --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+    --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe;
+    --grid: rgba(229, 237, 243, 0.06);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+  --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+  --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+  --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+  --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe;
+  --grid: rgba(229, 237, 243, 0.06);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--font-body); }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); text-wrap: balance; }
+p { margin: 0; }
+
+.page {
+  max-width: 1200px; margin: 0 auto;
+  padding-block: 22px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* header */
+.top { display: flex; gap: 20px 32px; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; padding-bottom: 20px; }
+.top-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.eyebrow { font: 600 12px var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.navlink { font: 500 12px var(--font-mono); color: var(--muted); text-decoration: none; padding: 3px 9px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+.navlink:hover { color: var(--ink); border-color: var(--muted); }
+.navlink.next { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.navlink.next:hover { filter: brightness(1.1); }
+
+/* module progression stepper card */
+.module-stepper {
+  margin-top: 36px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.stepper-info { display: flex; flex-direction: column; gap: 4px; }
+.stepper-step { font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+.stepper-title { font-size: 16px; font-weight: 700; margin: 0; color: var(--ink); }
+.stepper-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+h1 { font-size: clamp(24px, 4.4vw, 40px); font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; line-height: 1.12; }
+.progress { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.pbar { display: flex; gap: 10px; flex-wrap: wrap; }
+.grp { display: flex; gap: 3px; }
+.seg { width: 22px; height: 8px; border-radius: 2px; background: var(--line); transition: background 0.2s; }
+.seg.on { background: var(--accent); }
+.progress p { font: 500 13px var(--font-mono); color: var(--muted); }
+.progress strong { color: var(--ink); font-weight: 600; }
+
+/* tabs */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; }
+.tab { appearance: none; background: none; border: 0; border-bottom: 3px solid transparent; border-radius: 0; margin-bottom: -1px; padding: 11px 14px; font: 600 14px var(--font-body); color: var(--muted); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 8px; align-items: center; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.cnt { font: 500 11px var(--font-mono); padding: 1px 7px; border-radius: 10px; background: var(--surface-2); color: var(--muted); }
+.cnt.full { background: var(--accent); color: var(--accent-ink); }
+
+/* panel */
+.panel { padding-top: 22px; }
+.lede { max-width: 72ch; color: var(--muted); margin-bottom: 18px; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 940px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* workbench */
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+.toolbar .sp { flex: 1 1 8px; }
+.keyfield { display: flex; flex-direction: column; gap: 3px; font: 500 11px var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.keyfield input, .keyfield select { padding: 6px 9px; font: 500 14px var(--font-mono); border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.btn { appearance: none; font: 500 14px var(--font-body); padding: 8px 13px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; transition: transform 0.1s, border-color 0.15s, filter 0.15s; }
+.btn:hover { border-color: var(--muted); }
+.btn:active { transform: scale(0.96); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.sm { padding: 5px 10px; font-size: 13px; }
+.row2 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lbl { font: 500 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.segctl { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.segctl button { appearance: none; border: 0; border-radius: 0; padding: 5px 11px; font: 500 13px var(--font-body); background: var(--surface); color: var(--ink); cursor: pointer; }
+.segctl button + button { border-left: 1px solid var(--line); }
+.segctl button[aria-pressed="true"] { background: var(--ink); color: var(--bg); font-weight: 600; }
+select { font: 500 13px var(--font-body); padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); }
+button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visible, .navlink:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 4px 18px; font: 500 12px var(--font-mono); color: var(--muted); }
+.stats b { color: var(--ink); font-weight: 600; }
+
+.canvas { min-height: 310px; padding: 14px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.canvas svg { display: block; margin: auto; max-width: 100%; flex: none; }
+
+/* SVG Styles for Advanced & Spatial Structures */
+.sk-node rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; rx: 4; }
+.sk-node.visit rect { fill: var(--visit-soft); stroke: var(--visit); }
+.sk-node.hit rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.2; }
+.sk-txt { font: 600 12px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.sk-lane { stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 2; }
+.sk-ptr { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+.sk-ptr.active { stroke: var(--accent); stroke-width: 2.6; }
+
+.kd-split-x { stroke: var(--bad); stroke-width: 1.8; stroke-dasharray: 4 2; }
+.kd-split-y { stroke: var(--blue); stroke-width: 1.8; stroke-dasharray: 4 2; }
+.kd-pt circle { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
+.kd-pt.hit circle { fill: var(--accent); r: 6.5; }
+.kd-pt.query circle { fill: var(--visit); r: 7; }
+.kd-pt.near circle { fill: var(--bad); r: 8; stroke: var(--bad-soft); stroke-width: 3; }
+.kd-txt { font: 600 10px var(--font-mono); fill: var(--muted); text-anchor: middle; }
+
+.quad-border { fill: none; stroke: var(--line); stroke-width: 1.2; }
+.quad-border.split { stroke: var(--accent); stroke-width: 1.5; }
+
+.p-node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; }
+.p-node.new circle { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5; }
+.p-node.shared circle { fill: var(--surface-2); stroke: var(--muted); }
+.p-txt { font: 600 12px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.p-edge { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+.p-edge.new { stroke: var(--accent); stroke-width: 2.4; }
+
+/* step log */
+.log { border-top: 1px solid var(--line); padding-top: 12px; min-height: 120px; }
+.log-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.log-head h3 { font-size: 14px; font-weight: 600; font-family: var(--font-body); }
+.chip { font: 600 11px var(--font-mono); padding: 2px 8px; border-radius: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+.chip.hit, .chip.new { background: var(--accent-soft); color: var(--accent); }
+.chip.miss, .chip.dup { background: var(--bad-soft); color: var(--bad); }
+.chip.del { background: var(--visit-soft); color: var(--visit-ink); }
+.chip.blue { background: var(--blue-soft); color: var(--blue); }
+.chip.purple { background: var(--purple-soft); color: var(--purple); }
+.log ol { margin: 0; padding-left: 24px; font: 400 12.5px/1.65 var(--font-mono); }
+.log li { padding-left: 4px; overflow-wrap: anywhere; }
+.log .hint { font: 400 13px var(--font-body); color: var(--muted); }
+.log .err { color: var(--bad); font: 500 13px var(--font-mono); }
+
+/* concept column */
+.concept { display: flex; flex-direction: column; min-width: 0; }
+.topic { padding: 18px 0; border-top: 1px solid var(--line); }
+.topic:first-child { border-top: 0; padding-top: 0; }
+.topic-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.topic h3 { font-size: 18px; font-weight: 700; }
+.topic p { margin-top: 8px; }
+.topic ul { margin: 8px 0 0; padding-left: 18px; }
+.topic li { margin-top: 4px; }
+.topic li::marker { color: var(--accent); }
+.topic dl { margin: 8px 0 0; display: grid; gap: 8px; }
+.topic dt { font: 600 13px var(--font-mono); color: var(--accent); }
+.topic dd { margin: 0; }
+.tries { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.done { appearance: none; display: inline-flex; gap: 7px; align-items: center; font: 500 12px var(--font-mono); padding: 4px 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--muted); cursor: pointer; white-space: nowrap; }
+.done .box { width: 12px; height: 12px; border: 1.5px solid var(--muted); border-radius: 3px; display: grid; place-items: center; }
+.done[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.done[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); }
+.done[aria-pressed="true"] .box::after { content: ""; width: 3px; height: 6px; border: solid var(--accent-ink); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg) translate(-1px, -1px); }
+
+.tablewrap { overflow-x: auto; margin-top: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+td code, .code { font: 500 12.5px var(--font-mono); }
+.topic table { min-width: 340px; }
+
+/* comparison */
+.compare { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); }
+.compare h2 { font-size: 22px; font-weight: 700; }
+.compare .tablewrap table { min-width: 720px; }
+.compare td:first-child { font-weight: 600; white-space: nowrap; }
+.compare tr.cur td { background: var(--accent-soft); }
+.note { margin-top: 10px; color: var(--muted); font-size: 13px; }
+
+:root[data-motion="off"] * { transition: none !important; animation: none !important; }
+.mnote { max-width: 34ch; font-size: 12px; color: var(--muted); }
+#motion b { font-weight: 600; color: var(--accent); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes segpop { 0% { transform: scale(0.6); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+.panel.enter .lede, .panel.enter .bench, .panel.enter .topic { animation: rise 0.42s cubic-bezier(.2,.7,.2,1) both; }
+.panel.enter .bench { animation-delay: 0.05s; }
+.panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
+.log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
+.seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
+</style>
+<div class="page">
+  <header class="top">
+    <div>
+      <div class="top-nav">
+        <span class="eyebrow">Module 5 of 5 (Final)</span>
+        <a href="Module 4 String & Range Lab.html" class="navlink" title="Previous Module: String & Range">&larr; Module 4</a>
+        <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="Module 1 Tree Lab.html" class="navlink next" title="Restart Curriculum at Module 1">Restart: Module 1 ↺</a>
+      </div>
+      <h1>Skip Lists, Persistent Trees, KD-Trees, Spatial &amp; Concurrent Structures</h1>
+    </div>
+    <div class="progress">
+      <div class="pbar" id="pbar" aria-hidden="true"></div>
+      <p><strong id="pcount">0/4</strong> topics studied</p>
+      <button class="btn sm" id="motion" aria-pressed="true">Animations <b class="mstate">On</b></button>
+      <p class="mnote" id="mnote" hidden>Your device asks for reduced motion, so animations start off. Switch them on here.</p>
+    </div>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs" aria-label="Module 5 Topics"></nav>
+  <div id="panels"></div>
+
+  <section class="compare" aria-labelledby="cmp-h">
+    <h2 id="cmp-h">Side by side comparison</h2>
+    <p class="note">k is the number of spatial dimensions, n is the number of elements/points, and p is the coin probability (typically 0.50).</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Data Structure</th><th>Dimension / Category</th><th>Search Time</th><th>Insert / Update Time</th><th>Space Complexity</th><th>Key Invariant / Mechanism</th><th>Primary Trade-off / Bottleneck</th><th>Real-World Use Case</th></tr></thead>
+        <tbody>
+          <tr data-row="skip-list"><td>Skip List</td><td>1D Probabilistic Linked Hierarchy</td><td class="code">O(log n) avg, O(n) worst</td><td class="code">O(log n) avg</td><td class="code">O(n) expected</td><td>Multi-level forward pointers chosen via coin flips.</td><td>Probabilistic worst case; extra forward pointers per node.</td><td>Redis ZSET, RocksDB / LevelDB memtables, Java ConcurrentSkipList</td></tr>
+          <tr data-row="persistent"><td>Persistent Tree (Path Copying)</td><td>Versioned Immutable Tree</td><td class="code">O(log n)</td><td class="code">O(log n) new nodes</td><td class="code">O(n + v log n) for v versions</td><td>Duplicates only nodes on path to root; shares unchanged subtrees.</td><td>Cannot mutate in place; garbage collection overhead for old versions.</td><td>Git commit snapshots, Clojure persistent vectors, time-travel debuggers</td></tr>
+          <tr data-row="kd-tree"><td>KD-Tree (2D / 3D)</td><td>k-Dimensional Spatial Partitioning</td><td class="code">O(log n) avg, O(n) worst</td><td class="code">O(log n) avg</td><td class="code">O(n)</td><td>Alternates splitting axes (X &rarr; Y &rarr; Z); bounding box pruning.</td><td>Degrades exponentially in high dimensions ("Curse of Dimensionality").</td><td>Autonomous vehicle LiDAR, nearest neighbor search (k-NN), GIS maps</td></tr>
+          <tr data-row="spatial-concurrent"><td>Quadtree / Octree</td><td>2D / 3D Hierarchical Grids</td><td class="code">O(depth) &approx; O(log n)</td><td class="code">O(depth)</td><td class="code">O(n)</td><td>Subdivides space into 4 quadrants (2D) or 8 octants (3D).</td><td>Can become deeply unbalanced if points cluster tightly in one corner.</td><td>Game collision detection, spatial indexing, Minecraft voxel engines</td></tr>
+          <tr data-row="spatial-concurrent"><td>Lock-Free Stack &amp; Queue</td><td>Concurrent Atomic Data Structures</td><td class="code">O(1)</td><td class="code">O(1) amortized</td><td class="code">O(n)</td><td>Atomic Compare-And-Swap (CAS) loops without thread locks.</td><td>Contention overhead under extreme write loads; ABA problem.</td><td>High-frequency trading engines, Linux kernel lockless ring buffers</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="module-stepper" aria-label="Course Progression">
+    <div class="stepper-info">
+      <span class="stepper-step">🎉 Final Step 5 of 5 Complete!</span>
+      <h3 class="stepper-title">Curriculum Suite Completed (Modules 1 - 5)</h3>
+    </div>
+    <div class="stepper-actions">
+      <a href="Module 4 String & Range Lab.html" class="btn sm">&larr; Prev: Module 4</a>
+      <a href="index.html" class="btn primary" style="font-weight:600;">🏠 Return to Course Hub</a>
+      <a href="Module 1 Tree Lab.html" class="btn sm">↺ Restart: Module 1 (Trees)</a>
+    </div>
+  </footer>
+</div>
+<script>
+'use strict';
+/* =====================================================================
+   Module 5: Advanced & Spatial Structures Algorithms & Visualizers
+   ===================================================================== */
+
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+/* ---------------------------------------------------------------------
+   1. Skip List Model
+   --------------------------------------------------------------------- */
+class SkipNode {
+  constructor(val, level) {
+    this.val = val;
+    this.forward = new Array(level).fill(null);
+  }
+}
+
+class SkipListModel {
+  constructor(maxLevel) {
+    this.maxLevel = maxLevel || 4;
+    this.p = 0.5;
+    this.level = 1;
+    this.head = new SkipNode(-Infinity, this.maxLevel);
+  }
+  randomLevel() {
+    var lvl = 1;
+    while (Math.random() < this.p && lvl < this.maxLevel) lvl++;
+    return lvl;
+  }
+  insert(val) {
+    var steps = [];
+    var update = new Array(this.maxLevel).fill(null);
+    var cur = this.head;
+
+    steps.push('Begin insertion of key ' + val + '. Trace predecessors at each level.');
+
+    for (var i = this.level - 1; i >= 0; i--) {
+      while (cur.forward[i] && cur.forward[i].val < val) {
+        steps.push('• Level ' + i + ': advance right past ' + (cur.forward[i].val === -Infinity ? 'Head' : cur.forward[i].val) + '.');
+        cur = cur.forward[i];
+      }
+      update[i] = cur;
+    }
+    cur = cur.forward[0];
+
+    if (cur && cur.val === val) {
+      steps.push('Key ' + val + ' is already present in Skip List. Duplicate ignored.');
+      return { steps: steps, status: 'dup', val: val };
+    }
+
+    var rlevel = this.randomLevel();
+    steps.push('Coin flips determined node height: ' + rlevel + ' level(s).');
+
+    if (rlevel > this.level) {
+      for (var j = this.level; j < rlevel; j++) update[j] = this.head;
+      this.level = rlevel;
+      steps.push('Skip List raised to new maximum active level ' + this.level + '.');
+    }
+
+    var newNode = new SkipNode(val, rlevel);
+    for (var k = 0; k < rlevel; k++) {
+      newNode.forward[k] = update[k].forward[k];
+      update[k].forward[k] = newNode;
+      steps.push('• Level ' + k + ': linked pointer from predecessor (' + (update[k].val === -Infinity ? 'Head' : update[k].val) + ') &rarr; ' + val + '.');
+    }
+
+    return { steps: steps, status: 'new', val: val, height: rlevel };
+  }
+  search(val) {
+    var steps = [];
+    var cur = this.head;
+    var visited = [];
+
+    steps.push('Search for key ' + val + ' starting at top level ' + (this.level - 1) + '.');
+
+    for (var i = this.level - 1; i >= 0; i--) {
+      while (cur.forward[i] && cur.forward[i].val < val) {
+        cur = cur.forward[i];
+        visited.push({ val: cur.val, level: i });
+        steps.push('• Level ' + i + ' (express lane): forward to ' + cur.val + ' < ' + val + '.');
+      }
+      if (cur.forward[i] && cur.forward[i].val === val) {
+        visited.push({ val: cur.forward[i].val, level: i });
+        steps.push('Match found at Level ' + i + '! Key ' + val + ' located in O(log n) comparisons.');
+        return { steps: steps, status: 'hit', val: val, visited: visited };
+      }
+      steps.push('• Level ' + i + ': next node is ' + (cur.forward[i] ? cur.forward[i].val : 'Tail (null)') + ' > ' + val + '. Drop down to Level ' + (i - 1) + '.');
+    }
+
+    steps.push('Reached bottom Level 0: key ' + val + ' is not in the Skip List.');
+    return { steps: steps, status: 'miss', val: val, visited: visited };
+  }
+  delete(val) {
+    var steps = [];
+    var update = new Array(this.maxLevel).fill(null);
+    var cur = this.head;
+
+    for (var i = this.level - 1; i >= 0; i--) {
+      while (cur.forward[i] && cur.forward[i].val < val) cur = cur.forward[i];
+      update[i] = cur;
+    }
+    cur = cur.forward[0];
+
+    if (!cur || cur.val !== val) {
+      steps.push('Key ' + val + ' not found in Skip List. Nothing deleted.');
+      return { steps: steps, status: 'miss', val: val };
+    }
+
+    for (var j = 0; j < this.level; j++) {
+      if (update[j].forward[j] !== cur) break;
+      update[j].forward[j] = cur.forward[j];
+      steps.push('• Unlinked pointer at Level ' + j + '.');
+    }
+
+    while (this.level > 1 && this.head.forward[this.level - 1] === null) {
+      this.level--;
+    }
+
+    steps.push('Successfully deleted ' + val + ' from all levels.');
+    return { steps: steps, status: 'del', val: val };
+  }
+  allNodes() {
+    var nodes = [];
+    var cur = this.head.forward[0];
+    while (cur) {
+      nodes.push(cur);
+      cur = cur.forward[0];
+    }
+    return nodes;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   2. Persistent Data Structures (Path Copying Tree)
+   --------------------------------------------------------------------- */
+class PTreeNode {
+  constructor(k, l, r) {
+    this.k = k;
+    this.l = l || null;
+    this.r = r || null;
+  }
+}
+
+class PersistentTreeModel {
+  constructor() {
+    this.versions = [null]; // v0 = null
+    this.historySteps = [];
+  }
+  insertVersion(k) {
+    var steps = [];
+    var latest = this.versions[this.versions.length - 1];
+    var copiedNodes = [];
+
+    steps.push('Creating Version ' + this.versions.length + ' by inserting key ' + k + ' via Path Copying.');
+
+    function pIns(root) {
+      if (!root) {
+        steps.push('• Allocate new leaf PTreeNode(' + k + ').');
+        var leaf = new PTreeNode(k);
+        copiedNodes.push(k);
+        return leaf;
+      }
+      if (k < root.k) {
+        steps.push('• Duplicate ancestor ' + root.k + ' (left child updated, right subtree ' + (root.r ? root.r.k : 'null') + ' structurally shared).');
+        copiedNodes.push(root.k);
+        return new PTreeNode(root.k, pIns(root.l), root.r);
+      } else if (k > root.k) {
+        steps.push('• Duplicate ancestor ' + root.k + ' (left subtree ' + (root.l ? root.l.k : 'null') + ' structurally shared, right child updated).');
+        copiedNodes.push(root.k);
+        return new PTreeNode(root.k, root.l, pIns(root.r));
+      }
+      steps.push('Key ' + k + ' already in version.');
+      return root;
+    }
+
+    var newRoot = pIns(latest);
+    this.versions.push(newRoot);
+    steps.push('Version ' + (this.versions.length - 1) + ' committed. Duplicated ' + copiedNodes.length + ' nodes; all other nodes shared.');
+    return { steps: steps, status: 'new', ver: this.versions.length - 1, copied: copiedNodes };
+  }
+}
+
+/* ---------------------------------------------------------------------
+   3. KD-Tree (2D Nearest Neighbor & Range Search)
+   --------------------------------------------------------------------- */
+class KDNode {
+  constructor(pt, axis, l, r) {
+    this.x = pt[0];
+    this.y = pt[1];
+    this.axis = axis; // 0 = x-split, 1 = y-split
+    this.l = l || null;
+    this.r = r || null;
+  }
+}
+
+function buildKDTree(points, depth) {
+  if (!points || !points.length) return null;
+  depth = depth || 0;
+  var axis = depth % 2;
+  var pts = points.slice().sort(function (a, b) { return a[axis] - b[axis]; });
+  var mid = Math.floor(pts.length / 2);
+  return new KDNode(
+    pts[mid],
+    axis,
+    buildKDTree(pts.slice(0, mid), depth + 1),
+    buildKDTree(pts.slice(mid + 1), depth + 1)
+  );
+}
+
+function findNearestNeighbor(root, qx, qy) {
+  var bestNode = null;
+  var bestDist = Infinity;
+  var steps = [];
+
+  steps.push('Querying Nearest Neighbor for (' + qx + ', ' + qy + ') using alternating plane bounds.');
+
+  function search(node) {
+    if (!node) return;
+    var d = Math.hypot(node.x - qx, node.y - qy);
+    steps.push('• Inspect node (' + node.x + ', ' + node.y + '): distance = ' + d.toFixed(1) + 'px.');
+
+    if (d < bestDist) {
+      bestDist = d;
+      bestNode = node;
+      steps.push('  New nearest candidate: (' + node.x + ', ' + node.y + ') radius = ' + bestDist.toFixed(1) + 'px.');
+    }
+
+    var axis = node.axis;
+    var qVal = axis === 0 ? qx : qy;
+    var nVal = axis === 0 ? node.x : node.y;
+    var nearBranch = qVal < nVal ? node.l : node.r;
+    var farBranch = qVal < nVal ? node.r : node.l;
+
+    search(nearBranch);
+
+    // Prune check: does hypersphere cross the splitting plane?
+    var planeDist = Math.abs(qVal - nVal);
+    if (planeDist < bestDist) {
+      steps.push('  Splitting plane ' + (axis === 0 ? 'X=' : 'Y=') + nVal + ' intersects search radius (' + planeDist.toFixed(1) + ' < ' + bestDist.toFixed(1) + '). Search other branch.');
+      search(farBranch);
+    } else {
+      steps.push('  PRUNED other branch: plane distance ' + planeDist.toFixed(1) + ' &ge; best radius ' + bestDist.toFixed(1) + '. Whole subtree skipped!');
+    }
+  }
+
+  search(root);
+  return { bestNode: bestNode, bestDist: bestDist, steps: steps };
+}
+
+/* ---------------------------------------------------------------------
+   4. Spatial & Concurrent: Quadtree & CAS Lock-Free Stack
+   --------------------------------------------------------------------- */
+class Quadtree {
+  constructor(x, y, w, h, capacity) {
+    this.x = x; this.y = y; this.w = w; this.h = h;
+    this.capacity = capacity || 1;
+    this.points = [];
+    this.divided = false;
+    this.nw = null; this.ne = null; this.sw = null; this.se = null;
+  }
+  insert(pt, steps) {
+    if (pt[0] < this.x || pt[0] > this.x + this.w || pt[1] < this.y || pt[1] > this.y + this.h) {
+      return false;
+    }
+    if (this.points.length < this.capacity && !this.divided) {
+      this.points.push(pt);
+      if (steps) steps.push('• Stored point (' + pt[0] + ', ' + pt[1] + ') in quadrant [' + this.x + ',' + this.y + '].');
+      return true;
+    }
+    if (!this.divided) {
+      this.subdivide();
+      if (steps) steps.push('• Quadrant exceeded capacity ' + this.capacity + '. Subdividing into NW, NE, SW, SE.');
+    }
+    return this.nw.insert(pt, steps) || this.ne.insert(pt, steps) || this.sw.insert(pt, steps) || this.se.insert(pt, steps);
+  }
+  subdivide() {
+    var hw = this.w / 2, hh = this.h / 2;
+    this.nw = new Quadtree(this.x, this.y, hw, hh, this.capacity);
+    this.ne = new Quadtree(this.x + hw, this.y, hw, hh, this.capacity);
+    this.sw = new Quadtree(this.x, this.y + hh, hw, hh, this.capacity);
+    this.se = new Quadtree(this.x + hw, this.y + hh, hw, hh, this.capacity);
+    this.divided = true;
+    for (var i = 0; i < this.points.length; i++) {
+      var p = this.points[i];
+      this.nw.insert(p) || this.ne.insert(p) || this.sw.insert(p) || this.se.insert(p);
+    }
+    this.points = [];
+  }
+}
+
+/* =====================================================================
+   SVG Rendering Engines
+   ===================================================================== */
+function renderSkipListSVG(sl, res) {
+  var width = 520, height = 260;
+  var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Skip List Diagram">';
+
+  var all = sl.allNodes();
+  var startX = 60, colW = Math.min(50, (width - 100) / (all.length + 2));
+  var bottomY = 210, laneH = 42;
+
+  // Lanes
+  for (var l = 0; l < sl.maxLevel; l++) {
+    var y = bottomY - l * laneH;
+    svg += '<line class="sk-lane" x1="20" y1="' + y + '" x2="' + (width - 20) + '" y2="' + y + '" />' +
+      '<text x="14" y="' + (y + 3) + '" font-family="var(--font-mono)" font-size="10" font-weight="600" fill="var(--muted)">L' + l + '</text>';
+  }
+
+  // Draw Head Sentinel
+  for (var hl = 0; hl < sl.maxLevel; hl++) {
+    var hy = bottomY - hl * laneH;
+    svg += '<rect class="sk-node" x="38" y="' + (hy - 14) + '" width="24" height="28" fill="var(--surface-2)" />' +
+      '<text class="sk-txt" x="50" y="' + hy + '" font-size="9">H</text>';
+  }
+
+  // Draw Nodes and Horizontal Pointers
+  all.forEach(function (node, idx) {
+    var x = startX + (idx + 1) * colW;
+    var isHit = res && res.val === node.val && res.status === 'hit';
+
+    for (var lvl = 0; lvl < node.forward.length; lvl++) {
+      var ny = bottomY - lvl * laneH;
+      var cls = 'sk-node' + (isHit ? ' hit' : '');
+      svg += '<g class="' + cls + '" transform="translate(' + (x - 14) + ',' + (ny - 14) + ')">' +
+        '<rect width="28" height="28" />' +
+        '<text class="sk-txt" x="14" y="14">' + node.val + '</text>' +
+        '</g>';
+
+      // Pointer line
+      var nextX = width - 40;
+      if (node.forward[lvl]) {
+        var nIdx = all.indexOf(node.forward[lvl]);
+        nextX = startX + (nIdx + 1) * colW - 14;
+      }
+      svg += '<line class="sk-ptr" x1="' + (x + 14) + '" y1="' + ny + '" x2="' + nextX + '" y2="' + ny + '" marker-end="url(#arrow)" />';
+    }
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderKDTreeSVG(kdRoot, points, qPt, nnPt) {
+  var width = 520, height = 280;
+  var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="KD Tree Diagram">';
+
+  // Draw Bounding Plane 0..480 x 0..260
+  var minX = 20, maxX = 490, minY = 20, maxY = 250;
+  svg += '<rect x="' + minX + '" y="' + minY + '" width="' + (maxX - minX) + '" height="' + (maxY - minY) + '" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5" rx="6" />';
+
+  // Recursive partition lines
+  function drawSplits(node, x1, x2, y1, y2) {
+    if (!node) return;
+    if (node.axis === 0) { // X split (vertical)
+      svg += '<line class="kd-split-x" x1="' + node.x + '" y1="' + y1 + '" x2="' + node.x + '" y2="' + y2 + '" />';
+      drawSplits(node.l, x1, node.x, y1, y2);
+      drawSplits(node.r, node.x, x2, y1, y2);
+    } else { // Y split (horizontal)
+      svg += '<line class="kd-split-y" x1="' + x1 + '" y1="' + node.y + '" x2="' + x2 + '" y2="' + node.y + '" />';
+      drawSplits(node.l, x1, x2, y1, node.y);
+      drawSplits(node.r, x1, x2, node.y, y2);
+    }
+  }
+
+  drawSplits(kdRoot, minX, maxX, minY, maxY);
+
+  // Draw Points
+  points.forEach(function (pt) {
+    var isNN = nnPt && nnPt.x === pt[0] && nnPt.y === pt[1];
+    var cls = 'kd-pt' + (isNN ? ' near' : '');
+    svg += '<g class="' + cls + '" transform="translate(' + pt[0] + ',' + pt[1] + ')">' +
+      '<circle r="4.5" />' +
+      '<text class="kd-txt" x="0" y="-8">(' + pt[0] + ',' + pt[1] + ')</text>' +
+      '</g>';
+  });
+
+  // Query Point & Radius
+  if (qPt) {
+    svg += '<g class="kd-pt query" transform="translate(' + qPt[0] + ',' + qPt[1] + ')">' +
+      '<circle r="6" />' +
+      '<text class="kd-txt" x="0" y="16" fill="var(--visit-ink)">Query</text>' +
+      '</g>';
+    if (nnPt) {
+      var rad = Math.hypot(qPt[0] - nnPt.x, qPt[1] - nnPt.y);
+      svg += '<circle cx="' + qPt[0] + '" cy="' + qPt[1] + '" r="' + rad + '" fill="none" stroke="var(--visit)" stroke-width="1.5" stroke-dasharray="4 3" />';
+    }
+  }
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderPersistentSVG(model, activeVer) {
+  var width = 520, height = 270;
+  var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Persistent Tree Diagram">';
+
+  var root = model.versions[activeVer] || null;
+  if (!root) {
+    svg += '<text x="' + (width / 2) + '" y="' + (height / 2) + '" text-anchor="middle" font-family="var(--font-mono)" fill="var(--muted)">Version ' + activeVer + ' is empty.</text></svg>';
+    return svg;
+  }
+
+  var nodes = [];
+  var edges = [];
+
+  function layoutP(node, depth, x1, x2) {
+    if (!node) return null;
+    var x = (x1 + x2) / 2;
+    var y = 35 + depth * 55;
+    nodes.push({ k: node.k, x: x, y: y });
+
+    if (node.l) {
+      var lx = (x1 + x) / 2, ly = 35 + (depth + 1) * 55;
+      edges.push({ x1: x, y1: y, x2: lx, y2: ly });
+      layoutP(node.l, depth + 1, x1, x);
+    }
+    if (node.r) {
+      var rx = (x + x2) / 2, ry = 35 + (depth + 1) * 55;
+      edges.push({ x1: x, y1: y, x2: rx, y2: ry });
+      layoutP(node.r, depth + 1, x, x2);
+    }
+  }
+
+  layoutP(root, 0, 20, width - 20);
+
+  edges.forEach(function (e) {
+    svg += '<line class="p-edge" x1="' + e.x1 + '" y1="' + e.y1 + '" x2="' + e.x2 + '" y2="' + e.y2 + '" />';
+  });
+
+  nodes.forEach(function (n) {
+    svg += '<g class="p-node new" transform="translate(' + n.x + ',' + n.y + ')">' +
+      '<circle r="16" />' +
+      '<text class="p-txt" y="1">' + n.k + '</text>' +
+      '</g>';
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderQuadtreeSVG(qt, points) {
+  var width = 520, height = 270;
+  var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Quadtree Diagram">';
+
+  function drawQuad(node) {
+    if (!node) return;
+    svg += '<rect class="quad-border" x="' + node.x + '" y="' + node.y + '" width="' + node.w + '" height="' + node.h + '" />';
+    if (node.divided) {
+      drawQuad(node.nw); drawQuad(node.ne);
+      drawQuad(node.sw); drawQuad(node.se);
+    }
+  }
+
+  drawQuad(qt);
+
+  points.forEach(function (p) {
+    svg += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="4" fill="var(--accent)" stroke="var(--accent-ink)" stroke-width="1.2" />' +
+      '<text x="' + p[0] + '" y="' + (p[1] - 7) + '" font-family="var(--font-mono)" font-size="9" fill="var(--muted)" text-anchor="middle">(' + p[0] + ',' + p[1] + ')</text>';
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+/* =====================================================================
+   Topics Specification (0/4 Total)
+   ===================================================================== */
+var SKIPLIST_TABLE = '<div class="tablewrap"><table><thead><tr><th>Metric</th><th>Skip List</th><th>Red-Black Tree</th><th>Sorted Array</th></tr></thead><tbody>' +
+  '<tr><td>Average Search</td><td class="code">O(log n)</td><td class="code">O(log n)</td><td class="code">O(log n) (Binary)</td></tr>' +
+  '<tr><td>Average Insert</td><td class="code">O(log n)</td><td class="code">O(log n)</td><td class="code">O(n) (Shift memory)</td></tr>' +
+  '<tr><td>Average Delete</td><td class="code">O(log n)</td><td class="code">O(log n)</td><td class="code">O(n)</td></tr>' +
+  '<tr><td>Concurrency Friendly</td><td>High (Lock-free CAS forward pointers)</td><td>Poor (Tree rotations lock roots)</td><td>Very Low</td></tr>' +
+  '</tbody></table></div>';
+
+var PERSISTENT_TABLE = '<div class="tablewrap"><table><thead><tr><th>Persistence Level</th><th>Query Capability</th><th>Update Capability</th><th>Typical Real-World Use</th></tr></thead><tbody>' +
+  '<tr><td>Ephemeral</td><td>Current version only</td><td>Mutates current in-place</td><td>Standard C++ / Java collections</td></tr>' +
+  '<tr><td>Partially Persistent</td><td>Any version v &le; current</td><td>Latest version only</td><td>Historical database audit logs</td></tr>' +
+  '<tr><td>Fully Persistent</td><td>Any version v</td><td>Any version (branches new child)</td><td>Git version control, Clojure collections</td></tr>' +
+  '<tr><td>Confluent Persistent</td><td>Any version v</td><td>Can merge versions together</td><td>Distributed branch merging</td></tr>' +
+  '</tbody></table></div>';
+
+var KD_TABLE = '<div class="tablewrap"><table><thead><tr><th>Feature</th><th>KD-Tree (2D/3D)</th><th>R-Tree</th><th>Grid Index</th></tr></thead><tbody>' +
+  '<tr><td>Geometry Handled</td><td>Exact dimensionless Points</td><td>Bounding boxes (polygons, lines)</td><td>Uniform cells</td></tr>' +
+  '<tr><td>Splitting Axis</td><td>Alternates X &rarr; Y &rarr; Z cycling</td><td>Minimum Bounding Rectangles (MBR)</td><td>Fixed cell width</td></tr>' +
+  '<tr><td>Nearest Neighbor</td><td class="code">O(log n) average</td><td class="code">O(log n) average</td><td class="code">O(1 + &alpha;)</td></tr>' +
+  '</tbody></table></div>';
+
+var CONCURRENT_TABLE = '<div class="tablewrap"><table><thead><tr><th>Mechanism</th><th>Primitive</th><th>Advantage</th><th>Primary Risk / Flaw</th></tr></thead><tbody>' +
+  '<tr><td>Treiber Stack</td><td>Atomic CAS(Top, old, new)</td><td>Lock-free; no thread suspension</td><td>ABA Problem without version tags</td></tr>' +
+  '<tr><td>Michael-Scott Queue</td><td>2 CAS (Head &amp; Tail)</td><td>Concurrent push &amp; pop</td><td>High cache coherence traffic</td></tr>' +
+  '<tr><td>RCU (Read-Copy-Update)</td><td>Pointer swap + grace period</td><td>Lock-free zero-overhead reads</td><td>Delayed memory reclamation</td></tr>' +
+  '</tbody></table></div>';
+
+var TOPICS = [
+  {
+    id: 'skip-list', hash: 'skip-lists', tab: 'Skip Lists', kind: 'skip-list',
+    lede: 'A Skip List is a probabilistic multi-level linked list that delivers O(log n) search, insertion, and deletion without complex rebalancing rotations.',
+    subs: [
+      {
+        id: 'skip-list-sub', title: 'Skip Lists & Probabilistic Indexing',
+        lead: 'Express lanes skip over long runs of elements. Observe coin-flip promotions and multi-level searches dropping down lanes.',
+        points: [
+          'Probabilistic Promotion: Nodes are promoted to Level i + 1 with probability p = 0.5 (geometric distribution).',
+          'Search Strategy: Traverse right on highest level; drop down one level whenever the next element exceeds target.',
+          'Lock-Free Concurrency: Skip lists are exceptionally easy to implement lock-free using CAS forward pointer updates (e.g. Java ConcurrentSkipListMap).',
+          'Production Uses: Redis sorted sets (ZSET), LevelDB / RocksDB in-memory MemTables.'
+        ],
+        extra: SKIPLIST_TABLE,
+        tries: [
+          { label: 'Insert 15, 25, 35, 45', reset: true, act: 'sample-skip' },
+          { label: 'Search 35 (Drop lanes)', reset: false, act: 'search-35' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'persistent', hash: 'persistent-structures', tab: 'Persistent Trees', kind: 'persistent',
+    lede: 'Persistent data structures preserve historical versions whenever modified. Path Copying duplicates only O(log n) nodes along the root path while structurally sharing all unchanged subtrees.',
+    subs: [
+      {
+        id: 'persistent-sub', title: 'Persistent Trees & Path Copying',
+        lead: 'Explore how immutable functional data structures create new version roots while sharing existing subtrees with zero duplication overhead.',
+        points: [
+          'Path Copying: To insert or update a node, duplicate only the path from root to target. All untouched subtrees are shared verbatim.',
+          'Version Graph: Each version pointer v serves as an independent immutable tree snapshot.',
+          'Memory Invariant: An update costs only O(log n) new nodes instead of cloning the entire tree.',
+          'Production Uses: Git commit graphs, Clojure persistent hash maps (HAMT), time-travel debugging in Redux.'
+        ],
+        extra: PERSISTENT_TABLE,
+        tries: [
+          { label: 'Build Version 1 & 2', reset: true, act: 'build-v12' },
+          { label: 'Build Version 3 (Structural Sharing)', reset: false, act: 'build-v3' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'kd-tree', hash: 'kd-trees', tab: 'KD-Trees', kind: 'kd-tree',
+    lede: 'A KD-Tree (k-Dimensional Tree) partitions space using alternating orthogonal planes, allowing fast nearest neighbor search and multi-dimensional range queries.',
+    subs: [
+      {
+        id: 'kd-tree-sub', title: 'KD-Trees & Spatial Partitioning',
+        lead: 'Visualize alternating vertical (X) and horizontal (Y) spatial cuts, and watch the nearest-neighbor algorithm prune entire half-planes.',
+        points: [
+          'Alternating Planes: Level 0 splits X (vertical lines); Level 1 splits Y (horizontal lines); cycling through all k dimensions.',
+          'Branch Pruning: If the distance from query point to a splitting plane exceeds the current best radius, the ENTIRE opposite subtree is skipped.',
+          'Curse of Dimensionality: In high dimensions (k > 20), almost all points lie near the hypersphere boundary, causing KD-Tree search to degrade toward O(n).',
+          'Production Uses: Autonomous robotics LiDAR mapping, geospatial indexing (PostGIS), computer vision feature matching.'
+        ],
+        extra: KD_TABLE,
+        tries: [
+          { label: 'Build 2D KD-Tree', reset: true, act: 'build-kd' },
+          { label: 'Nearest Neighbor Query', reset: false, act: 'query-nn' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'spatial-concurrent', hash: 'spatial-concurrent', tab: 'Spatial & Concurrent', kind: 'spatial-concurrent',
+    lede: 'Hierarchical spatial decomposition (Quadtree/Octree) enables collision detection, while atomic Compare-And-Swap (CAS) primitives drive lock-free concurrency.',
+    subs: [
+      {
+        id: 'spatial-concurrent-sub', title: 'Spatial Quadtrees & Lock-Free CAS',
+        lead: 'Trace 2D Quadtree spatial splits into NW, NE, SW, and SE quadrants, and explore atomic lock-free CAS stack loops.',
+        points: [
+          'Quadtrees (2D): Recursively divide space into 4 quadrants when point density exceeds capacity (used in game physics and GIS).',
+          'Octrees (3D): Recursively divide 3D volume into 8 octants (used in Minecraft voxel rendering and 3D ray tracing).',
+          'Atomic CAS: Compare-And-Swap replaces mutual exclusion locks with non-blocking retry loops: while (!CAS(&top, old, new)).',
+          'The ABA Problem: When a memory address is changed and restored to its original value, naive CAS succeeds erroneously. Resolved using version tags.'
+        ],
+        extra: CONCURRENT_TABLE,
+        tries: [
+          { label: 'Subdivide Quadtree', reset: true, act: 'quad-sub' },
+          { label: 'Simulate Atomic CAS Stack', reset: true, act: 'cas-stack' }
+        ]
+      }
+    ]
+  }
+];
+
+var ALL_SUBS = [];
+TOPICS.forEach(function (t) { t.subs.forEach(function (s) { ALL_SUBS.push(s.id); }); });
+
+/* =====================================================================
+   App State & Persistence
+   ===================================================================== */
+var STORE = 'advanced_spatial_module_done';
+var MSTORE = 'advanced_spatial_module_motion';
+var done = {};
+try { done = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) { done = {}; }
+function save() { try { localStorage.setItem(STORE, JSON.stringify(done)); } catch (e) { /* storage disabled */ } }
+
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var motionOn = true;
+try {
+  var savedM = localStorage.getItem(MSTORE);
+  if (savedM !== null) motionOn = savedM === 'on';
+  else if (reduce) motionOn = false;
+} catch (e) { /* no storage */ }
+
+function applyMotion() {
+  document.documentElement.setAttribute('data-motion', motionOn ? 'on' : 'off');
+  var b = document.getElementById('motion');
+  if (b) {
+    b.setAttribute('aria-pressed', motionOn ? 'true' : 'false');
+    b.querySelector('.mstate').textContent = motionOn ? 'On' : 'Off';
+  }
+  var mn = document.getElementById('mnote');
+  if (mn) mn.hidden = !reduce;
+}
+
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+/* =====================================================================
+   Panel HTML Generation
+   ===================================================================== */
+var panels = {};
+
+function panelHTML(t) {
+  var id = t.id;
+  var extras = '';
+
+  if (id === 'skip-list') {
+    extras = '<div class="row2">' +
+      '<label class="keyfield">Key<input id="key-' + id + '" type="number" min="1" max="999" value="35" style="width:75px;"></label>' +
+      '<button class="btn primary sm" data-act="sl-insert">Insert</button>' +
+      '<button class="btn sm" data-act="sl-search">Search</button>' +
+      '<button class="btn sm" data-act="sl-delete">Delete</button>' +
+      '<span class="sp"></span>' +
+      '<button class="btn sm" data-act="sl-reset">Reset Example</button></div>';
+  } else if (id === 'persistent') {
+    extras = '<div class="row2">' +
+      '<label class="keyfield">Key<input id="key-' + id + '" type="number" min="1" max="999" value="25" style="width:75px;"></label>' +
+      '<button class="btn primary sm" data-act="pt-insert">Insert (New Version)</button>' +
+      '<label class="lbl" for="ver-' + id + '">View Version</label>' +
+      '<select id="ver-' + id + '" data-ver><option value="0">v0 (Empty)</option></select>' +
+      '<span class="sp"></span>' +
+      '<button class="btn sm" data-act="pt-reset">Reset</button></div>';
+  } else if (id === 'kd-tree') {
+    extras = '<div class="row2">' +
+      '<label class="keyfield">Qx<input id="qx-' + id + '" type="number" value="180" style="width:65px;"></label>' +
+      '<label class="keyfield">Qy<input id="qy-' + id + '" type="number" value="120" style="width:65px;"></label>' +
+      '<button class="btn primary sm" data-act="kd-nn">Find Nearest Neighbor</button>' +
+      '<span class="sp"></span>' +
+      '<button class="btn sm" data-act="kd-reset">Reset Points</button></div>';
+  } else if (id === 'spatial-concurrent') {
+    extras = '<div class="row2">' +
+      '<span class="segctl" role="group" aria-label="Spatial Mode">' +
+      '<button data-sc-mode="quad" aria-pressed="true">Quadtree (2D)</button>' +
+      '<button data-sc-mode="cas" aria-pressed="false">Lock-Free Stack (CAS)</button></span>' +
+      '<span class="sp"></span>' +
+      '<button class="btn primary sm" data-act="sc-run">Execute Action</button></div>';
+  }
+
+  var concept = t.subs.map(function (s, si) {
+    var pts = s.points && s.points.length ? '<ul>' + s.points.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '';
+    var tries = s.tries && s.tries.length ? '<div class="tries">' + s.tries.map(function (tr, i) {
+      return '<button class="btn sm" data-try="' + s.id + ':' + i + '">Try: ' + esc(tr.label) + '</button>';
+    }).join('') + '</div>' : '';
+    return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
+      '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
+      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+  }).join('');
+
+  return '<section class="panel" id="panel-' + id + '" role="tabpanel" aria-labelledby="tab-' + id + '" hidden>' +
+    '<p class="lede">' + esc(t.lede) + '</p>' +
+    '<div class="layout"><div class="bench">' +
+    extras +
+    '<div class="stats" data-stats></div>' +
+    '<div class="canvas" data-canvas></div>' +
+    '<div class="log" data-log aria-live="polite"></div>' +
+    '</div><div class="concept">' + concept + '</div></div></section>';
+}
+
+/* =====================================================================
+   Workbench Engine: Execution & Step Logs
+   ===================================================================== */
+function statsHTML(p) {
+  var id = p.topic.id;
+  var items = [];
+  if (id === 'skip-list') {
+    items = [
+      ['Elements', p.sl.allNodes().length],
+      ['Max Level', p.sl.maxLevel],
+      ['Active Levels', p.sl.level],
+      ['Expected Search', 'O(log n)']
+    ];
+  } else if (id === 'persistent') {
+    items = [
+      ['Total Versions', p.pt.versions.length],
+      ['Active Version', 'v' + p.curVer],
+      ['Storage', 'Path Copying (O(log n))']
+    ];
+  } else if (id === 'kd-tree') {
+    items = [
+      ['Points', p.kdPoints.length],
+      ['Dimensions k', '2 (X & Y)'],
+      ['Splitting Strategy', 'Alternating Planes']
+    ];
+  } else if (id === 'spatial-concurrent') {
+    items = [
+      ['Structure', p.scMode === 'quad' ? '2D Quadtree' : 'Treiber Lock-Free Stack'],
+      ['Mechanism', p.scMode === 'quad' ? 'NW/NE/SW/SE Subdivisions' : 'Atomic CAS Loop']
+    ];
+  }
+  return items.map(function (x) { return x[0] + ' <b>' + x[1] + '</b>'; }).join('<span aria-hidden="true"> &bull; </span>');
+}
+
+function showLog(p, title, chipLabel, chipClass, steps) {
+  p.log.innerHTML = '<div class="log-head"><h3>' + esc(title) + '</h3><span class="chip ' + chipClass + '">' + esc(chipLabel) + '</span></div>' +
+    '<ol>' + steps.map(function (s, i) { return '<li style="--i:' + i + '">' + s + '</li>'; }).join('') + '</ol>';
+}
+
+function hint(p, msg, err) {
+  p.log.innerHTML = '<p class="' + (err ? 'err' : 'hint') + '">' + esc(msg) + '</p>';
+}
+
+function draw(p, meta) {
+  var id = p.topic.id;
+  if (id === 'skip-list') {
+    p.canvas.innerHTML = renderSkipListSVG(p.sl, meta);
+    p.stats.innerHTML = statsHTML(p);
+  } else if (id === 'persistent') {
+    p.canvas.innerHTML = renderPersistentSVG(p.pt, p.curVer);
+    p.stats.innerHTML = statsHTML(p);
+  } else if (id === 'kd-tree') {
+    p.canvas.innerHTML = renderKDTreeSVG(p.kdRoot, p.kdPoints, meta ? meta.qPt : null, meta ? meta.nnPt : null);
+    p.stats.innerHTML = statsHTML(p);
+  } else if (id === 'spatial-concurrent') {
+    if (p.scMode === 'quad') {
+      p.canvas.innerHTML = renderQuadtreeSVG(p.quad, p.quadPoints);
+    } else {
+      p.canvas.innerHTML = '<div style="font-family:var(--font-mono);font-size:13px;padding:20px;text-align:center;background:var(--surface-2);border-radius:6px;width:100%;">' +
+        '<p style="margin-bottom:8px;font-weight:700;color:var(--accent);">Atomic CAS Treiber Stack Simulation</p>' +
+        '<p style="color:var(--muted);">Top Pointer &rarr; [Node B: val 42] &rarr; [Node A: val 10] &rarr; NULL</p>' +
+        '<p style="margin-top:8px;">Thread 1 attempting CAS(&amp;Top, Node B, Node C)...</p></div>';
+    }
+    p.stats.innerHTML = statsHTML(p);
+  }
+}
+
+/* =====================================================================
+   Progress Bar & Checkmarks (4 Topics Total: 0/4)
+   ===================================================================== */
+var GROUPS = [1, 1, 1, 1]; // 4 topics total
+
+function buildBar() {
+  var html = '', i = 0;
+  GROUPS.forEach(function (g) {
+    html += '<div class="grp">';
+    for (var j = 0; j < g; j++, i++) html += '<span class="seg" data-seg="' + ALL_SUBS[i] + '"></span>';
+    html += '</div>';
+  });
+  $('#pbar').innerHTML = html;
+}
+
+function refreshProgress() {
+  var total = 0;
+  ALL_SUBS.forEach(function (id) {
+    var on = !!done[id];
+    if (on) total++;
+    var seg = $('[data-seg="' + id + '"]'); if (seg) seg.classList.toggle('on', on);
+    var btn = $('[data-done="' + id + '"]'); if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  $('#pcount').textContent = total + '/' + ALL_SUBS.length;
+  TOPICS.forEach(function (t) {
+    var c = 0; t.subs.forEach(function (s) { if (done[s.id]) c++; });
+    var el = $('#tab-' + t.id + ' .cnt');
+    if (el) { el.textContent = c + '/' + t.subs.length; el.classList.toggle('full', c === t.subs.length); }
+  });
+}
+
+/* =====================================================================
+   Tabs & Navigation
+   ===================================================================== */
+var current = null;
+function showTab(id) {
+  var t = TOPICS.filter(function (x) { return x.id === id; })[0] || TOPICS[0];
+  current = t.id;
+  TOPICS.forEach(function (x) {
+    var on = x.id === t.id;
+    $('#panel-' + x.id).hidden = !on;
+    $('#tab-' + x.id).setAttribute('aria-selected', on ? 'true' : 'false');
+    $('#tab-' + x.id).tabIndex = on ? 0 : -1;
+  });
+  var act = $('#panel-' + t.id);
+  act.classList.remove('enter'); void act.offsetWidth; act.classList.add('enter');
+  $$('tr[data-row]').forEach(function (tr) { tr.classList.toggle('cur', tr.getAttribute('data-row') === t.id); });
+}
+
+function fromHash() {
+  var h = (location.hash || '').replace('#', '');
+  var t = TOPICS.filter(function (x) { return x.hash === h; })[0];
+  showTab(t ? t.id : TOPICS[0].id);
+}
+
+/* =====================================================================
+   App Bootstrapping
+   ===================================================================== */
+(function () {
+  $('#tabs').innerHTML = TOPICS.map(function (t) {
+    return '<button class="tab" role="tab" id="tab-' + t.id + '" aria-controls="panel-' + t.id + '" aria-selected="false" data-tab="' + t.id + '">' + esc(t.tab) + ' <span class="cnt">0/' + t.subs.length + '</span></button>';
+  }).join('');
+  $('#panels').innerHTML = TOPICS.map(panelHTML).join('');
+  buildBar();
+
+  TOPICS.forEach(function (t) {
+    var el = $('#panel-' + t.id);
+    var p = {
+      topic: t, el: el,
+      sl: new SkipListModel(4),
+      pt: new PersistentTreeModel(),
+      curVer: 0,
+      kdPoints: [[80, 100], [160, 60], [240, 180], [320, 90], [400, 190], [180, 210], [120, 140]],
+      kdRoot: null,
+      quad: new Quadtree(20, 20, 470, 230, 2),
+      quadPoints: [[90, 80], [140, 110], [110, 130], [300, 70], [380, 140], [240, 190], [310, 200]],
+      scMode: 'quad',
+      canvas: $('[data-canvas]', el),
+      stats: $('[data-stats]', el),
+      log: $('[data-log]', el)
+    };
+    panels[t.id] = p;
+
+    // Seed data
+    if (t.id === 'skip-list') {
+      [10, 20, 35, 50, 75].forEach(function (k) { p.sl.insert(k); });
+      draw(p);
+      hint(p, 'Sample Skip List initialized with keys {10, 20, 35, 50, 75}. Enter a key to test.');
+    } else if (t.id === 'persistent') {
+      p.pt.insertVersion(20);
+      p.pt.insertVersion(10);
+      p.pt.insertVersion(30);
+      p.curVer = p.pt.versions.length - 1;
+      var sel = $('#ver-' + t.id, el);
+      if (sel) {
+        sel.innerHTML = p.pt.versions.map(function (v, idx) { return '<option value="' + idx + '"' + (idx === p.curVer ? ' selected' : '') + '>v' + idx + ' (Root ' + (v ? v.k : 'null') + ')</option>'; }).join('');
+      }
+      draw(p);
+      hint(p, 'Persistent tree created up to Version 3 via Path Copying.');
+    } else if (t.id === 'kd-tree') {
+      p.kdRoot = buildKDTree(p.kdPoints);
+      draw(p);
+      hint(p, '2D KD-Tree built with alternating X-splits (red) and Y-splits (blue). Click "Find Nearest Neighbor".');
+    } else if (t.id === 'spatial-concurrent') {
+      p.quadPoints.forEach(function (pt) { p.quad.insert(pt); });
+      draw(p);
+      hint(p, '2D Quadtree with automatic quadrant subdivision when points exceed capacity.');
+    }
+
+    // Event Delegation
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b || !el.contains(b)) return;
+
+      // Studied Checkbox
+      if (b.hasAttribute('data-done')) {
+        var id = b.getAttribute('data-done');
+        done[id] = !done[id]; if (!done[id]) delete done[id];
+        save(); refreshProgress();
+        return;
+      }
+
+      // Tab 1: Skip List
+      if (b.getAttribute('data-act') === 'sl-insert') {
+        var val = Number($('#key-' + t.id, el).value);
+        var res = p.sl.insert(val);
+        draw(p, res);
+        showLog(p, 'Insert Key ' + val, res.status === 'dup' ? 'Duplicate' : 'Inserted', res.status === 'dup' ? 'miss' : 'hit', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-act') === 'sl-search') {
+        var val = Number($('#key-' + t.id, el).value);
+        var res = p.sl.search(val);
+        draw(p, res);
+        showLog(p, 'Search Key ' + val, res.status === 'hit' ? 'Found' : 'Not Found', res.status === 'hit' ? 'hit' : 'miss', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-act') === 'sl-delete') {
+        var val = Number($('#key-' + t.id, el).value);
+        var res = p.sl.delete(val);
+        draw(p, res);
+        showLog(p, 'Delete Key ' + val, res.status === 'del' ? 'Deleted' : 'Not Found', res.status === 'del' ? 'del' : 'miss', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-act') === 'sl-reset') {
+        p.sl = new SkipListModel(4);
+        [10, 20, 35, 50, 75].forEach(function (k) { p.sl.insert(k); });
+        draw(p); hint(p, 'Skip list reset.');
+        return;
+      }
+
+      // Tab 2: Persistent Tree
+      if (b.getAttribute('data-act') === 'pt-insert') {
+        var val = Number($('#key-' + t.id, el).value);
+        var res = p.pt.insertVersion(val);
+        p.curVer = res.ver;
+        var sel = $('#ver-' + t.id, el);
+        if (sel) {
+          sel.innerHTML = p.pt.versions.map(function (v, idx) { return '<option value="' + idx + '"' + (idx === p.curVer ? ' selected' : '') + '>v' + idx + ' (Root ' + (v ? v.k : 'null') + ')</option>'; }).join('');
+        }
+        draw(p);
+        showLog(p, 'Path Copying Insert &rarr; Version ' + res.ver, 'Committed', 'hit', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-act') === 'pt-reset') {
+        p.pt = new PersistentTreeModel();
+        p.pt.insertVersion(20); p.pt.insertVersion(10); p.pt.insertVersion(30);
+        p.curVer = 3;
+        var sel = $('#ver-' + t.id, el);
+        if (sel) {
+          sel.innerHTML = p.pt.versions.map(function (v, idx) { return '<option value="' + idx + '"' + (idx === p.curVer ? ' selected' : '') + '>v' + idx + ' (Root ' + (v ? v.k : 'null') + ')</option>'; }).join('');
+        }
+        draw(p); hint(p, 'Persistent tree reset.');
+        return;
+      }
+
+      // Tab 3: KD-Tree
+      if (b.getAttribute('data-act') === 'kd-nn') {
+        var qx = Number($('#qx-' + t.id, el).value);
+        var qy = Number($('#qy-' + t.id, el).value);
+        var res = findNearestNeighbor(p.kdRoot, qx, qy);
+        draw(p, { qPt: [qx, qy], nnPt: res.bestNode });
+        showLog(p, 'Nearest Neighbor Query for (' + qx + ', ' + qy + ')', 'Found (' + res.bestNode.x + ',' + res.bestNode.y + ')', 'hit', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-act') === 'kd-reset') {
+        p.kdPoints = [[80, 100], [160, 60], [240, 180], [320, 90], [400, 190], [180, 210], [120, 140]];
+        p.kdRoot = buildKDTree(p.kdPoints);
+        draw(p); hint(p, 'KD-Tree points reset.');
+        return;
+      }
+
+      // Tab 4: Spatial & Concurrent
+      if (b.hasAttribute('data-sc-mode')) {
+        p.scMode = b.getAttribute('data-sc-mode');
+        $$('[data-sc-mode]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        draw(p);
+        hint(p, 'Switched to ' + (p.scMode === 'quad' ? '2D Quadtree' : 'Lock-Free CAS Stack') + '.');
+        return;
+      }
+      if (b.getAttribute('data-act') === 'sc-run') {
+        if (p.scMode === 'quad') {
+          var rx = Math.floor(60 + Math.random() * 360);
+          var ry = Math.floor(40 + Math.random() * 180);
+          var steps = [];
+          p.quadPoints.push([rx, ry]);
+          p.quad.insert([rx, ry], steps);
+          draw(p);
+          showLog(p, 'Insert Point (' + rx + ', ' + ry + ') into Quadtree', 'Inserted', 'hit', steps);
+        } else {
+          var steps = [
+            'Thread 1 reads current Top pointer &rarr; Node B (address 0x1000).',
+            'Thread 1 allocates new Node C with Node C.next = Node B.',
+            '⚡ Thread 2 preempts Thread 1! Thread 2 pushes Node X, updating Top &rarr; Node X (address 0x2000).',
+            'Thread 1 attempts CAS(&amp;Top, expected: Node B, desired: Node C).',
+            '❌ CAS FAILS! Top is 0x2000 &ne; 0x1000. Atomic condition failed.',
+            'Thread 1 re-reads Top &rarr; Node X, sets Node C.next = Node X, retries CAS &rarr; SUCCESS!'
+          ];
+          showLog(p, 'Lock-Free Treiber Stack: CAS Contention & Retry', 'CAS Success', 'purple', steps);
+        }
+        return;
+      }
+
+      // "Try" worked examples
+      if (b.hasAttribute('data-try')) {
+        var parts = b.getAttribute('data-try').split(':');
+        var subId = parts[0], tryIdx = Number(parts[1]);
+        var sub = p.topic.subs.filter(function (s) { return s.id === subId; })[0];
+        if (!sub) return;
+        var tr = sub.tries[tryIdx];
+
+        if (tr.act === 'sample-skip') {
+          p.sl = new SkipListModel(4);
+          [15, 25, 35, 45].forEach(function (k) { p.sl.insert(k); });
+          draw(p); hint(p, 'Built Skip List with keys {15, 25, 35, 45}.');
+        } else if (tr.act === 'search-35') {
+          $('#key-' + t.id, el).value = '35';
+          $('[data-act="sl-search"]', el).click();
+        } else if (tr.act === 'build-v12') {
+          p.pt = new PersistentTreeModel();
+          p.pt.insertVersion(20); p.pt.insertVersion(10);
+          p.curVer = 2;
+          draw(p); hint(p, 'Persistent tree at Version 2.');
+        } else if (tr.act === 'build-v3') {
+          p.pt.insertVersion(30);
+          p.curVer = 3;
+          draw(p); hint(p, 'Version 3 created; shares left subtree with Version 2.');
+        } else if (tr.act === 'build-kd') {
+          $('[data-act="kd-reset"]', el).click();
+        } else if (tr.act === 'query-nn') {
+          $('[data-act="kd-nn"]', el).click();
+        } else if (tr.act === 'quad-sub') {
+          $('[data-sc-mode="quad"]', el).click();
+          $('[data-act="sc-run"]', el).click();
+        } else if (tr.act === 'cas-stack') {
+          $('[data-sc-mode="cas"]', el).click();
+          $('[data-act="sc-run"]', el).click();
+        }
+      }
+    });
+
+    // Version select change
+    var selVer = $('#ver-' + t.id, el);
+    if (selVer) {
+      selVer.addEventListener('change', function () {
+        p.curVer = Number(selVer.value);
+        draw(p);
+        hint(p, 'Viewing historical snapshot Version ' + p.curVer + '.');
+      });
+    }
+  });
+
+  $('#tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tab]'); if (!b) return;
+    var t = TOPICS.filter(function (x) { return x.id === b.getAttribute('data-tab'); })[0];
+    if (location.hash === '#' + t.hash) showTab(t.id); else location.hash = t.hash;
+  });
+
+  $('#tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var idx = TOPICS.map(function (t) { return t.id; }).indexOf(current);
+    var next = TOPICS[(idx + (e.key === 'ArrowRight' ? 1 : TOPICS.length - 1)) % TOPICS.length];
+    location.hash = next.hash;
+    var el = $('#tab-' + next.id); if (el) el.focus();
+  });
+
+  window.addEventListener('hashchange', fromHash);
+
+  $('#motion').addEventListener('click', function () {
+    motionOn = !motionOn;
+    try { localStorage.setItem(MSTORE, motionOn ? 'on' : 'off'); } catch (e) { /* storage error */ }
+    applyMotion();
+  });
+
+  applyMotion();
+  fromHash();
+  refreshProgress();
+})();
+</script>
+</body></html>

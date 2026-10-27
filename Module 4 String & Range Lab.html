@@ -1,0 +1,1234 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Module 4 String &amp; Range Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: syllabus header with a progress strip, one tab per topic,
+   a graph-paper workbench on the left and the concept notes on the right. */
+:root {
+  --bg: #edf1f4;
+  --surface: #fbfcfd;
+  --surface-2: #e2e9ee;
+  --ink: #10202c;
+  --muted: #526473;
+  --line: #cbd5dd;
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  --accent-soft: #d3eeea;
+  --visit: #b7791f;
+  --visit-soft: #f6e6c4;
+  --visit-ink: #774c06;
+  --bad: #b3372a;
+  --bad-soft: #f7dcd7;
+  --purple: #6b21a8;
+  --purple-soft: #f3e8ff;
+  --purple-ink: #4c1d95;
+  --blue: #1d4ed8;
+  --blue-soft: #dbeafe;
+  --blue-ink: #1e3a8a;
+  --grid: rgba(16, 32, 44, 0.06);
+  --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+    --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+    --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+    --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+    --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe;
+    --grid: rgba(229, 237, 243, 0.06);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+  --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+  --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+  --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+  --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe;
+  --grid: rgba(229, 237, 243, 0.06);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--font-body); }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); text-wrap: balance; }
+p { margin: 0; }
+
+.page {
+  max-width: 1200px; margin: 0 auto;
+  padding-block: 22px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* header */
+.top { display: flex; gap: 20px 32px; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; padding-bottom: 20px; }
+.top-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.eyebrow { font: 600 12px var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.navlink { font: 500 12px var(--font-mono); color: var(--muted); text-decoration: none; padding: 3px 9px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+.navlink:hover { color: var(--ink); border-color: var(--muted); }
+.navlink.next { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.navlink.next:hover { filter: brightness(1.1); }
+
+/* module progression stepper card */
+.module-stepper {
+  margin-top: 36px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.stepper-info { display: flex; flex-direction: column; gap: 4px; }
+.stepper-step { font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+.stepper-title { font-size: 16px; font-weight: 700; margin: 0; color: var(--ink); }
+.stepper-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+h1 { font-size: clamp(24px, 4.4vw, 40px); font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; line-height: 1.12; }
+.progress { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.pbar { display: flex; gap: 10px; flex-wrap: wrap; }
+.grp { display: flex; gap: 3px; }
+.seg { width: 22px; height: 8px; border-radius: 2px; background: var(--line); transition: background 0.2s; }
+.seg.on { background: var(--accent); }
+.progress p { font: 500 13px var(--font-mono); color: var(--muted); }
+.progress strong { color: var(--ink); font-weight: 600; }
+
+/* tabs */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; }
+.tab { appearance: none; background: none; border: 0; border-bottom: 3px solid transparent; border-radius: 0; margin-bottom: -1px; padding: 11px 14px; font: 600 14px var(--font-body); color: var(--muted); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 8px; align-items: center; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.cnt { font: 500 11px var(--font-mono); padding: 1px 7px; border-radius: 10px; background: var(--surface-2); color: var(--muted); }
+.cnt.full { background: var(--accent); color: var(--accent-ink); }
+
+/* panel */
+.panel { padding-top: 22px; }
+.lede { max-width: 72ch; color: var(--muted); margin-bottom: 18px; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 940px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* workbench */
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+.toolbar .sp { flex: 1 1 8px; }
+.keyfield { display: flex; flex-direction: column; gap: 3px; font: 500 11px var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.keyfield input, .keyfield select { padding: 6px 9px; font: 500 14px var(--font-mono); border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.btn { appearance: none; font: 500 14px var(--font-body); padding: 8px 13px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; transition: transform 0.1s, border-color 0.15s, filter 0.15s; }
+.btn:hover { border-color: var(--muted); }
+.btn:active { transform: scale(0.96); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.sm { padding: 5px 10px; font-size: 13px; }
+.row2 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lbl { font: 500 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.segctl { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.segctl button { appearance: none; border: 0; border-radius: 0; padding: 5px 11px; font: 500 13px var(--font-body); background: var(--surface); color: var(--ink); cursor: pointer; }
+.segctl button + button { border-left: 1px solid var(--line); }
+.segctl button[aria-pressed="true"] { background: var(--ink); color: var(--bg); font-weight: 600; }
+select { font: 500 13px var(--font-body); padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); }
+button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visible, .navlink:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 4px 18px; font: 500 12px var(--font-mono); color: var(--muted); }
+.stats b { color: var(--ink); font-weight: 600; }
+
+.canvas { min-height: 310px; padding: 14px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.canvas svg { display: block; margin: auto; max-width: 100%; flex: none; }
+
+/* SVG Visuals */
+.t-node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.8; transition: fill 0.2s, stroke 0.2s; }
+.t-node.end circle { stroke: var(--accent); stroke-width: 3.5; }
+.t-node.visit circle { fill: var(--visit-soft); stroke: var(--visit); }
+.t-node.hit circle { fill: var(--accent-soft); stroke: var(--accent); }
+.t-node text.char { font: 600 13px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.t-edge { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+.t-edge.active { stroke: var(--accent); stroke-width: 2.8; }
+.t-edge-txt { font: 600 11px var(--font-mono); fill: var(--muted); text-anchor: middle; dominant-baseline: central; }
+
+/* Suffix & Range Tables */
+.aux-box { width: 100%; margin-top: 8px; overflow-x: auto; }
+.sa-table { border-collapse: collapse; width: 100%; font-family: var(--font-mono); font-size: 12.5px; }
+.sa-table th, .sa-table td { border-bottom: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+.sa-table th { font-size: 11px; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
+.sa-table tr.hit td { background: var(--accent-soft); font-weight: 600; }
+.sa-table tr.active td { background: var(--visit-soft); }
+.lcp-bar { display: inline-block; height: 7px; background: var(--accent); border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+
+/* Segment Tree Visuals */
+.st-node rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; transition: all 0.2s; rx: 5; }
+.st-node.cover rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5; }
+.st-node.visit rect { fill: var(--visit-soft); stroke: var(--visit); }
+.st-node.lazy rect { stroke: var(--purple); stroke-dasharray: 3 2; }
+.st-val { font: 700 13px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.st-range { font: 500 10px var(--font-mono); fill: var(--muted); text-anchor: middle; }
+
+/* step log */
+.log { border-top: 1px solid var(--line); padding-top: 12px; min-height: 120px; }
+.log-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.log-head h3 { font-size: 14px; font-weight: 600; font-family: var(--font-body); }
+.chip { font: 600 11px var(--font-mono); padding: 2px 8px; border-radius: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+.chip.hit, .chip.new { background: var(--accent-soft); color: var(--accent); }
+.chip.miss, .chip.dup { background: var(--bad-soft); color: var(--bad); }
+.chip.del { background: var(--visit-soft); color: var(--visit-ink); }
+.chip.blue { background: var(--blue-soft); color: var(--blue); }
+.chip.purple { background: var(--purple-soft); color: var(--purple); }
+.log ol { margin: 0; padding-left: 24px; font: 400 12.5px/1.65 var(--font-mono); }
+.log li { padding-left: 4px; overflow-wrap: anywhere; }
+.log .hint { font: 400 13px var(--font-body); color: var(--muted); }
+.log .err { color: var(--bad); font: 500 13px var(--font-mono); }
+
+/* concept column */
+.concept { display: flex; flex-direction: column; min-width: 0; }
+.topic { padding: 18px 0; border-top: 1px solid var(--line); }
+.topic:first-child { border-top: 0; padding-top: 0; }
+.topic-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.topic h3 { font-size: 18px; font-weight: 700; }
+.topic p { margin-top: 8px; }
+.topic ul { margin: 8px 0 0; padding-left: 18px; }
+.topic li { margin-top: 4px; }
+.topic li::marker { color: var(--accent); }
+.topic dl { margin: 8px 0 0; display: grid; gap: 8px; }
+.topic dt { font: 600 13px var(--font-mono); color: var(--accent); }
+.topic dd { margin: 0; }
+.tries { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.done { appearance: none; display: inline-flex; gap: 7px; align-items: center; font: 500 12px var(--font-mono); padding: 4px 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--muted); cursor: pointer; white-space: nowrap; }
+.done .box { width: 12px; height: 12px; border: 1.5px solid var(--muted); border-radius: 3px; display: grid; place-items: center; }
+.done[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.done[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); }
+.done[aria-pressed="true"] .box::after { content: ""; width: 3px; height: 6px; border: solid var(--accent-ink); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg) translate(-1px, -1px); }
+
+.tablewrap { overflow-x: auto; margin-top: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+td code, .code { font: 500 12.5px var(--font-mono); }
+.topic table { min-width: 340px; }
+
+/* comparison */
+.compare { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); }
+.compare h2 { font-size: 22px; font-weight: 700; }
+.compare .tablewrap table { min-width: 720px; }
+.compare td:first-child { font-weight: 600; white-space: nowrap; }
+.compare tr.cur td { background: var(--accent-soft); }
+.note { margin-top: 10px; color: var(--muted); font-size: 13px; }
+
+:root[data-motion="off"] * { transition: none !important; animation: none !important; }
+.mnote { max-width: 34ch; font-size: 12px; color: var(--muted); }
+#motion b { font-weight: 600; color: var(--accent); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes segpop { 0% { transform: scale(0.6); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+.panel.enter .lede, .panel.enter .bench, .panel.enter .topic { animation: rise 0.42s cubic-bezier(.2,.7,.2,1) both; }
+.panel.enter .bench { animation-delay: 0.05s; }
+.panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
+.log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
+.seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
+</style>
+<div class="page">
+  <header class="top">
+    <div>
+      <div class="top-nav">
+        <span class="eyebrow">Module 4 of 5</span>
+        <a href="Module 3 Graph Lab.html" class="navlink" title="Previous Module: Graphs">&larr; Module 3</a>
+        <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="Module 5 Advanced & Spatial Lab.html" class="navlink next" title="Next Module: Advanced & Spatial">Next: Module 5 (Advanced &amp; Spatial) &rarr;</a>
+      </div>
+      <h1>Tries, Suffix Arrays, String Indexing, Segment Trees</h1>
+    </div>
+    <div class="progress">
+      <div class="pbar" id="pbar" aria-hidden="true"></div>
+      <p><strong id="pcount">0/4</strong> topics studied</p>
+      <button class="btn sm" id="motion" aria-pressed="true">Animations <b class="mstate">On</b></button>
+      <p class="mnote" id="mnote" hidden>Your device asks for reduced motion, so animations start off. Switch them on here.</p>
+    </div>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs" aria-label="Module 4 Topics"></nav>
+  <div id="panels"></div>
+
+  <section class="compare" aria-labelledby="cmp-h">
+    <h2 id="cmp-h">Side by side comparison</h2>
+    <p class="note">m is the pattern length, n is the text length / array length, &Sigma; is alphabet size, and z is the number of pattern occurrences.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Data Structure</th><th>Primary Problem Solved</th><th>Query / Search Time</th><th>Build Time</th><th>Space Complexity</th><th>Key Strength</th><th>Key Bottleneck / Trade-off</th><th>Real-World Application</th></tr></thead>
+        <tbody>
+          <tr data-row="trie"><td>Standard Trie</td><td>Exact word match &amp; prefix lookup</td><td class="code">O(m)</td><td class="code">O(&sum; m)</td><td class="code">O(&Sigma; &times; Total Chars)</td><td>Optimal prefix matching and auto-complete.</td><td>High pointer overhead (26 null pointers per node).</td><td>Browser auto-complete, spell checkers, dictionary lookup</td></tr>
+          <tr data-row="trie"><td>Compressed Trie (Radix Tree)</td><td>Prefix lookup with compacted paths</td><td class="code">O(m)</td><td class="code">O(&sum; m)</td><td class="code">O(Number of words)</td><td>Merges non-branching edges; reduces node count drastically.</td><td>Split and merge edge logic adds mutation overhead.</td><td>Linux kernel routing tables, IP lookup, Git tree objects</td></tr>
+          <tr data-row="suffix-array"><td>Suffix Array (+ LCP Array)</td><td>Full-text substring search &amp; indexing</td><td class="code">O(m log n) or O(m + log n)</td><td class="code">O(n log n) or O(n)</td><td class="code">O(n) &mdash; 4n bytes (integers only)</td><td>Takes 1/5th the memory of a Suffix Tree; cache-friendly.</td><td>Static array; expensive to update when text changes.</td><td>Bioinformatics (BLAST, DNA alignment), Burrows-Wheeler bzip2</td></tr>
+          <tr data-row="string-index"><td>Aho-Corasick Automaton</td><td>Simultaneous multi-pattern matching</td><td class="code">O(n + z)</td><td class="code">O(&sum; m &times; &Sigma;)</td><td class="code">O(&sum; m &times; &Sigma;)</td><td>Matches all k patterns in a single linear pass of text.</td><td>Large state machine; failure link traversals require RAM.</td><td>Intrusion Detection Systems (Snort, Suricata), ClamAV antivirus</td></tr>
+          <tr data-row="segment-tree"><td>Segment Tree (with Lazy Propagation)</td><td>Range queries (Sum/Min) &amp; Range updates</td><td class="code">O(log n)</td><td class="code">O(n)</td><td class="code">O(4n)</td><td>Dynamic range queries and range additions in logarithmic time.</td><td>High constant factor compared to Fenwick Tree; O(4n) memory.</td><td>Computational geometry, stock price range analyzers, game engines</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="module-stepper" aria-label="Course Progression">
+    <div class="stepper-info">
+      <span class="stepper-step">Step 4 of 5 &bull; String Indexing &amp; Segment Trees</span>
+      <h3 class="stepper-title">Finished with Strings &amp; Trees? Continue to Module 5</h3>
+    </div>
+    <div class="stepper-actions">
+      <a href="Module 3 Graph Lab.html" class="btn sm">&larr; Prev: Module 3 (Graphs)</a>
+      <a href="index.html" class="btn sm">🏠 Course Hub</a>
+      <a href="Module 5 Advanced & Spatial Lab.html" class="btn primary" style="font-weight:600;">Next: Module 5 (Advanced &amp; Spatial) &rarr;</a>
+    </div>
+  </footer>
+</div>
+<script>
+'use strict';
+/* =====================================================================
+   Module 4: String & Range Core Algorithms & Visual Models
+   ===================================================================== */
+
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+/* ---------------------------------------------------------------------
+   1. Standard & Compressed Trie Implementation
+   --------------------------------------------------------------------- */
+class TrieNode {
+  constructor(char, isEnd) {
+    this.char = char || '';
+    this.isEnd = !!isEnd;
+    this.children = {}; // char -> TrieNode
+  }
+}
+
+class TrieModel {
+  constructor() {
+    this.root = new TrieNode('', false);
+    this.words = [];
+  }
+  insert(word) {
+    word = word.toLowerCase().trim();
+    if (!word) return { steps: ['Empty word ignored.'], status: 'miss', word: word };
+    var steps = [];
+    var cur = this.root;
+    steps.push('Begin insertion of "' + word + '" at Root.');
+
+    for (var i = 0; i < word.length; i++) {
+      var ch = word[i];
+      if (!cur.children[ch]) {
+        cur.children[ch] = new TrieNode(ch, false);
+        steps.push('• Char \'' + ch + '\' not found: create new TrieNode(\'' + ch + '\').');
+      } else {
+        steps.push('• Char \'' + ch + '\' already exists: reuse edge.');
+      }
+      cur = cur.children[ch];
+    }
+    var wasEnd = cur.isEnd;
+    cur.isEnd = true;
+    if (this.words.indexOf(word) === -1) this.words.push(word);
+
+    steps.push(wasEnd ? 'Word "' + word + '" already existed in Trie.' : 'Mark final node \'' + word[word.length - 1] + '\' as isEndOfWord = true.');
+    return { steps: steps, status: wasEnd ? 'dup' : 'new', word: word };
+  }
+  search(word) {
+    word = word.toLowerCase().trim();
+    var steps = [];
+    var cur = this.root;
+    steps.push('Search for exact word "' + word + '".');
+
+    for (var i = 0; i < word.length; i++) {
+      var ch = word[i];
+      if (!cur.children[ch]) {
+        steps.push('• Char \'' + ch + '\' absent: search terminates at depth ' + i + '. Word NOT found.');
+        return { steps: steps, status: 'miss', word: word, matchLength: i };
+      }
+      steps.push('• Follow child \'' + ch + '\'.');
+      cur = cur.children[ch];
+    }
+    if (cur.isEnd) {
+      steps.push('Reached final node and isEndOfWord = true: exact word "' + word + '" FOUND (O(m)).');
+      return { steps: steps, status: 'hit', word: word, matchLength: word.length };
+    }
+    steps.push('Prefix exists in Trie, but isEndOfWord = false. Exact word "' + word + '" NOT in dictionary.');
+    return { steps: steps, status: 'miss', word: word, matchLength: word.length };
+  }
+  startsWith(prefix) {
+    prefix = prefix.toLowerCase().trim();
+    var steps = [];
+    var cur = this.root;
+    steps.push('Query prefix startsWith("' + prefix + '").');
+
+    for (var i = 0; i < prefix.length; i++) {
+      var ch = prefix[i];
+      if (!cur.children[ch]) {
+        steps.push('• Char \'' + ch + '\' missing: no words start with "' + prefix + '".');
+        return { steps: steps, status: 'miss', word: prefix };
+      }
+      cur = cur.children[ch];
+    }
+    // Collect autocompletions
+    var results = [];
+    function dfsCollect(node, path) {
+      if (node.isEnd) results.push(path);
+      for (var k in node.children) dfsCollect(node.children[k], path + k);
+    }
+    dfsCollect(cur, prefix);
+    steps.push('Prefix found! Autocomplete suggestions: [' + results.slice(0, 5).join(', ') + (results.length > 5 ? '...' : '') + '].');
+    return { steps: steps, status: 'hit', word: prefix, suggestions: results };
+  }
+}
+
+/* ---------------------------------------------------------------------
+   2. Suffix Array & Kasai's LCP Algorithm
+   --------------------------------------------------------------------- */
+function buildSuffixArray(text) {
+  text = text.trim();
+  if (text[text.length - 1] !== '$') text += '$';
+  var n = text.length;
+  var suffixes = [];
+  for (var i = 0; i < n; i++) suffixes.push({ idx: i, str: text.substring(i) });
+  
+  suffixes.sort(function (a, b) { return a.str.localeCompare(b.str); });
+  var sa = suffixes.map(function (x) { return x.idx; });
+
+  // Kasai LCP algorithm in O(n)
+  var rank = new Array(n).fill(0);
+  for (var i = 0; i < n; i++) rank[sa[i]] = i;
+  var lcp = new Array(n).fill(0);
+  var k = 0;
+  for (var i = 0; i < n; i++) {
+    if (rank[i] === 0) continue;
+    var j = sa[rank[i] - 1];
+    while (i + k < n && j + k < n && text[i + k] === text[j + k]) k++;
+    lcp[rank[i]] = k;
+    if (k > 0) k--;
+  }
+
+  return { text: text, sa: sa, lcp: lcp, suffixes: suffixes };
+}
+
+function searchSuffixArray(saObj, pattern) {
+  var text = saObj.text, sa = saObj.sa, n = sa.length;
+  var steps = [];
+  var l = 0, r = n - 1;
+  var found = false, hitIdx = -1;
+
+  steps.push('Binary searching pattern "' + pattern + '" over Suffix Array of length ' + n + '.');
+
+  while (l <= r) {
+    var mid = Math.floor((l + r) / 2);
+    var suffixStr = text.substring(sa[mid]);
+    var cmp = suffixStr.localeCompare(pattern);
+    var matchPrefix = suffixStr.indexOf(pattern) === 0;
+
+    steps.push('• Range [' + l + ', ' + r + ']: mid = ' + mid + ' &rarr; Suffix SA[' + mid + '] = "' + suffixStr.substring(0, 10) + '..."');
+
+    if (matchPrefix) {
+      steps.push('Found match! Pattern "' + pattern + '" occurs at text index ' + sa[mid] + '.');
+      found = true;
+      hitIdx = mid;
+      break;
+    }
+    if (cmp < 0) {
+      l = mid + 1;
+      steps.push('  Suffix < pattern: search right half [' + l + ', ' + r + '].');
+    } else {
+      r = mid - 1;
+      steps.push('  Suffix > pattern: search left half [' + l + ', ' + r + '].');
+    }
+  }
+
+  if (!found) steps.push('Pattern "' + pattern + '" not found in Suffix Array.');
+  return { steps: steps, status: found ? 'hit' : 'miss', hitIdx: hitIdx, pattern: pattern };
+}
+
+/* ---------------------------------------------------------------------
+   3. String Indexing: Aho-Corasick & KMP Prefix Function
+   --------------------------------------------------------------------- */
+function computeKMPPi(pat) {
+  var pi = new Array(pat.length).fill(0);
+  var j = 0;
+  var steps = [];
+  steps.push('Compute &pi; prefix table for pattern "' + pat + '". &pi;[i] stores length of longest proper prefix that is also a suffix.');
+
+  for (var i = 1; i < pat.length; i++) {
+    while (j > 0 && pat[i] !== pat[j]) {
+      steps.push('• Mismatch pat[' + i + ']=\'' + pat[i] + '\' &ne; pat[' + j + ']=\'' + pat[j] + '\'. Fallback j &rarr; &pi;[' + (j - 1) + '] = ' + pi[j - 1] + '.');
+      j = pi[j - 1];
+    }
+    if (pat[i] === pat[j]) {
+      j++;
+      steps.push('• Match pat[' + i + ']==pat[' + (j - 1) + ']=\'' + pat[i] + '\': j extends to ' + j + '. Set &pi;[' + i + '] = ' + j + '.');
+    } else {
+      steps.push('• No match: set &pi;[' + i + '] = 0.');
+    }
+    pi[i] = j;
+  }
+  return { pi: pi, steps: steps };
+}
+
+/* ---------------------------------------------------------------------
+   4. Segment Tree (RSQ & RMQ with Point Updates)
+   --------------------------------------------------------------------- */
+class SegmentTreeModel {
+  constructor(arr, type) {
+    this.arr = arr.slice();
+    this.n = arr.length;
+    this.type = type || 'sum'; // 'sum' or 'min'
+    this.tree = new Array(4 * this.n).fill(0);
+    this.lazy = new Array(4 * this.n).fill(0);
+    this.build(1, 0, this.n - 1);
+  }
+  build(node, l, r) {
+    if (l === r) {
+      this.tree[node] = this.arr[l];
+      return;
+    }
+    var mid = Math.floor((l + r) / 2);
+    this.build(2 * node, l, mid);
+    this.build(2 * node + 1, mid + 1, r);
+    this.tree[node] = this.combine(this.tree[2 * node], this.tree[2 * node + 1]);
+  }
+  combine(a, b) {
+    return this.type === 'min' ? Math.min(a, b) : a + b;
+  }
+  query(node, l, r, ql, qr, steps, visited) {
+    visited.push({ node: node, l: l, r: r });
+    if (ql <= l && r <= qr) {
+      steps.push('• Node [' + l + ', ' + r + '] value ' + this.tree[node] + ': FULLY inside query range [' + ql + ', ' + qr + ']. Accept value.');
+      return this.tree[node];
+    }
+    if (r < ql || l > qr) {
+      steps.push('• Node [' + l + ', ' + r + ']: OUTSIDE query range [' + ql + ', ' + qr + ']. Discard.');
+      return this.type === 'min' ? Infinity : 0;
+    }
+    var mid = Math.floor((l + r) / 2);
+    steps.push('• Node [' + l + ', ' + r + ']: PARTIALLY overlaps [' + ql + ', ' + qr + ']. Split &rarr; left [' + l + ', ' + mid + '] & right [' + (mid + 1) + ', ' + r + '].');
+    var leftAns = this.query(2 * node, l, mid, ql, qr, steps, visited);
+    var rightAns = this.query(2 * node + 1, mid + 1, r, ql, qr, steps, visited);
+    return this.combine(leftAns, rightAns);
+  }
+  updatePoint(node, l, r, idx, val, steps, visited) {
+    visited.push({ node: node, l: l, r: r });
+    if (l === r) {
+      steps.push('• Reached leaf [' + l + ', ' + r + ']: update value from ' + this.tree[node] + ' &rarr; ' + val + '.');
+      this.tree[node] = val;
+      this.arr[idx] = val;
+      return;
+    }
+    var mid = Math.floor((l + r) / 2);
+    if (idx <= mid) {
+      steps.push('• Target index ' + idx + ' &le; mid ' + mid + ': descend left child [' + l + ', ' + mid + '].');
+      this.updatePoint(2 * node, l, mid, idx, val, steps, visited);
+    } else {
+      steps.push('• Target index ' + idx + ' > mid ' + mid + ': descend right child [' + (mid + 1) + ', ' + r + '].');
+      this.updatePoint(2 * node + 1, mid + 1, r, idx, val, steps, visited);
+    }
+    this.tree[node] = this.combine(this.tree[2 * node], this.tree[2 * node + 1]);
+    steps.push('• Recomputed ancestor node [' + l + ', ' + r + '] = ' + this.tree[node] + '.');
+  }
+}
+
+/* =====================================================================
+   SVG Visualizers for Trie, Segment Tree, & Suffix Table
+   ===================================================================== */
+function renderTrieSVG(trie, res) {
+  var width = 520, height = 300;
+  var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Trie Tree Diagram">';
+
+  var nodes = [];
+  var edges = [];
+  var idCounter = 0;
+
+  function layout(node, depth, minX, maxX) {
+    var myId = idCounter++;
+    var x = (minX + maxX) / 2;
+    var y = 35 + depth * 55;
+    nodes.push({ id: myId, char: node.char || '●', isEnd: node.isEnd, x: x, y: y });
+
+    var keys = Object.keys(node.children);
+    var step = (maxX - minX) / (keys.length || 1);
+    for (var i = 0; i < keys.length; i++) {
+      var child = node.children[keys[i]];
+      var childX1 = minX + i * step;
+      var childX2 = childX1 + step;
+      var childId = idCounter;
+      edges.push({ from: myId, to: childId, x1: x, y1: y, x2: (childX1 + childX2) / 2, y2: 35 + (depth + 1) * 55, char: keys[i] });
+      layout(child, depth + 1, childX1, childX2);
+    }
+  }
+
+  layout(trie.root, 0, 10, width - 10);
+
+  // Draw Edges
+  edges.forEach(function (e) {
+    svg += '<line class="t-edge" x1="' + e.x1 + '" y1="' + e.y1 + '" x2="' + e.x2 + '" y2="' + e.y2 + '" />';
+    var mx = (e.x1 + e.x2) / 2 - 8;
+    var my = (e.y1 + e.y2) / 2;
+    svg += '<text class="t-edge-txt" x="' + mx + '" y="' + my + '">' + e.char + '</text>';
+  });
+
+  // Draw Nodes
+  nodes.forEach(function (n) {
+    var isHit = res && res.status === 'hit' && n.isEnd;
+    var cls = 't-node' + (n.isEnd ? ' end' : '') + (isHit ? ' hit' : '');
+    svg += '<g class="' + cls + '" transform="translate(' + n.x + ',' + n.y + ')">' +
+      '<circle r="15" />' +
+      '<text class="char" y="1">' + n.char + '</text>' +
+      '</g>';
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderSegmentTreeSVG(st, meta) {
+  var width = 520, height = 280;
+  var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Segment Tree Diagram">';
+
+  meta = meta || {};
+  var visited = meta.visited || [];
+  var nodeElements = [];
+  var edges = [];
+
+  function layoutST(node, l, r, depth, minX, maxX) {
+    var x = (minX + maxX) / 2;
+    var y = 30 + depth * 55;
+    var val = st.tree[node];
+    nodeElements.push({ node: node, l: l, r: r, val: val, x: x, y: y });
+
+    if (l === r) return;
+    var mid = Math.floor((l + r) / 2);
+    var midX = (minX + maxX) / 2;
+
+    edges.push({ x1: x, y1: y, x2: (minX + midX) / 2, y2: 30 + (depth + 1) * 55 });
+    layoutST(2 * node, l, mid, depth + 1, minX, midX);
+
+    edges.push({ x1: x, y1: y, x2: (midX + maxX) / 2, y2: 30 + (depth + 1) * 55 });
+    layoutST(2 * node + 1, mid + 1, r, depth + 1, midX, maxX);
+  }
+
+  layoutST(1, 0, st.n - 1, 0, 15, width - 15);
+
+  // Draw Edges
+  edges.forEach(function (e) {
+    svg += '<line class="t-edge" x1="' + e.x1 + '" y1="' + e.y1 + '" x2="' + e.x2 + '" y2="' + e.y2 + '" />';
+  });
+
+  // Draw Nodes
+  nodeElements.forEach(function (n) {
+    var isVis = visited.some(function (v) { return v.node === n.node; });
+    var cls = 'st-node' + (isVis ? ' cover' : '');
+    svg += '<g class="' + cls + '" transform="translate(' + (n.x - 22) + ',' + (n.y - 18) + ')">' +
+      '<rect width="44" height="36" />' +
+      '<text class="st-val" x="22" y="15">' + n.val + '</text>' +
+      '<text class="st-range" x="22" y="28">[' + n.l + ',' + n.r + ']</text>' +
+      '</g>';
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderSuffixTableHTML(saObj, hitIdx) {
+  var html = '<table class="sa-table"><thead><tr><th>i</th><th>SA[i]</th><th>LCP[i]</th><th>Suffix String</th></tr></thead><tbody>';
+  for (var i = 0; i < saObj.sa.length; i++) {
+    var isHit = i === hitIdx;
+    var lcpVal = saObj.lcp[i];
+    var barW = Math.min(60, lcpVal * 12);
+    html += '<tr class="' + (isHit ? 'hit' : '') + '"><td>' + i + '</td><td><b>' + saObj.sa[i] + '</b></td><td>' +
+      '<span class="lcp-bar" style="width:' + barW + 'px;"></span>' + lcpVal + '</td><td><span class="code">' + esc(saObj.suffixes[i].str) + '</span></td></tr>';
+  }
+  html += '</tbody></table>';
+  return html;
+}
+
+function renderKMPTableHTML(pat, pi) {
+  var html = '<p class="lbl" style="margin-bottom:6px;">KMP Prefix Table (&pi; Array):</p><table class="sa-table"><thead><tr><th>Index i</th>' +
+    pat.split('').map(function (c, i) { return '<th>' + i + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    '<tr><td><b>Pattern</b></td>' + pat.split('').map(function (c) { return '<td><b>' + c + '</b></td>'; }).join('') + '</tr>' +
+    '<tr><td><b>&pi;[i]</b></td>' + pi.map(function (p) { return '<td style="color:var(--accent);font-weight:700;">' + p + '</td>'; }).join('') + '</tr></tbody></table>';
+  return html;
+}
+
+/* =====================================================================
+   Topics Specification (0/4 Total)
+   ===================================================================== */
+var TRIE_TYPES_TABLE = '<div class="tablewrap"><table><thead><tr><th>Trie Variant</th><th>Edge Representation</th><th>Lookup Time</th><th>Space Efficiency</th></tr></thead><tbody>' +
+  '<tr><td>Standard Trie</td><td>Single character per edge</td><td class="code">O(m)</td><td>High overhead; 26 pointers per node</td></tr>' +
+  '<tr><td>Compressed Trie (Radix)</td><td>Substrings on non-branching edges</td><td class="code">O(m)</td><td>Optimal; internal nodes have &ge; 2 children</td></tr>' +
+  '<tr><td>Ternary Search Tree (TST)</td><td>Split char with &lt;, =, &gt; branches</td><td class="code">O(m + log &Sigma;)</td><td>Compact; 3 pointers per node instead of &Sigma;</td></tr>' +
+  '</tbody></table></div>';
+
+var SA_LCP_TABLE = '<div class="tablewrap"><table><thead><tr><th>Algorithm</th><th>Time Complexity</th><th>Space</th><th>Key Operation</th></tr></thead><tbody>' +
+  '<tr><td>Suffix Array Binary Search</td><td class="code">O(m log n)</td><td class="code">O(n)</td><td>Locates occurrences of pattern of length m</td></tr>' +
+  '<tr><td>Kasai\'s LCP Algorithm</td><td class="code">O(n) linear</td><td class="code">O(n)</td><td>Computes shared prefix length between adjacent sorted suffixes</td></tr>' +
+  '<tr><td>Longest Repeated Substring</td><td class="code">O(n) scan</td><td class="code">O(1)</td><td>Finds max value in LCP array</td></tr>' +
+  '</tbody></table></div>';
+
+var AC_KMP_TABLE = '<div class="tablewrap"><table><thead><tr><th>Algorithm</th><th>Target Problem</th><th>Search Time</th><th>Core Data Structure</th></tr></thead><tbody>' +
+  '<tr><td>Aho-Corasick</td><td>Multi-pattern search simultaneously</td><td class="code">O(n + z)</td><td>Trie with Failure &amp; Dictionary Output Links</td></tr>' +
+  '<tr><td>Knuth-Morris-Pratt (KMP)</td><td>Single pattern exact search</td><td class="code">O(n + m)</td><td>&pi; Prefix Function (restarts without rollback)</td></tr>' +
+  '<tr><td>Burrows-Wheeler Transform (BWT)</td><td>Text compression &amp; indexing</td><td class="code">O(m) with FM-Index</td><td>Permutation of sorted rotations</td></tr>' +
+  '</tbody></table></div>';
+
+var SEGTREE_TABLE = '<div class="tablewrap"><table><thead><tr><th>Operation</th><th>Segment Tree Time</th><th>Naive Array Time</th><th>Fenwick Tree Time</th></tr></thead><tbody>' +
+  '<tr><td>Build Tree</td><td class="code">O(n)</td><td class="code">O(1)</td><td class="code">O(n)</td></tr>' +
+  '<tr><td>Range Query (Sum / Min)</td><td class="code">O(log n)</td><td class="code">O(n)</td><td class="code">O(log n) (Sum only)</td></tr>' +
+  '<tr><td>Point Update</td><td class="code">O(log n)</td><td class="code">O(1)</td><td class="code">O(log n)</td></tr>' +
+  '<tr><td>Range Update (Lazy Tag)</td><td class="code">O(log n)</td><td class="code">O(n)</td><td class="code">O(log n) (Diff array)</td></tr>' +
+  '</tbody></table></div>';
+
+var TOPICS = [
+  {
+    id: 'trie', hash: 'trie-types', tab: 'Trie & Types of Trie', kind: 'trie',
+    lede: 'A Trie (Prefix Tree) is an ordered tree that stores key strings by sharing common prefixes. Lookups take O(m) time independent of the number of stored words.',
+    subs: [
+      {
+        id: 'trie-types-sub', title: 'Trie and Types of Trie',
+        lead: 'Compare Standard Tries, Compressed Radix Trees, and Ternary Search Trees (TST) for prefix lookups and auto-complete.',
+        points: [
+          'Retrieval Speed: O(m) search time where m is word length, beating hash tables when prefix searches or sorted traversals are needed.',
+          'Standard Trie: Every edge represents a single character; end of valid word is marked by an isEndOfWord boolean flag.',
+          'Compressed Trie (Radix Tree / Patricia): Compacts chains of single-child nodes into single edges containing substrings, reducing memory drastically.',
+          'Ternary Search Tree (TST): Replaces 26 pointers per node with 3 pointers (less, equal, greater), combining BST memory efficiency with Trie prefix speed.'
+        ],
+        extra: TRIE_TYPES_TABLE,
+        tries: [
+          { label: 'Insert "cat", "car", "card"', reset: true, act: 'insert-sample' },
+          { label: 'Search "car" (Hit)', reset: false, act: 'search-car' },
+          { label: 'Prefix startsWith("ca")', reset: false, act: 'prefix-ca' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'suffix-array', hash: 'suffix-arrays', tab: 'Suffix Arrays', kind: 'suffix-array',
+    lede: 'A Suffix Array is a sorted array of all suffixes of a string. Combined with the LCP (Longest Common Prefix) array, it solves complex string pattern matching in minimal memory.',
+    subs: [
+      {
+        id: 'suffix-array-sub', title: 'Suffix Arrays & LCP Array',
+        lead: 'Explore how suffix sorting and Kasai\'s linear-time LCP algorithm enable binary-search pattern matching in O(m log n) time.',
+        points: [
+          'Suffix Array Definition: Stores the starting indices of all sorted suffixes of string S$. Requires only 4n bytes (integers only).',
+          'LCP Array: Stores the length of the longest common prefix between consecutive sorted suffixes. Computed in O(n) using Kasai\'s algorithm.',
+          'Binary Search Matching: Because suffixes are sorted alphabetically, any pattern substring of length m can be found in O(m log n) time.',
+          'Longest Repeated Substring: Equal to the maximum value in the LCP array.'
+        ],
+        extra: SA_LCP_TABLE,
+        tries: [
+          { label: 'Build SA for "banana$"', reset: true, text: 'banana$' },
+          { label: 'Search "ana" in Suffix Array', reset: false, pat: 'ana' },
+          { label: 'Build SA for "mississippi$"', reset: true, text: 'mississippi$' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'string-index', hash: 'string-indexing', tab: 'String Indexing Structures', kind: 'string-index',
+    lede: 'Advanced indexing structures enable lightning-fast text search: Aho-Corasick matches multiple dictionary patterns simultaneously, while KMP avoids rollbacks via prefix tables.',
+    subs: [
+      {
+        id: 'string-index-sub', title: 'String Indexing & Multi-Pattern Search',
+        lead: 'Trace the Aho-Corasick automaton with failure links, and observe how the KMP &pi; table shifts matching windows without backtracking.',
+        points: [
+          'Aho-Corasick Automaton: Constructs a Trie of dictionary patterns augmented with "failure links" (fallback transitions) and dictionary output links.',
+          'Linear Scan: Matches all k patterns in text of length n in O(n + z) time where z is the number of matches (used in intrusion detection & antivirus).',
+          'KMP Prefix Function (&pi; Array): Precomputes the length of the longest proper prefix matching a suffix, shifting the pattern forward on mismatch in O(m).',
+          'Burrows-Wheeler Transform (BWT): Reversible permutation grouping identical characters together; powers the FM-Index in genomic sequencing.'
+        ],
+        extra: AC_KMP_TABLE,
+        tries: [
+          { label: 'Compute KMP &pi; for "ababcaba"', reset: true, act: 'kmp-sample' },
+          { label: 'Compute KMP &pi; for "aabaabaaa"', reset: true, act: 'kmp-aa' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'segment-tree', hash: 'segment-trees', tab: 'Segment Trees', kind: 'segment-tree',
+    lede: 'A Segment Tree is a binary tree designed for range queries (Sum, Min, Max) and updates on an array in O(log n) time. Lazy Propagation defers range updates efficiently.',
+    subs: [
+      {
+        id: 'segment-tree-sub', title: 'Segment Trees & Range Queries',
+        lead: 'Visualize how intervals split and recombine. Query arbitrary ranges [L, R] and perform point updates in logarithmic time.',
+        points: [
+          'Binary Division: Root represents interval [0, n - 1]; left child handles [0, mid] and right child handles [mid + 1, n - 1].',
+          'Range Query in O(log n): Intervals fully covered by [L, R] return immediately; partial overlaps split into at most 2 nodes per level.',
+          'Point Update in O(log n): Modifies the leaf node and recalculates values on the way back up to the root.',
+          'Lazy Propagation: Defers updating descendent nodes during range additions by caching pending changes, preserving O(log n) range updates.'
+        ],
+        extra: SEGTREE_TABLE,
+        tries: [
+          { label: 'Query Range Sum [1, 3] on [1,3,5,7,9,11]', reset: true, act: 'query-1-3' },
+          { label: 'Update A[2] = 10', reset: false, act: 'update-2-10' },
+          { label: 'Switch to Range Minimum (RMQ)', reset: true, act: 'switch-rmq' }
+        ]
+      }
+    ]
+  }
+];
+
+var ALL_SUBS = [];
+TOPICS.forEach(function (t) { t.subs.forEach(function (s) { ALL_SUBS.push(s.id); }); });
+
+/* =====================================================================
+   App State & Persistence
+   ===================================================================== */
+var STORE = 'string_range_module_done';
+var MSTORE = 'string_range_module_motion';
+var done = {};
+try { done = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) { done = {}; }
+function save() { try { localStorage.setItem(STORE, JSON.stringify(done)); } catch (e) { /* storage disabled */ } }
+
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var motionOn = true;
+try {
+  var savedM = localStorage.getItem(MSTORE);
+  if (savedM !== null) motionOn = savedM === 'on';
+  else if (reduce) motionOn = false;
+} catch (e) { /* no storage */ }
+
+function applyMotion() {
+  document.documentElement.setAttribute('data-motion', motionOn ? 'on' : 'off');
+  var b = document.getElementById('motion');
+  if (b) {
+    b.setAttribute('aria-pressed', motionOn ? 'true' : 'false');
+    b.querySelector('.mstate').textContent = motionOn ? 'On' : 'Off';
+  }
+  var mn = document.getElementById('mnote');
+  if (mn) mn.hidden = !reduce;
+}
+
+function $(sel, root) { return (root || document).querySelector(sel); }
+function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+/* =====================================================================
+   Panel HTML Generation
+   ===================================================================== */
+var panels = {};
+
+function panelHTML(t) {
+  var id = t.id;
+  var extras = '';
+
+  if (id === 'trie') {
+    extras = '<div class="row2">' +
+      '<label class="keyfield">Word<input id="word-' + id + '" type="text" placeholder="e.g. cat" value="card"></label>' +
+      '<button class="btn primary sm" data-act="trie-insert">Insert Word</button>' +
+      '<button class="btn sm" data-act="trie-search">Search</button>' +
+      '<button class="btn sm" data-act="trie-prefix">StartsWith</button>' +
+      '<span class="sp"></span>' +
+      '<button class="btn sm" data-act="trie-reset">Reset Example</button>' +
+      '<button class="btn sm" data-act="trie-clear">Clear</button></div>';
+  } else if (id === 'suffix-array') {
+    extras = '<div class="row2">' +
+      '<label class="keyfield" style="flex:1 1 140px;">Text String<input id="text-' + id + '" type="text" value="banana$"></label>' +
+      '<button class="btn primary sm" data-act="sa-build">Build Suffix Array</button>' +
+      '<label class="keyfield">Pattern<input id="pat-' + id + '" type="text" value="ana" style="width:70px;"></label>' +
+      '<button class="btn sm" data-act="sa-search">Binary Search</button>' +
+      '<span class="sp"></span>' +
+      '<button class="btn sm" data-preset="mississippi">Mississippi</button></div>';
+  } else if (id === 'string-index') {
+    extras = '<div class="row2">' +
+      '<label class="keyfield" style="flex:1 1 140px;">Pattern String<input id="pat-' + id + '" type="text" value="ababcaba"></label>' +
+      '<button class="btn primary sm" data-act="kmp-build">Compute &pi; Table</button>' +
+      '<span class="sp"></span>' +
+      '<button class="btn sm" data-preset="kmp-dna">DNA Pattern</button>' +
+      '<button class="btn sm" data-preset="kmp-rep">Repeated Pattern</button></div>';
+  } else if (id === 'segment-tree') {
+    extras = '<div class="row2">' +
+      '<span class="segctl" role="group" aria-label="Query Mode">' +
+      '<button data-st-mode="sum" aria-pressed="true">Range Sum (RSQ)</button>' +
+      '<button data-st-mode="min" aria-pressed="false">Range Min (RMQ)</button></span>' +
+      '<label class="keyfield">L<input id="ql-' + id + '" type="number" min="0" max="5" value="1" style="width:50px;"></label>' +
+      '<label class="keyfield">R<input id="qr-' + id + '" type="number" min="0" max="5" value="3" style="width:50px;"></label>' +
+      '<button class="btn primary sm" data-act="st-query">Query Range</button>' +
+      '<span class="sp"></span>' +
+      '<label class="keyfield">Idx<input id="up-idx-' + id + '" type="number" min="0" max="5" value="2" style="width:50px;"></label>' +
+      '<label class="keyfield">Val<input id="up-val-' + id + '" type="number" value="10" style="width:60px;"></label>' +
+      '<button class="btn sm" data-act="st-update">Update Point</button></div>';
+  }
+
+  var concept = t.subs.map(function (s, si) {
+    var pts = s.points && s.points.length ? '<ul>' + s.points.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '';
+    var tries = s.tries && s.tries.length ? '<div class="tries">' + s.tries.map(function (tr, i) {
+      return '<button class="btn sm" data-try="' + s.id + ':' + i + '">Try: ' + esc(tr.label) + '</button>';
+    }).join('') + '</div>' : '';
+    return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
+      '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
+      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+  }).join('');
+
+  return '<section class="panel" id="panel-' + id + '" role="tabpanel" aria-labelledby="tab-' + id + '" hidden>' +
+    '<p class="lede">' + esc(t.lede) + '</p>' +
+    '<div class="layout"><div class="bench">' +
+    extras +
+    '<div class="stats" data-stats></div>' +
+    '<div class="canvas" data-canvas></div>' +
+    '<div class="aux-box" data-aux></div>' +
+    '<div class="log" data-log aria-live="polite"></div>' +
+    '</div><div class="concept">' + concept + '</div></div></section>';
+}
+
+/* =====================================================================
+   Workbench Engine: Execution & Step Logs
+   ===================================================================== */
+function statsHTML(p) {
+  var id = p.topic.id;
+  var items = [];
+  if (id === 'trie') {
+    items = [
+      ['Stored Words', p.trie.words.length],
+      ['Search Complexity', 'O(m)'],
+      ['Alphabet &Sigma;', 'a-z (26)']
+    ];
+  } else if (id === 'suffix-array') {
+    items = [
+      ['Text Length n', p.saObj.text.length],
+      ['Suffixes', p.saObj.sa.length],
+      ['Search Complexity', 'O(m log n)']
+    ];
+  } else if (id === 'string-index') {
+    items = [
+      ['Pattern Length m', p.kmpPat.length],
+      ['Preprocessing Time', 'O(m)'],
+      ['Max Prefix Match', Math.max.apply(null, p.kmpPi)]
+    ];
+  } else if (id === 'segment-tree') {
+    items = [
+      ['Array Size n', p.st.n],
+      ['Operation', p.st.type.toUpperCase()],
+      ['Tree Nodes', (4 * p.st.n)],
+      ['Query Complexity', 'O(log n)']
+    ];
+  }
+  return items.map(function (x) { return x[0] + ' <b>' + x[1] + '</b>'; }).join('<span aria-hidden="true"> &bull; </span>');
+}
+
+function showLog(p, title, chipLabel, chipClass, steps) {
+  p.log.innerHTML = '<div class="log-head"><h3>' + esc(title) + '</h3><span class="chip ' + chipClass + '">' + esc(chipLabel) + '</span></div>' +
+    '<ol>' + steps.map(function (s, i) { return '<li style="--i:' + i + '">' + s + '</li>'; }).join('') + '</ol>';
+}
+
+function hint(p, msg, err) {
+  p.log.innerHTML = '<p class="' + (err ? 'err' : 'hint') + '">' + esc(msg) + '</p>';
+}
+
+function draw(p, meta) {
+  var id = p.topic.id;
+  if (id === 'trie') {
+    p.canvas.innerHTML = renderTrieSVG(p.trie, meta);
+    p.stats.innerHTML = statsHTML(p);
+  } else if (id === 'suffix-array') {
+    p.canvas.innerHTML = '<div style="width:100%;">' + renderSuffixTableHTML(p.saObj, meta ? meta.hitIdx : -1) + '</div>';
+    p.stats.innerHTML = statsHTML(p);
+  } else if (id === 'string-index') {
+    p.canvas.innerHTML = '<div style="width:100%;">' + renderKMPTableHTML(p.kmpPat, p.kmpPi) + '</div>';
+    p.stats.innerHTML = statsHTML(p);
+  } else if (id === 'segment-tree') {
+    p.canvas.innerHTML = renderSegmentTreeSVG(p.st, meta);
+    p.stats.innerHTML = statsHTML(p);
+  }
+}
+
+/* =====================================================================
+   Progress Bar & Checkmarks (4 Topics Total: 0/4)
+   ===================================================================== */
+var GROUPS = [1, 1, 1, 1]; // 4 topics total
+
+function buildBar() {
+  var html = '', i = 0;
+  GROUPS.forEach(function (g) {
+    html += '<div class="grp">';
+    for (var j = 0; j < g; j++, i++) html += '<span class="seg" data-seg="' + ALL_SUBS[i] + '"></span>';
+    html += '</div>';
+  });
+  $('#pbar').innerHTML = html;
+}
+
+function refreshProgress() {
+  var total = 0;
+  ALL_SUBS.forEach(function (id) {
+    var on = !!done[id];
+    if (on) total++;
+    var seg = $('[data-seg="' + id + '"]'); if (seg) seg.classList.toggle('on', on);
+    var btn = $('[data-done="' + id + '"]'); if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  $('#pcount').textContent = total + '/' + ALL_SUBS.length;
+  TOPICS.forEach(function (t) {
+    var c = 0; t.subs.forEach(function (s) { if (done[s.id]) c++; });
+    var el = $('#tab-' + t.id + ' .cnt');
+    if (el) { el.textContent = c + '/' + t.subs.length; el.classList.toggle('full', c === t.subs.length); }
+  });
+}
+
+/* =====================================================================
+   Tabs & Navigation
+   ===================================================================== */
+var current = null;
+function showTab(id) {
+  var t = TOPICS.filter(function (x) { return x.id === id; })[0] || TOPICS[0];
+  current = t.id;
+  TOPICS.forEach(function (x) {
+    var on = x.id === t.id;
+    $('#panel-' + x.id).hidden = !on;
+    $('#tab-' + x.id).setAttribute('aria-selected', on ? 'true' : 'false');
+    $('#tab-' + x.id).tabIndex = on ? 0 : -1;
+  });
+  var act = $('#panel-' + t.id);
+  act.classList.remove('enter'); void act.offsetWidth; act.classList.add('enter');
+  $$('tr[data-row]').forEach(function (tr) { tr.classList.toggle('cur', tr.getAttribute('data-row') === t.id); });
+}
+
+function fromHash() {
+  var h = (location.hash || '').replace('#', '');
+  var t = TOPICS.filter(function (x) { return x.hash === h; })[0];
+  showTab(t ? t.id : TOPICS[0].id);
+}
+
+/* =====================================================================
+   App Bootstrapping
+   ===================================================================== */
+(function () {
+  $('#tabs').innerHTML = TOPICS.map(function (t) {
+    return '<button class="tab" role="tab" id="tab-' + t.id + '" aria-controls="panel-' + t.id + '" aria-selected="false" data-tab="' + t.id + '">' + esc(t.tab) + ' <span class="cnt">0/' + t.subs.length + '</span></button>';
+  }).join('');
+  $('#panels').innerHTML = TOPICS.map(panelHTML).join('');
+  buildBar();
+
+  TOPICS.forEach(function (t) {
+    var el = $('#panel-' + t.id);
+    var p = {
+      topic: t, el: el,
+      trie: new TrieModel(),
+      saObj: buildSuffixArray('banana$'),
+      kmpPat: 'ababcaba',
+      kmpPi: computeKMPPi('ababcaba').pi,
+      st: new SegmentTreeModel([1, 3, 5, 7, 9, 11], 'sum'),
+      canvas: $('[data-canvas]', el),
+      stats: $('[data-stats]', el),
+      aux: $('[data-aux]', el),
+      log: $('[data-log]', el)
+    };
+    panels[t.id] = p;
+
+    // Seed data
+    if (t.id === 'trie') {
+      ['cat', 'car', 'card', 'care', 'dog'].forEach(function (w) { p.trie.insert(w); });
+      draw(p);
+      hint(p, 'Sample words {cat, car, card, care, dog} loaded into Trie. Double-circled nodes denote ends of words.');
+    } else if (t.id === 'suffix-array') {
+      draw(p);
+      hint(p, 'Suffix Array and Kasai LCP computed for "banana$". Enter a pattern to binary search.');
+    } else if (t.id === 'string-index') {
+      draw(p);
+      var kRes = computeKMPPi(p.kmpPat);
+      showLog(p, 'KMP &pi; Array for "' + p.kmpPat + '"', 'Computed', 'hit', kRes.steps);
+    } else if (t.id === 'segment-tree') {
+      draw(p);
+      hint(p, 'Segment Tree initialized over array [1, 3, 5, 7, 9, 11]. Choose a range [L, R] to query.');
+    }
+
+    // Event Delegation
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b || !el.contains(b)) return;
+
+      // Studied Checkbox
+      if (b.hasAttribute('data-done')) {
+        var id = b.getAttribute('data-done');
+        done[id] = !done[id]; if (!done[id]) delete done[id];
+        save(); refreshProgress();
+        return;
+      }
+
+      // Tab 1: Trie
+      if (b.getAttribute('data-act') === 'trie-insert') {
+        var inp = $('#word-' + t.id, el);
+        var w = inp.value.trim();
+        var res = p.trie.insert(w);
+        draw(p, res);
+        showLog(p, 'Insert "' + w + '"', res.status === 'dup' ? 'Duplicate' : 'Inserted', res.status === 'dup' ? 'miss' : 'hit', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-act') === 'trie-search') {
+        var inp = $('#word-' + t.id, el);
+        var w = inp.value.trim();
+        var res = p.trie.search(w);
+        draw(p, res);
+        showLog(p, 'Search "' + w + '"', res.status === 'hit' ? 'Found' : 'Not Found', res.status === 'hit' ? 'hit' : 'miss', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-act') === 'trie-prefix') {
+        var inp = $('#word-' + t.id, el);
+        var w = inp.value.trim();
+        var res = p.trie.startsWith(w);
+        draw(p, res);
+        showLog(p, 'Prefix Query "' + w + '"', res.status === 'hit' ? 'Prefix Match' : 'No Matches', res.status === 'hit' ? 'hit' : 'miss', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-act') === 'trie-reset') {
+        p.trie = new TrieModel();
+        ['cat', 'car', 'card', 'care', 'dog'].forEach(function (w) { p.trie.insert(w); });
+        draw(p); hint(p, 'Example Trie restored.');
+        return;
+      }
+      if (b.getAttribute('data-act') === 'trie-clear') {
+        p.trie = new TrieModel();
+        draw(p); hint(p, 'Trie cleared.');
+        return;
+      }
+
+      // Tab 2: Suffix Array
+      if (b.getAttribute('data-act') === 'sa-build') {
+        var text = $('#text-' + t.id, el).value.trim();
+        p.saObj = buildSuffixArray(text);
+        draw(p);
+        hint(p, 'Rebuilt Suffix Array & Kasai LCP for "' + p.saObj.text + '".');
+        return;
+      }
+      if (b.getAttribute('data-act') === 'sa-search') {
+        var pat = $('#pat-' + t.id, el).value.trim();
+        var res = searchSuffixArray(p.saObj, pat);
+        draw(p, res);
+        showLog(p, 'Suffix Array Binary Search for "' + pat + '"', res.status === 'hit' ? 'Pattern Found' : 'Absent', res.status === 'hit' ? 'hit' : 'miss', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-preset') === 'mississippi') {
+        $('#text-' + t.id, el).value = 'mississippi$';
+        p.saObj = buildSuffixArray('mississippi$');
+        draw(p);
+        hint(p, 'Loaded classic "mississippi$" with repeated "iss" and "ssi" prefixes.');
+        return;
+      }
+
+      // Tab 3: String Indexing (KMP)
+      if (b.getAttribute('data-act') === 'kmp-build') {
+        var pat = $('#pat-' + t.id, el).value.trim();
+        p.kmpPat = pat;
+        var res = computeKMPPi(pat);
+        p.kmpPi = res.pi;
+        draw(p);
+        showLog(p, 'KMP &pi; Array for "' + pat + '"', 'Computed', 'hit', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-preset') === 'kmp-dna') {
+        $('#pat-' + t.id, el).value = 'AGAGAGCA';
+        p.kmpPat = 'AGAGAGCA';
+        var res = computeKMPPi(p.kmpPat);
+        p.kmpPi = res.pi;
+        draw(p);
+        showLog(p, 'KMP &pi; Array for DNA Motif', 'Computed', 'hit', res.steps);
+        return;
+      }
+      if (b.getAttribute('data-preset') === 'kmp-rep') {
+        $('#pat-' + t.id, el).value = 'aabaabaaa';
+        p.kmpPat = 'aabaabaaa';
+        var res = computeKMPPi(p.kmpPat);
+        p.kmpPi = res.pi;
+        draw(p);
+        showLog(p, 'KMP &pi; Array for "aabaabaaa"', 'Computed', 'hit', res.steps);
+        return;
+      }
+
+      // Tab 4: Segment Tree
+      if (b.hasAttribute('data-st-mode')) {
+        p.st.type = b.getAttribute('data-st-mode');
+        $$('[data-st-mode]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        p.st.build(1, 0, p.st.n - 1);
+        draw(p);
+        hint(p, 'Switched to ' + (p.st.type === 'min' ? 'Range Minimum (RMQ)' : 'Range Sum (RSQ)') + '. Rebuilt Segment Tree.');
+        return;
+      }
+      if (b.getAttribute('data-act') === 'st-query') {
+        var ql = Number($('#ql-' + t.id, el).value);
+        var qr = Number($('#qr-' + t.id, el).value);
+        var steps = [];
+        var visited = [];
+        var ans = p.st.query(1, 0, p.st.n - 1, ql, qr, steps, visited);
+        draw(p, { visited: visited });
+        showLog(p, 'Query Range [' + ql + ', ' + qr + ']', (p.st.type === 'min' ? 'Min = ' : 'Sum = ') + ans, 'hit', steps);
+        return;
+      }
+      if (b.getAttribute('data-act') === 'st-update') {
+        var idx = Number($('#up-idx-' + t.id, el).value);
+        var val = Number($('#up-val-' + t.id, el).value);
+        var steps = [];
+        var visited = [];
+        p.st.updatePoint(1, 0, p.st.n - 1, idx, val, steps, visited);
+        draw(p, { visited: visited });
+        showLog(p, 'Point Update A[' + idx + '] = ' + val, 'Updated', 'blue', steps);
+        return;
+      }
+
+      // "Try" worked examples
+      if (b.hasAttribute('data-try')) {
+        var parts = b.getAttribute('data-try').split(':');
+        var subId = parts[0], tryIdx = Number(parts[1]);
+        var sub = p.topic.subs.filter(function (s) { return s.id === subId; })[0];
+        if (!sub) return;
+        var tr = sub.tries[tryIdx];
+
+        if (tr.act === 'insert-sample') {
+          p.trie = new TrieModel();
+          ['cat', 'car', 'card'].forEach(function (w) { p.trie.insert(w); });
+          draw(p); hint(p, 'Inserted "cat", "car", and "card". Observe shared "ca" prefix node.');
+        } else if (tr.act === 'search-car') {
+          $('#word-' + t.id, el).value = 'car';
+          $('[data-act="trie-search"]', el).click();
+        } else if (tr.act === 'prefix-ca') {
+          $('#word-' + t.id, el).value = 'ca';
+          $('[data-act="trie-prefix"]', el).click();
+        } else if (tr.text) {
+          $('#text-' + t.id, el).value = tr.text;
+          $('[data-act="sa-build"]', el).click();
+        } else if (tr.pat) {
+          $('#pat-' + t.id, el).value = tr.pat;
+          $('[data-act="sa-search"]', el).click();
+        } else if (tr.act === 'kmp-sample') {
+          $('#pat-' + t.id, el).value = 'ababcaba';
+          $('[data-act="kmp-build"]', el).click();
+        } else if (tr.act === 'kmp-aa') {
+          $('#pat-' + t.id, el).value = 'aabaabaaa';
+          $('[data-act="kmp-build"]', el).click();
+        } else if (tr.act === 'query-1-3') {
+          $('#ql-' + t.id, el).value = '1';
+          $('#qr-' + t.id, el).value = '3';
+          $('[data-act="st-query"]', el).click();
+        } else if (tr.act === 'update-2-10') {
+          $('#up-idx-' + t.id, el).value = '2';
+          $('#up-val-' + t.id, el).value = '10';
+          $('[data-act="st-update"]', el).click();
+        } else if (tr.act === 'switch-rmq') {
+          $('[data-st-mode="min"]', el).click();
+        }
+      }
+    });
+  });
+
+  $('#tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tab]'); if (!b) return;
+    var t = TOPICS.filter(function (x) { return x.id === b.getAttribute('data-tab'); })[0];
+    if (location.hash === '#' + t.hash) showTab(t.id); else location.hash = t.hash;
+  });
+
+  $('#tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var idx = TOPICS.map(function (t) { return t.id; }).indexOf(current);
+    var next = TOPICS[(idx + (e.key === 'ArrowRight' ? 1 : TOPICS.length - 1)) % TOPICS.length];
+    location.hash = next.hash;
+    var el = $('#tab-' + next.id); if (el) el.focus();
+  });
+
+  window.addEventListener('hashchange', fromHash);
+
+  $('#motion').addEventListener('click', function () {
+    motionOn = !motionOn;
+    try { localStorage.setItem(MSTORE, motionOn ? 'on' : 'off'); } catch (e) { /* storage error */ }
+    applyMotion();
+  });
+
+  applyMotion();
+  fromHash();
+  refreshProgress();
+})();
+</script>
+</body></html>
