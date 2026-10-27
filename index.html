@@ -1,0 +1,312 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Data Structures &amp; Algorithms Lab Suite</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #edf1f4;
+  --surface: #fbfcfd;
+  --surface-2: #e2e9ee;
+  --ink: #10202c;
+  --muted: #526473;
+  --line: #cbd5dd;
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  --accent-soft: #d3eeea;
+  --visit: #b7791f;
+  --visit-soft: #f6e6c4;
+  --visit-ink: #774c06;
+  --bad: #b3372a;
+  --bad-soft: #f7dcd7;
+  --purple: #6b21a8;
+  --purple-soft: #f3e8ff;
+  --purple-ink: #4c1d95;
+  --blue: #1d4ed8;
+  --blue-soft: #dbeafe;
+  --grid: rgba(16, 32, 44, 0.06);
+  --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+    --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+    --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+    --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+    --blue: #60a5fa; --blue-soft: #172554;
+    --grid: rgba(229, 237, 243, 0.06);
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--font-body); }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); text-wrap: balance; }
+p { margin: 0; }
+
+.page {
+  max-width: 1100px; margin: 0 auto;
+  padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.hero {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.eyebrow { font: 600 12px var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+h1 { font-size: clamp(28px, 4.5vw, 44px); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+.hero p { max-width: 68ch; color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+.start-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.btn {
+  appearance: none;
+  font: 500 14px var(--font-body);
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.1s, border-color 0.15s, filter 0.15s;
+}
+.btn:hover { border-color: var(--muted); }
+.btn:active { transform: scale(0.98); }
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  font-size: 15px;
+}
+.btn.primary:hover { filter: brightness(1.08); }
+
+/* Sequential Stepper Strip */
+.roadmap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 36px;
+}
+.step-pill {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.15s;
+}
+.step-pill:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  background: var(--surface-2);
+}
+.step-num { font: 600 11px var(--font-mono); color: var(--accent); text-transform: uppercase; }
+.step-name { font-weight: 600; font-size: 13.5px; }
+
+/* Module Cards Grid */
+.cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  transition: border-color 0.2s;
+}
+@media (max-width: 720px) {
+  .card { grid-template-columns: 1fr; }
+}
+.card:hover { border-color: var(--muted); }
+.card-body h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.tag { font: 500 11px var(--font-mono); padding: 2px 8px; border-radius: 12px; background: var(--surface-2); color: var(--muted); }
+.card-desc { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+.footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font: 500 13px var(--font-mono);
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+</style>
+<div class="page">
+  <div class="hero">
+    <p class="eyebrow">Interactive Course Platform</p>
+    <h1>Data Structures &amp; Algorithms Lab Suite</h1>
+    <p>Five self-contained, browser-executable modules covering foundational and advanced computer science data structures with interactive workbenches, visual SVG state engines, step-by-step algorithms, and side-by-side complexity matrices.</p>
+    
+    <div class="start-bar">
+      <a href="Module 1 Tree Lab.html" class="btn primary">Start Module 1: Trees &rarr;</a>
+      <span style="font:500 13px var(--font-mono);color:var(--muted);">Use the "Next Module &rarr;" button in each lab to progress one by one.</span>
+    </div>
+  </div>
+
+  <section aria-labelledby="rm-heading">
+    <h2 id="rm-heading" style="font-size:18px;font-weight:700;margin-bottom:12px;">Quick Sequential Navigation (Step by Step):</h2>
+    <nav class="roadmap" aria-label="Course Steps">
+      <a href="Module 1 Tree Lab.html" class="step-pill">
+        <span class="step-num">Step 1</span>
+        <span class="step-name">1. Trees &amp; B-Trees</span>
+      </a>
+      <a href="Module 2 Hashing Lab.html" class="step-pill">
+        <span class="step-num">Step 2</span>
+        <span class="step-name">2. Hashing &amp; Bloom</span>
+      </a>
+      <a href="Module 3 Graph Lab.html" class="step-pill">
+        <span class="step-num">Step 3</span>
+        <span class="step-name">3. Graphs &amp; Paths</span>
+      </a>
+      <a href="Module 4 String & Range Lab.html" class="step-pill">
+        <span class="step-num">Step 4</span>
+        <span class="step-name">4. Strings &amp; Segments</span>
+      </a>
+      <a href="Module 5 Advanced & Spatial Lab.html" class="step-pill">
+        <span class="step-num">Step 5</span>
+        <span class="step-name">5. Advanced &amp; Spatial</span>
+      </a>
+    </nav>
+  </section>
+
+  <section class="cards" aria-label="Course Modules">
+    <!-- Module 1 -->
+    <article class="card">
+      <div class="card-body">
+        <p class="eyebrow">Module 1</p>
+        <h2>Binary Search Tree, AVL, Splay, B-Tree &amp; B+ Tree</h2>
+        <div class="card-tags">
+          <span class="tag">BST</span>
+          <span class="tag">AVL Rotations</span>
+          <span class="tag">Splay Trees</span>
+          <span class="tag">B-Tree</span>
+          <span class="tag">B+ Tree</span>
+        </div>
+        <p class="card-desc">Master ordered lookups, self-balancing rotations (LL, RR, LR, RL), amortized splay operations, and multi-way disk B-Tree node splitting &amp; borrowing.</p>
+      </div>
+      <div>
+        <a href="Module 1 Tree Lab.html" class="btn primary">Open Module 1 &rarr;</a>
+      </div>
+    </article>
+
+    <!-- Module 2 -->
+    <article class="card">
+      <div class="card-body">
+        <p class="eyebrow">Module 2</p>
+        <h2>Hash Table, Collision Resolution, Cuckoo Hashing, Bloom Filters</h2>
+        <div class="card-tags">
+          <span class="tag">Division / Mult / DJB2</span>
+          <span class="tag">Separate Chaining</span>
+          <span class="tag">Linear / Quad Probing</span>
+          <span class="tag">Double Hashing</span>
+          <span class="tag">Cuckoo Evictions</span>
+          <span class="tag">Bloom Filter</span>
+        </div>
+        <p class="card-desc">Interactive modulo tables, tombstone deletion mechanics, guaranteed O(1) worst-case 2-read Cuckoo evictions, and zero-false-negative Bloom filters.</p>
+      </div>
+      <div>
+        <a href="Module 2 Hashing Lab.html" class="btn primary">Open Module 2 &rarr;</a>
+      </div>
+    </article>
+
+    <!-- Module 3 -->
+    <article class="card">
+      <div class="card-body">
+        <p class="eyebrow">Module 3</p>
+        <h2>Graph Representations, BFS &amp; DFS, Kruskal's MST, Dijkstra &amp; Floyd-Warshall</h2>
+        <div class="card-tags">
+          <span class="tag">Adjacency Matrix / List</span>
+          <span class="tag">Queue BFS</span>
+          <span class="tag">Stack DFS</span>
+          <span class="tag">Kruskal DSU</span>
+          <span class="tag">Dijkstra SSSP</span>
+          <span class="tag">Floyd-Warshall O(V³)</span>
+        </div>
+        <p class="card-desc">Full graph workbench with matrix/list toggle, concentric BFS discovery, cycle-detecting DFS back edges, Kruskal MST with Disjoint Sets, and edge relaxation.</p>
+      </div>
+      <div>
+        <a href="Module 3 Graph Lab.html" class="btn primary">Open Module 3 &rarr;</a>
+      </div>
+    </article>
+
+    <!-- Module 4 -->
+    <article class="card">
+      <div class="card-body">
+        <p class="eyebrow">Module 4</p>
+        <h2>Tries, Suffix Arrays, String Indexing, Segment Trees</h2>
+        <div class="card-tags">
+          <span class="tag">Standard &amp; Radix Trie</span>
+          <span class="tag">Suffix Array</span>
+          <span class="tag">Kasai LCP</span>
+          <span class="tag">KMP &pi; Table</span>
+          <span class="tag">Aho-Corasick</span>
+          <span class="tag">Segment Tree RMQ/RSQ</span>
+        </div>
+        <p class="card-desc">Prefix tree autocompletions, linear-time LCP suffix sorting, KMP non-backtracking failure tables, and binary interval decomposition with point updates.</p>
+      </div>
+      <div>
+        <a href="Module 4 String & Range Lab.html" class="btn primary">Open Module 4 &rarr;</a>
+      </div>
+    </article>
+
+    <!-- Module 5 -->
+    <article class="card">
+      <div class="card-body">
+        <p class="eyebrow">Module 5</p>
+        <h2>Skip Lists, Persistent Trees, KD-Trees, Spatial &amp; Concurrent Structures</h2>
+        <div class="card-tags">
+          <span class="tag">Probabilistic Skip List</span>
+          <span class="tag">Path Copying Persistence</span>
+          <span class="tag">KD-Tree 2D Split</span>
+          <span class="tag">1-NN Pruning</span>
+          <span class="tag">Quadtree</span>
+          <span class="tag">Lock-Free CAS Stack</span>
+        </div>
+        <p class="card-desc">Multi-level express lane lists, Git-style immutable path copying with structural sharing, 2D plane partitioning with nearest-neighbor search, and atomic CAS concurrency.</p>
+      </div>
+      <div>
+        <a href="Module 5 Advanced & Spatial Lab.html" class="btn primary">Open Module 5 &rarr;</a>
+      </div>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <span>Data Structures &amp; Algorithms Interactive Laboratory</span>
+    <span>Offline-first &bull; Zero dependencies &bull; Accessible</span>
+  </footer>
+</div>
+</body></html>
