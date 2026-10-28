@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Module 5 Advanced &amp; Spatial Lab</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -142,31 +142,35 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .canvas svg { display: block; margin: auto; max-width: 100%; flex: none; }
 
 /* SVG Styles for Advanced & Spatial Structures */
-.sk-node rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; rx: 4; }
-.sk-node.visit rect { fill: var(--visit-soft); stroke: var(--visit); }
-.sk-node.hit rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.2; }
+.sk-node rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; rx: 4; transform-box: fill-box; transform-origin: center; transition: all 0.2s; }
+.sk-node.visit rect { fill: var(--visit-soft); stroke: var(--visit); animation: bump 0.38s ease-out backwards; }
+.sk-node.hit rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.2; animation: bump 0.4s ease-out backwards; }
 .sk-txt { font: 600 12px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
 .sk-lane { stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 2; }
-.sk-ptr { stroke: var(--muted); stroke-width: 1.6; fill: none; }
-.sk-ptr.active { stroke: var(--accent); stroke-width: 2.6; }
+.sk-ptr { stroke: var(--muted); stroke-width: 1.6; fill: none; transition: stroke 0.2s; }
+.sk-ptr.active { stroke: var(--accent); stroke-width: 2.6; stroke-dasharray: 6 3; animation: probeDash 0.8s linear infinite; }
 
 .kd-split-x { stroke: var(--bad); stroke-width: 1.8; stroke-dasharray: 4 2; }
 .kd-split-y { stroke: var(--blue); stroke-width: 1.8; stroke-dasharray: 4 2; }
-.kd-pt circle { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
-.kd-pt.hit circle { fill: var(--accent); r: 6.5; }
-.kd-pt.query circle { fill: var(--visit); r: 7; }
-.kd-pt.near circle { fill: var(--bad); r: 8; stroke: var(--bad-soft); stroke-width: 3; }
+.kd-pt circle { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; transition: all 0.25s; }
+.kd-pt.hit circle { fill: var(--accent); r: 6.5; animation: bump 0.4s ease-out; }
+.kd-pt.query circle { fill: var(--visit); r: 7; animation: pulseRing 0.5s ease-out; }
+.kd-pt.near circle { fill: var(--bad); r: 8; stroke: var(--bad-soft); stroke-width: 4; animation: bump 0.45s ease-out; }
 .kd-txt { font: 600 10px var(--font-mono); fill: var(--muted); text-anchor: middle; }
 
 .quad-border { fill: none; stroke: var(--line); stroke-width: 1.2; }
 .quad-border.split { stroke: var(--accent); stroke-width: 1.5; }
 
-.p-node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; }
-.p-node.new circle { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5; }
+.p-node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; transform-box: fill-box; transform-origin: center; transition: all 0.2s; }
+.p-node.new circle { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5; animation: bump 0.4s ease-out backwards; }
 .p-node.shared circle { fill: var(--surface-2); stroke: var(--muted); }
 .p-txt { font: 600 12px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
 .p-edge { stroke: var(--muted); stroke-width: 1.5; fill: none; }
 .p-edge.new { stroke: var(--accent); stroke-width: 2.4; }
+
+@keyframes pulseRing { 0% { transform: scale(0.92); } 50% { transform: scale(1.18); } 100% { transform: scale(1); } }
+@keyframes bump { 0% { transform: scale(0.94); } 50% { transform: scale(1.09); } 100% { transform: scale(1); } }
+@keyframes probeDash { to { stroke-dashoffset: -18; } }
 
 /* step log */
 .log { border-top: 1px solid var(--line); padding-top: 12px; min-height: 120px; }
@@ -229,7 +233,40 @@ td code, .code { font: 500 12.5px var(--font-mono); }
 .panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
 .log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
 .seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
+/* Exam & Interview Marks Section (2M, 4M, 6M) */
+.marks-section { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.marks-bar { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; gap: 8px; }
+.marks-title { font: 600 12px var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
+.marks-filters { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; background: var(--surface); }
+.marks-filter-btn { appearance: none; border: none; background: none; padding: 3px 9px; font: 600 11px var(--font-mono); color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.marks-filter-btn + .marks-filter-btn { border-left: 1px solid var(--line); }
+.marks-filter-btn.active { background: var(--accent); color: var(--accent-ink); }
+.marks-list { display: flex; flex-direction: column; }
+.mark-card { padding: 9px 12px; border-top: 1px solid var(--line); }
+.mark-card:first-child { border-top: none; }
+.mark-summary { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; list-style: none; font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.mark-summary::-webkit-details-marker { display: none; }
+.mark-summary::before { content: "▸"; font-family: var(--font-mono); color: var(--accent); display: inline-block; transition: transform 0.15s; font-size: 11px; margin-top: 2px; }
+details[open] > .mark-summary::before { transform: rotate(90deg); }
+.badge-mark { font: 700 10px var(--font-mono); padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0; margin-top: 1px; }
+.badge-mark.m2 { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+.badge-mark.m4 { background: var(--visit-soft); color: var(--visit-ink); border: 1px solid var(--visit); }
+.badge-mark.m6 { background: #ede9fe; color: #4c1d95; border: 1px solid #c084fc; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+}
+:root[data-theme="dark"] .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+.mark-body { margin-top: 8px; padding-left: 18px; font-size: 13px; line-height: 1.6; color: var(--ink); }
+.mark-body p { margin-top: 6px; }
+.mark-body p:first-child { margin-top: 0; }
+.mark-body ul, .mark-body ol { margin: 6px 0; padding-left: 18px; }
+.mark-body li { margin-top: 3px; }
+.mark-body pre { background: var(--surface-2); padding: 8px; border-radius: 4px; overflow-x: auto; margin: 6px 0; font-family: var(--font-mono); font-size: 12px; }
+.mark-body code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 4px; border-radius: 3px; }
+.mark-body .key-takeaway { margin-top: 8px; padding: 6px 10px; background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; font-size: 12px; }
 </style>
+</head>
+<body>
 <div class="page">
   <header class="top">
     <div>
@@ -237,6 +274,7 @@ td code, .code { font: 500 12.5px var(--font-mono); }
         <span class="eyebrow">Module 5 of 5 (Final)</span>
         <a href="Module 4 String & Range Lab.html" class="navlink" title="Previous Module: String & Range">&larr; Module 4</a>
         <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="exam-suite.html" class="navlink" title="Master Exam Bank (72 Q&amp;As)">📝 Exam Bank</a>
         <a href="Module 1 Tree Lab.html" class="navlink next" title="Restart Curriculum at Module 1">Restart: Module 1 ↺</a>
       </div>
       <h1>Skip Lists, Persistent Trees, KD-Trees, Spatial &amp; Concurrent Structures</h1>
@@ -276,6 +314,7 @@ td code, .code { font: 500 12.5px var(--font-mono); }
     <div class="stepper-actions">
       <a href="Module 4 String & Range Lab.html" class="btn sm">&larr; Prev: Module 4</a>
       <a href="index.html" class="btn primary" style="font-weight:600;">🏠 Return to Course Hub</a>
+      <a href="exam-suite.html" class="btn sm">📝 Exam Bank</a>
       <a href="Module 1 Tree Lab.html" class="btn sm">↺ Restart: Module 1 (Trees)</a>
     </div>
   </footer>
@@ -358,12 +397,14 @@ class SkipListModel {
 
     for (var i = this.level - 1; i >= 0; i--) {
       while (cur.forward[i] && cur.forward[i].val < val) {
+        var prevVal = cur.val;
         cur = cur.forward[i];
-        visited.push({ val: cur.val, level: i });
+        visited.push({ fromVal: prevVal, toVal: cur.val, val: cur.val, level: i });
         steps.push('• Level ' + i + ' (express lane): forward to ' + cur.val + ' < ' + val + '.');
       }
       if (cur.forward[i] && cur.forward[i].val === val) {
-        visited.push({ val: cur.forward[i].val, level: i });
+        var prevVal = cur.val;
+        visited.push({ fromVal: prevVal, toVal: cur.forward[i].val, val: cur.forward[i].val, level: i, match: true });
         steps.push('Match found at Level ' + i + '! Key ' + val + ' located in O(log n) comparisons.');
         return { steps: steps, status: 'hit', val: val, visited: visited };
       }
@@ -494,19 +535,22 @@ function findNearestNeighbor(root, qx, qy) {
   var bestNode = null;
   var bestDist = Infinity;
   var steps = [];
+  var inspected = [];
 
   steps.push('Querying Nearest Neighbor for (' + qx + ', ' + qy + ') using alternating plane bounds.');
 
   function search(node) {
     if (!node) return;
     var d = Math.hypot(node.x - qx, node.y - qy);
-    steps.push('• Inspect node (' + node.x + ', ' + node.y + '): distance = ' + d.toFixed(1) + 'px.');
-
-    if (d < bestDist) {
+    var isNewBest = (d < bestDist);
+    if (isNewBest) {
       bestDist = d;
       bestNode = node;
-      steps.push('  New nearest candidate: (' + node.x + ', ' + node.y + ') radius = ' + bestDist.toFixed(1) + 'px.');
+      steps.push('• Inspect node (' + node.x + ', ' + node.y + '): distance = ' + d.toFixed(1) + 'px &rarr; NEW NEAREST candidate!');
+    } else {
+      steps.push('• Inspect node (' + node.x + ', ' + node.y + '): distance = ' + d.toFixed(1) + 'px.');
     }
+    inspected.push({ x: node.x, y: node.y, dist: d, isBest: isNewBest });
 
     var axis = node.axis;
     var qVal = axis === 0 ? qx : qy;
@@ -527,7 +571,7 @@ function findNearestNeighbor(root, qx, qy) {
   }
 
   search(root);
-  return { bestNode: bestNode, bestDist: bestDist, steps: steps };
+  return { bestNode: bestNode, bestDist: bestDist, steps: steps, inspected: inspected };
 }
 
 /* ---------------------------------------------------------------------
@@ -578,6 +622,11 @@ function renderSkipListSVG(sl, res) {
   var width = 520, height = 260;
   var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Skip List Diagram">';
 
+  svg += '<defs>' +
+    '<marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="var(--muted)" /></marker>' +
+    '<marker id="arrow-active" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="var(--accent)" /></marker>' +
+    '</defs>';
+
   var all = sl.allNodes();
   var startX = 60, colW = Math.min(50, (width - 100) / (all.length + 2));
   var bottomY = 210, laneH = 42;
@@ -592,8 +641,21 @@ function renderSkipListSVG(sl, res) {
   // Draw Head Sentinel
   for (var hl = 0; hl < sl.maxLevel; hl++) {
     var hy = bottomY - hl * laneH;
-    svg += '<rect class="sk-node" x="38" y="' + (hy - 14) + '" width="24" height="28" fill="var(--surface-2)" />' +
-      '<text class="sk-txt" x="50" y="' + hy + '" font-size="9">H</text>';
+    var headActive = false;
+    var hStep = 0;
+    if (res && res.visited) {
+      for (var vi = 0; vi < res.visited.length; vi++) {
+        if (res.visited[vi].level === hl && (res.visited[vi].fromVal === -Infinity || res.visited[vi].fromVal === sl.head.val)) {
+          headActive = true;
+          hStep = vi;
+          break;
+        }
+      }
+    }
+    var hCls = 'sk-node' + (headActive ? ' visit' : '');
+    var hAnim = (headActive && motionOn) ? ' style="animation: bump 0.4s ease-out ' + (hStep * 130) + 'ms both;"' : '';
+    svg += '<g class="' + hCls + '"' + hAnim + '><rect x="38" y="' + (hy - 14) + '" width="24" height="28" fill="var(--surface-2)" />' +
+      '<text class="sk-txt" x="50" y="' + hy + '" font-size="9">H</text></g>';
   }
 
   // Draw Nodes and Horizontal Pointers
@@ -603,19 +665,47 @@ function renderSkipListSVG(sl, res) {
 
     for (var lvl = 0; lvl < node.forward.length; lvl++) {
       var ny = bottomY - lvl * laneH;
-      var cls = 'sk-node' + (isHit ? ' hit' : '');
-      svg += '<g class="' + cls + '" transform="translate(' + (x - 14) + ',' + (ny - 14) + ')">' +
+      var vStep = -1;
+      if (res && res.visited) {
+        for (var vi = 0; vi < res.visited.length; vi++) {
+          if (res.visited[vi].val === node.val && res.visited[vi].level === lvl) {
+            vStep = vi;
+            break;
+          }
+        }
+      }
+      var cls = 'sk-node';
+      if (isHit && lvl === 0) cls += ' hit';
+      else if (vStep !== -1) cls += ' visit';
+
+      var animStyle = (vStep !== -1 && motionOn) ? ' style="animation: bump 0.4s ease-out ' + (vStep * 130) + 'ms both;"' : '';
+      svg += '<g class="' + cls + '" transform="translate(' + (x - 14) + ',' + (ny - 14) + ')"' + animStyle + '>' +
         '<rect width="28" height="28" />' +
         '<text class="sk-txt" x="14" y="14">' + node.val + '</text>' +
         '</g>';
 
       // Pointer line
       var nextX = width - 40;
+      var isPtrActive = false;
+      var ptrStep = 0;
       if (node.forward[lvl]) {
         var nIdx = all.indexOf(node.forward[lvl]);
         nextX = startX + (nIdx + 1) * colW - 14;
+        if (res && res.visited) {
+          for (var vi = 0; vi < res.visited.length; vi++) {
+            var vItem = res.visited[vi];
+            if (vItem.level === lvl && vItem.fromVal === node.val && vItem.toVal === node.forward[lvl].val) {
+              isPtrActive = true;
+              ptrStep = vi;
+              break;
+            }
+          }
+        }
       }
-      svg += '<line class="sk-ptr" x1="' + (x + 14) + '" y1="' + ny + '" x2="' + nextX + '" y2="' + ny + '" marker-end="url(#arrow)" />';
+      var ptrCls = 'sk-ptr' + (isPtrActive ? ' active' : '');
+      var ptrMarker = isPtrActive ? 'url(#arrow-active)' : 'url(#arrow)';
+      var ptrAnim = (isPtrActive && motionOn) ? ' style="animation-delay: ' + (ptrStep * 130) + 'ms;"' : '';
+      svg += '<line class="' + ptrCls + '" x1="' + (x + 14) + '" y1="' + ny + '" x2="' + nextX + '" y2="' + ny + '" marker-end="' + ptrMarker + '"' + ptrAnim + ' />';
     }
   });
 
@@ -623,7 +713,7 @@ function renderSkipListSVG(sl, res) {
   return svg;
 }
 
-function renderKDTreeSVG(kdRoot, points, qPt, nnPt) {
+function renderKDTreeSVG(kdRoot, points, qPt, nnPt, meta) {
   var width = 520, height = 280;
   var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="KD Tree Diagram">';
 
@@ -647,11 +737,21 @@ function renderKDTreeSVG(kdRoot, points, qPt, nnPt) {
 
   drawSplits(kdRoot, minX, maxX, minY, maxY);
 
+  var inspected = (meta && meta.inspected) ? meta.inspected : [];
+
   // Draw Points
   points.forEach(function (pt) {
     var isNN = nnPt && nnPt.x === pt[0] && nnPt.y === pt[1];
-    var cls = 'kd-pt' + (isNN ? ' near' : '');
-    svg += '<g class="' + cls + '" transform="translate(' + pt[0] + ',' + pt[1] + ')">' +
+    var inspectIdx = -1;
+    for (var i = 0; i < inspected.length; i++) {
+      if (inspected[i].x === pt[0] && inspected[i].y === pt[1]) {
+        inspectIdx = i;
+        break;
+      }
+    }
+    var cls = 'kd-pt' + (isNN ? ' near' : (inspectIdx !== -1 ? ' hit' : ''));
+    var ptStyle = (inspectIdx !== -1 && motionOn) ? ' style="animation-delay: ' + (inspectIdx * 120) + 'ms;"' : '';
+    svg += '<g class="' + cls + '" transform="translate(' + pt[0] + ',' + pt[1] + ')"' + ptStyle + '>' +
       '<circle r="4.5" />' +
       '<text class="kd-txt" x="0" y="-8">(' + pt[0] + ',' + pt[1] + ')</text>' +
       '</g>';
@@ -665,7 +765,8 @@ function renderKDTreeSVG(kdRoot, points, qPt, nnPt) {
       '</g>';
     if (nnPt) {
       var rad = Math.hypot(qPt[0] - nnPt.x, qPt[1] - nnPt.y);
-      svg += '<circle cx="' + qPt[0] + '" cy="' + qPt[1] + '" r="' + rad + '" fill="none" stroke="var(--visit)" stroke-width="1.5" stroke-dasharray="4 3" />';
+      var cAnim = motionOn ? ' style="animation: pulseRing 0.5s ease-out;"' : '';
+      svg += '<circle cx="' + qPt[0] + '" cy="' + qPt[1] + '" r="' + rad + '" fill="none" stroke="var(--visit)" stroke-width="1.6" stroke-dasharray="4 3"' + cAnim + ' />';
     }
   }
 
@@ -673,7 +774,7 @@ function renderKDTreeSVG(kdRoot, points, qPt, nnPt) {
   return svg;
 }
 
-function renderPersistentSVG(model, activeVer) {
+function renderPersistentSVG(model, activeVer, meta) {
   var width = 520, height = 270;
   var svg = '<svg width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Persistent Tree Diagram">';
 
@@ -685,6 +786,7 @@ function renderPersistentSVG(model, activeVer) {
 
   var nodes = [];
   var edges = [];
+  var copied = (meta && meta.copied) ? meta.copied : [];
 
   function layoutP(node, depth, x1, x2) {
     if (!node) return null;
@@ -711,7 +813,10 @@ function renderPersistentSVG(model, activeVer) {
   });
 
   nodes.forEach(function (n) {
-    svg += '<g class="p-node new" transform="translate(' + n.x + ',' + n.y + ')">' +
+    var isNew = copied.indexOf(n.k) !== -1;
+    var cls = 'p-node ' + (isNew ? 'new' : 'shared');
+    var nAnim = (isNew && motionOn) ? ' style="animation: bump 0.4s ease-out;"' : '';
+    svg += '<g class="' + cls + '" transform="translate(' + n.x + ',' + n.y + ')"' + nAnim + '>' +
       '<circle r="16" />' +
       '<text class="p-txt" y="1">' + n.k + '</text>' +
       '</g>';
@@ -789,7 +894,8 @@ var TOPICS = [
           'Production Uses: Redis sorted sets (ZSET), LevelDB / RocksDB in-memory MemTables.'
         ],
         extra: SKIPLIST_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "What is a Skip List and how does probabilistic promotion achieve O(log n) average search without complex tree rotations?", "a": "<p>A <strong>Skip List</strong> (William Pugh) is a multi-level linked list data structure where higher forward pointer lanes skip over multiple nodes, mimicking binary search over a linked list.</p><div class=\"key-takeaway\"><strong>Probabilistic Promotion:</strong> When inserting a key, its level height is determined by tossing a fair coin (probability <code>p = 0.5</code>). It reaches Level <code>k</code> with probability <code>(1/2)^k</code>. This geometric distribution guarantees expected height <code>O(log n)</code> and average search/insert/delete time of <code>O(log n)</code> without balancing rotations.</div>"}, {"marks": 4, "q": "Explain the search and insertion algorithms in a Skip List with multi-level pointer updates.", "a": "<p><strong>Search Algorithm:</strong></p><ol><li>Start at top level of head sentinel.</li><li>Traverse horizontally along current level as long as <code>curr->forward[level]->key < target</code>.</li><li>When next key is <code>\u2265 target</code> or <code>null</code>, drop down one level vertically: <code>level = level - 1</code>.</li><li>Repeat until reaching bottom Level 0. If <code>curr->forward[0]->key == target</code>, key is found!</li></ol><p><strong>Insertion Algorithm:</strong></p><ol><li>Perform search while recording a tracking array <code>update[0...MAX_LEVEL]</code> storing the rightmost node visited at each level.</li><li>Generate random level <code>lvl</code> for the new node via coin flips.</li><li>Allocate new node and for each level <code>0 \u2264 i \u2264 lvl</code>, splice node into list: <code>newNode->forward[i] = update[i]->forward[i]; update[i]->forward[i] = newNode;</code>.</li></ol>"}, {"marks": 6, "q": "Analyze the space/time complexity of Skip Lists, explain lock-free concurrent Skip Lists using CAS, and explain why Redis uses Skip Lists for Sorted Sets (ZSET).", "a": "<p><strong>1. Mathematical Complexity Analysis:</strong></p><ul><li><em>Expected Height:</em> With promotion probability <code>p = 0.5</code>, expected maximum level for <code>n</code> items is <code>log_{1/p} n = log\u2082 n</code>.</li><li><em>Search Cost:</em> Bounded by walking backwards up and left. At each step, we either drop down a level with probability <code>1 - p</code> or step left with probability <code>p</code>. Expected comparisons <code>= (log_{1/p} n) / (1 - p) = 2 log\u2082 n = O(log n)</code>.</li><li><em>Total Memory:</em> Expected pointers per node is <code>\u2211_{i=1}^\u221e p^{i-1} = 1 / (1 - p) = 2</code> pointers. Total auxiliary space is strictly <code>O(n)</code>.</li></ul><p><strong>2. Lock-Free Concurrent Skip Lists:</strong></p><p>Balancing trees (AVL, Red-Black) requires multi-node rotations that touch grandparents and uncles, making lock-free concurrent writes virtually impossible. Skip lists require updating <strong>only local forward pointers</strong>, easily achieved with atomic Compare-And-Swap (CAS) instructions (e.g. Java's <code>ConcurrentSkipListMap</code>) without mutex locking!</p><p><strong>3. Why Redis Uses Skip Lists for ZSET:</strong></p><ul><li>Range scans (<code>ZRANGEBYSCORE</code>) simply traverse Level 0 linked list pointers sequentially with minimal CPU cache overhead.</li><li>Memory-tunable: Setting <code>p = 0.25</code> uses an average of only 1.33 pointers per node, consuming less RAM than a Red-Black tree while retaining <code>O(log n)</code> lookups.</li><li>Much simpler and more resilient code than balanced tree implementations.</li></ul>"}],
+          tries: [
           { label: 'Insert 15, 25, 35, 45', reset: true, act: 'sample-skip' },
           { label: 'Search 35 (Drop lanes)', reset: false, act: 'search-35' }
         ]
@@ -810,7 +916,8 @@ var TOPICS = [
           'Production Uses: Git commit graphs, Clojure persistent hash maps (HAMT), time-travel debugging in Redux.'
         ],
         extra: PERSISTENT_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "What is a Persistent Data Structure? Contrast partial persistence with full persistence.", "a": "<p>A <strong>Persistent Data Structure</strong> preserves all previous historical versions of itself whenever modified, rendering mutations non-destructive.</p><ul><li><strong>Partial Persistence:</strong> All historical versions can be queried, but <strong>only the newest version</strong> can be modified (linear version timeline).</li><li><strong>Full Persistence:</strong> <strong>Any version</strong> can be queried and modified, creating a branching version tree (like Git branches).</li></ul>"}, {"marks": 4, "q": "Explain the Path Copying technique in persistent binary search trees and illustrate with a structural sharing diagram.", "a": "<p><strong>Path Copying Technique:</strong></p><p>To insert or modify a node in a persistent binary search tree:</p><ol><li>Do NOT clone the entire tree (which would take <code>O(n)</code> time and memory).</li><li>Copy <strong>only the nodes along the direct path</strong> from the root down to the modified node (exactly <code>h = O(log n)</code> nodes).</li><li>All subtrees not on this access path are <strong>shared structurally</strong> between the old and new version roots.</li><li>Create a new version root pointer pointing to the newly copied top node.</li></ol><pre><code>Version 0:     Root_0 (A)               Version 1:    Root_1 (A')\n               /        \\                             /        \\\n             (B)        (C)                         (B)        (C')\n             / \\        / \\                         / \\        / \\\n           (D) (E)    (F) (G)                     (D) (E)    (F) (G') [Modified]\n           [Subtree B shared completely]</code></pre>"}, {"marks": 6, "q": "Analyze the time and space complexity of Path Copying, explain Persistent Hash Maps (HAMT) in functional languages, and describe Git's DAG architecture.", "a": "<p><strong>1. Complexity Analysis:</strong></p><ul><li><em>Time Complexity:</em> <code>O(log n)</code> to traverse and copy nodes along the path.</li><li><em>Space Allocation:</em> Only <code>h = \u2308log\u2082 n\u2309</code> newly allocated nodes per modification.</li><li><em>Historical Query:</em> Any past version <code>v</code> can be queried in <code>O(log n)</code> time by traversing from <code>Root_v</code>.</li></ul><p><strong>2. Hash Array Mapped Tries (HAMT):</strong></p><p>Standard persistent trees have fan-out 2, requiring <code>log\u2082 n</code> copies per update. Functional languages (Clojure, Scala, Rust, JavaScript Immutable.js) use <strong>HAMT</strong> with fan-out 32:</p><ul><li>The 32-bit hash of key is split into 5-bit chunks (<code>2\u2075 = 32</code>).</li><li>Each trie node has a 32-bit bitmap mask tracking occupied children.</li><li>Depth is at most <code>\u230832 / 5\u2309 = 7</code> levels! A modification copies at most 7 nodes, achieving near <code>O(1)</code> persistent mutations with immense structural sharing.</li></ul><p><strong>3. Git Commit Object Graph:</strong></p><p>Git's commit history is a fully persistent tree where directories are Tree Objects and files are Blobs identified by SHA-1/SHA-256 hashes. Editing one file in a repo copies only the directory tree path up to the commit root, while all untouched gigabytes of project files are structurally shared via immutable hashes.</p>"}],
+          tries: [
           { label: 'Build Version 1 & 2', reset: true, act: 'build-v12' },
           { label: 'Build Version 3 (Structural Sharing)', reset: false, act: 'build-v3' }
         ]
@@ -831,7 +938,8 @@ var TOPICS = [
           'Production Uses: Autonomous robotics LiDAR mapping, geospatial indexing (PostGIS), computer vision feature matching.'
         ],
         extra: KD_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "What is a KD-Tree and what rule dictates the splitting dimension at each depth level?", "a": "<p>A <strong>KD-Tree</strong> (k-Dimensional Tree) is a space-partitioning binary search tree for organizing points in <code>k</code>-dimensional coordinate space.</p><div class=\"key-takeaway\"><strong>Splitting Rule:</strong> At depth level <code>d</code>, the cutting dimension is chosen cycling through coordinates: <code>axis = d mod k</code>. For 2D points: Level 0 splits on X (vertical line), Level 1 on Y (horizontal line), Level 2 on X, and so on. Points with <code>coord[axis] < node.coord[axis]</code> branch left; others branch right.</div>"}, {"marks": 4, "q": "Explain the Nearest Neighbor (1-NN) search algorithm on a 2D KD-Tree and explain the bounding plane pruning condition.", "a": "<p><strong>Nearest Neighbor Algorithm:</strong></p><ol><li>Traverse down the KD-Tree comparing coordinates along the splitting axis to reach the target point's candidate leaf.</li><li>Initialize <code>best_node = leaf</code> and <code>best_dist = distance(query, leaf)</code>.</li><li>Backtrack up the recursion path:<ul><li>If current node is closer than <code>best_dist</code>, update <code>best_node</code> and <code>best_dist</code>.</li><li><strong>Pruning Condition (Hyperplane Intersection):</strong> Calculate the perpendicular distance from query point to the splitting axis plane: <code>plane_dist = |query[axis] - node.coord[axis]|</code>.</li><li>If <code>plane_dist < best_dist</code>: a closer point <em>could</em> lie on the other side of the cutting plane; recursively explore the opposite subtree.</li><li>If <code>plane_dist \u2265 best_dist</code>: <strong>prune the entire opposite subtree</strong> without inspecting any of its nodes!</li></ul></li></ol>"}, {"marks": 6, "q": "Explain multi-dimensional range search on KD-Trees, analyze query complexity O(n^{1 - 1/k}), explain the Curse of Dimensionality, and contrast with R-Trees.", "a": "<p><strong>1. Multi-Dimensional Range Query:</strong></p><p>Given a query bounding box <code>[X_{min}, X_{max}] \u00d7 [Y_{min}, Y_{max}]</code>:</p><ul><li>If node's bounding region is completely inside the query box: report all points in its subtree.</li><li>If node's bounding region is completely disjoint: prune subtree.</li><li>If bounding region partially intersects: check point and recurse on both subtrees.</li></ul><p><strong>2. Complexity Derivation:</strong></p><p>For a 2D KD-Tree (<code>k = 2</code>), an orthogonal line intersects at most 2 out of 4 regions at depth 2: <code>T(n) = 2 T(n/4) + O(1)</code>. By the Master Theorem, range search takes <code>O(\u221an) = O(n^{1/2})</code>. For <code>k</code> dimensions, search takes <code>O(n^{1 - 1/k})</code>.</p><p><strong>3. The Curse of Dimensionality:</strong></p><p>As dimension <code>k</code> increases (e.g. <code>k > 20</code> in machine learning embeddings):</p><ul><li>The volume of the hypercube grows exponentially. Almost all points reside near the boundary of the hypersphere.</li><li>The pruning condition <code>plane_dist < best_dist</code> almost always evaluates to true, forcing search to inspect virtually every branch. KD-Tree performance degrades to an exhaustive <code>O(n)</code> linear scan!</li></ul><p><strong>4. Comparison with R-Trees:</strong></p><ul><li><em>KD-Tree:</em> Divides space with infinite planes; ideal for static points in memory.</li><li><em>R-Tree:</em> Groups objects into hierarchical Minimum Bounding Boxes (MBR); handles spatial objects (polygons, line segments, areas) and powers disk-based spatial databases (PostGIS, SQLite R*Tree).</li></ul>"}],
+          tries: [
           { label: 'Build 2D KD-Tree', reset: true, act: 'build-kd' },
           { label: 'Nearest Neighbor Query', reset: false, act: 'query-nn' }
         ]
@@ -852,7 +960,8 @@ var TOPICS = [
           'The ABA Problem: When a memory address is changed and restored to its original value, naive CAS succeeds erroneously. Resolved using version tags.'
         ],
         extra: CONCURRENT_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "What is a Quadtree and how are its four quadrants (NW, NE, SW, SE) created when point capacity is exceeded?", "a": "<p>A <strong>Quadtree</strong> is a 2D spatial tree where each internal node has exactly 4 children representing spatial quadrants: <strong>NW (North-West)</strong>, <strong>NE (North-East)</strong>, <strong>SW (South-West)</strong>, and <strong>SE (South-East)</strong>.</p><div class=\"key-takeaway\"><strong>Subdivision Rule:</strong> A leaf node holds a capacity of <code>C</code> points (e.g. <code>C = 4</code>). When the <code>(C + 1)</code>-th point is inserted, the node subdivides its 2D bounding rectangle into 4 equal quadrants and distributes its existing points into the corresponding child quadrants.</div>"}, {"marks": 4, "q": "Explain the Compare-And-Swap (CAS) atomic hardware instruction and how a lock-free Treiber Stack implements concurrent push and pop.", "a": "<p><strong>Compare-And-Swap (CAS) Primitive:</strong></p><p>An atomic CPU instruction: <code>CAS(address, expected_val, new_val)</code></p><p>Atomically checks if <code>*address == expected_val</code>: if true, writes <code>new_val</code> and returns true; otherwise leaves memory unmodified and returns false without locking the CPU bus.</p><p><strong>Treiber Lock-Free Stack:</strong></p><pre><code>void push(Node* node) {\n  do {\n    node->next = top;\n  } while (!atomic_compare_and_swap(&top, node->next, node));\n}\n\nNode* pop() {\n  Node* old_top;\n  do {\n    old_top = top;\n    if (!old_top) return NULL;\n  } while (!atomic_compare_and_swap(&top, old_top, old_top->next));\n  return old_top;\n}</code></pre><p>If multiple threads attempt to push or pop concurrently, one succeeds immediately while others fail CAS and retry in a tight spin loop with zero thread sleep/context switch overhead.</p>"}, {"marks": 6, "q": "Explain the ABA Problem in lock-free concurrent programming, how it corrupts memory in a concurrent stack, and detail mitigation strategies.", "a": "<p><strong>1. The ABA Problem Scenario:</strong></p><ol><li>Thread 1 reads <code>top = A</code> and observes <code>A->next = B</code>.</li><li>Thread 1 is preempted by the OS scheduler.</li><li>Thread 2 runs: pops <code>A</code>, pops <code>B</code>, and then pushes a newly allocated node that happens to reuse memory address <code>A</code> (or pushes <code>A</code> back). Stack state is now: <code>top \u2192 A \u2192 C</code>.</li><li>Thread 1 resumes: executes <code>CAS(&top, A, B)</code>.</li><li>Because <code>top</code> is indeed <code>A</code>, CAS succeeds! <code>top</code> is now pointed to <code>B</code>, which has <strong>already been freed/deallocated</strong>! The stack is severely corrupted.</li></ol><p><strong>2. Mitigation Strategies:</strong></p><ul><li><strong>Tagged / Versioned Pointers (Double-Word CAS):</strong> Pair every pointer with an integer version counter (e.g. <code>struct { Node* ptr; uint64_t tag; }</code>). Every push/pop increments <code>tag</code>. <code>CAS64 / CMPXCHG16B</code> compares both pointer AND tag: <code>(A, 0) \u2260 (A, 1)</code>, instantly preventing ABA.</li><li><strong>Hazard Pointers:</strong> Reader threads publish addresses they are currently accessing to a thread-local hazard pointer list. Memory deallocation is deferred until no thread holds a hazard pointer to that address.</li><li><strong>Read-Copy-Update (RCU):</strong> Linux kernel synchronization: readers access data lock-free; writers allocate a modified copy and swap pointers. Old memory is reclaimed only after a \"grace period\" where all CPU cores have context-switched.</li></ul><p><strong>3. Quadtrees vs Spatial Hashing in Game Physics:</strong></p><ul><li><em>Quadtrees:</em> Adapts dynamically to non-uniform clusters of game entities; requires tree traversals.</li><li><em>Spatial Hash Grids:</em> Maps 2D coordinates into a 1D hash table in <code>O(1)</code> time; superior when entities are uniformly distributed and moving continuously.</li></ul>"}],
+          tries: [
           { label: 'Subdivide Quadtree', reset: true, act: 'quad-sub' },
           { label: 'Simulate Atomic CAS Stack', reset: true, act: 'cas-stack' }
         ]
@@ -900,7 +1009,51 @@ function $$(sel, root) { return Array.prototype.slice.call((root || document).qu
    ===================================================================== */
 var panels = {};
 
-function panelHTML(t) {
+
+  function renderMarksHTML(s) {
+    if (!s.marks || !s.marks.length) return '';
+    var items = s.marks.map(function (m) {
+      var cls = 'm' + m.marks;
+      return '<details class="mark-card ' + cls + '" open>' +
+        '<summary class="mark-summary">' +
+        '<span class="badge-mark ' + cls + '">' + m.marks + ' Marks</span>' +
+        '<span class="mark-q">' + esc(m.q) + '</span>' +
+        '</summary>' +
+        '<div class="mark-body">' + m.a + '</div>' +
+        '</details>';
+    }).join('');
+    return '<div class="marks-section">' +
+      '<div class="marks-bar">' +
+      '<div class="marks-title"><span>📝 Exam &amp; Interview Answers</span></div>' +
+      '<div class="marks-filters">' +
+      '<button class="marks-filter-btn active" data-mark-filter="all">All</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="2">2M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="4">4M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="6">6M</button>' +
+      '</div></div>' +
+      '<div class="marks-list">' + items + '</div>' +
+      '</div>';
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mark-filter]');
+    if (!b) return;
+    var filter = b.getAttribute('data-mark-filter');
+    var sec = b.closest('.marks-section');
+    if (sec) {
+      sec.querySelectorAll('[data-mark-filter]').forEach(function (x) { x.classList.toggle('active', x === b); });
+      sec.querySelectorAll('.mark-card').forEach(function (c) {
+        if (filter === 'all' || c.classList.contains('m' + filter)) {
+          c.style.display = '';
+          if (filter !== 'all') c.open = true;
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+  });
+
+  function panelHTML(t) {
   var id = t.id;
   var extras = '';
 
@@ -943,7 +1096,7 @@ function panelHTML(t) {
     }).join('') + '</div>' : '';
     return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
       '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
-      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + renderMarksHTML(s) + '</article>';
   }).join('');
 
   return '<section class="panel" id="panel-' + id + '" role="tabpanel" aria-labelledby="tab-' + id + '" hidden>' +
@@ -1005,10 +1158,10 @@ function draw(p, meta) {
     p.canvas.innerHTML = renderSkipListSVG(p.sl, meta);
     p.stats.innerHTML = statsHTML(p);
   } else if (id === 'persistent') {
-    p.canvas.innerHTML = renderPersistentSVG(p.pt, p.curVer);
+    p.canvas.innerHTML = renderPersistentSVG(p.pt, p.curVer, meta);
     p.stats.innerHTML = statsHTML(p);
   } else if (id === 'kd-tree') {
-    p.canvas.innerHTML = renderKDTreeSVG(p.kdRoot, p.kdPoints, meta ? meta.qPt : null, meta ? meta.nnPt : null);
+    p.canvas.innerHTML = renderKDTreeSVG(p.kdRoot, p.kdPoints, meta ? meta.qPt : null, meta ? meta.nnPt : null, meta);
     p.stats.innerHTML = statsHTML(p);
   } else if (id === 'spatial-concurrent') {
     if (p.scMode === 'quad') {
@@ -1054,11 +1207,14 @@ function refreshProgress() {
   });
 }
 
-/* =====================================================================
-   Tabs & Navigation
-   ===================================================================== */
+var seqTimer = null;
+function stopSeq() {
+  if (seqTimer) { clearTimeout(seqTimer); seqTimer = null; }
+}
+
 var current = null;
 function showTab(id) {
+  stopSeq();
   var t = TOPICS.filter(function (x) { return x.id === id; })[0] || TOPICS[0];
   current = t.id;
   TOPICS.forEach(function (x) {
@@ -1135,6 +1291,7 @@ function fromHash() {
     // Event Delegation
     el.addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b || !el.contains(b)) return;
+      if (!b.hasAttribute('data-try')) stopSeq();
 
       // Studied Checkbox
       if (b.hasAttribute('data-done')) {
@@ -1182,7 +1339,7 @@ function fromHash() {
         if (sel) {
           sel.innerHTML = p.pt.versions.map(function (v, idx) { return '<option value="' + idx + '"' + (idx === p.curVer ? ' selected' : '') + '>v' + idx + ' (Root ' + (v ? v.k : 'null') + ')</option>'; }).join('');
         }
-        draw(p);
+        draw(p, { copied: res.copied });
         showLog(p, 'Path Copying Insert &rarr; Version ' + res.ver, 'Committed', 'hit', res.steps);
         return;
       }
@@ -1203,7 +1360,7 @@ function fromHash() {
         var qx = Number($('#qx-' + t.id, el).value);
         var qy = Number($('#qy-' + t.id, el).value);
         var res = findNearestNeighbor(p.kdRoot, qx, qy);
-        draw(p, { qPt: [qx, qy], nnPt: res.bestNode });
+        draw(p, { qPt: [qx, qy], nnPt: res.bestNode, inspected: res.inspected });
         showLog(p, 'Nearest Neighbor Query for (' + qx + ', ' + qy + ')', 'Found (' + res.bestNode.x + ',' + res.bestNode.y + ')', 'hit', res.steps);
         return;
       }
@@ -1254,9 +1411,21 @@ function fromHash() {
         var tr = sub.tries[tryIdx];
 
         if (tr.act === 'sample-skip') {
+          stopSeq();
           p.sl = new SkipListModel(4);
-          [15, 25, 35, 45].forEach(function (k) { p.sl.insert(k); });
-          draw(p); hint(p, 'Built Skip List with keys {15, 25, 35, 45}.');
+          var seqKeys = [15, 25, 35, 45];
+          var sIdx = 0;
+          function stepSkip() {
+            if (sIdx >= seqKeys.length) return;
+            var k = seqKeys[sIdx++];
+            var res = p.sl.insert(k);
+            draw(p, res);
+            showLog(p, 'Step ' + sIdx + '/' + seqKeys.length + ': Insert Key ' + k, res.status === 'dup' ? 'Duplicate' : 'Inserted', 'hit', res.steps);
+            if (sIdx < seqKeys.length) {
+              seqTimer = setTimeout(stepSkip, motionOn ? 700 : 0);
+            }
+          }
+          stepSkip();
         } else if (tr.act === 'search-35') {
           $('#key-' + t.id, el).value = '35';
           $('[data-act="sl-search"]', el).click();

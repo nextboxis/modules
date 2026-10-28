@@ -63,6 +63,16 @@ flowchart LR
 
 ---
 
+## 📝 University & Interview Exam Q&A Bank (2M, 4M, 6M)
+
+Every topic across all 5 modules includes an interactive **Exam & Technical Interview revision component** on the concept sidebar:
+- **2 Marks (Short Answers)**: Definitions, core formulas, balance factors, constraints, and time/space complexity bounds.
+- **4 Marks (Medium Explanations)**: Step-by-step algorithms, structural rotation diagrams, comparison matrices, and worked trace examples.
+- **6 Marks (Long Analytical Answers)**: Comprehensive proofs, amortized analysis, edge cases, kernel/production implementations, and architectural tradeoffs.
+- **Interactive Filtering**: Filter by `[All]`, `[2M]`, `[4M]`, or `[6M]` with single-click accordions.
+
+---
+
 ## 🚀 Running Locally
 
 All modules are completely self-contained in standalone HTML/CSS/JS files:

@@ -1,10 +1,11 @@
-<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Module 2 Hashing Lab</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
 /* Layout concept: syllabus header with a progress strip, one tab per topic,
    a graph-paper workbench on the left and the concept notes on the right. */
 :root {
@@ -25,6 +26,9 @@
   --purple: #6b21a8;
   --purple-soft: #f3e8ff;
   --purple-ink: #4c1d95;
+  --blue: #1d4ed8;
+  --blue-soft: #dbeafe;
+  --blue-ink: #1e3a8a;
   --grid: rgba(16, 32, 44, 0.06);
   --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
   --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -138,20 +142,30 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .meter-fill.warn { background: var(--visit); }
 .meter-fill.danger { background: var(--bad); }
 
-.canvas { min-height: 290px; padding: 14px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.canvas { min-height: 310px; padding: 14px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .canvas svg { display: block; margin: auto; max-width: 100%; flex: none; }
 .empty { margin: auto; color: var(--muted); font: 500 13px var(--font-mono); text-align: center; padding: 40px 12px; }
 
 /* svg hashing visual styles */
 .slot-rect { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; transition: fill 0.2s, stroke 0.2s; }
 .slot-rect.occupied { fill: var(--surface-2); stroke: var(--muted); }
-.slot-rect.visit { fill: var(--visit-soft); stroke: var(--visit); stroke-width: 2.2; }
-.slot-rect.hit, .slot-rect.new { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5; }
+.slot-rect.visit { fill: var(--visit-soft); stroke: var(--visit); stroke-width: 2.2; animation: ping 0.4s ease-out; }
+.slot-rect.hit, .slot-rect.new { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5; animation: bump 0.5s ease-out; }
+.slot-rect.probing { fill: var(--visit-soft); stroke: var(--visit); stroke-width: 2.2; animation: probePulse 0.4s ease-out both; }
 .slot-rect.del { fill: var(--bad-soft); stroke: var(--bad); stroke-dasharray: 4 2; }
 .slot-text { font: 600 13px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
 .slot-idx { font: 500 10px var(--font-mono); fill: var(--muted); text-anchor: middle; }
-.probe-arrow { fill: none; stroke: var(--visit); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 4 3; }
-.cuckoo-kick-arrow { fill: none; stroke: var(--purple); stroke-width: 2.2; stroke-dasharray: 5 3; animation: dash 1s linear infinite; }
+.probe-arrow { fill: none; stroke: var(--visit); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 6 3; animation: probeDash 0.35s ease-out backwards; animation-delay: calc(var(--step, 0) * 180ms); }
+.probe-badge { animation: rise 0.25s ease-out backwards; animation-delay: calc(var(--step, 0) * 180ms + 60ms); }
+.cuckoo-kick-arrow { fill: none; stroke: var(--purple); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 6 3; animation: cuckooKick 0.5s ease-out backwards; animation-delay: calc(var(--kick, 0) * 220ms); }
+.bloom-beam { stroke-dasharray: 4 2; animation: beamDown 0.4s ease-out backwards; animation-delay: calc(var(--k, 0) * 120ms); }
+
+@keyframes probeDash { from { stroke-dashoffset: 40; opacity: 0; } to { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes probePulse { 0% { transform: scale(0.92); } 50% { transform: scale(1.06); } 100% { transform: scale(1); } }
+@keyframes cuckooKick { from { stroke-dashoffset: 60; opacity: 0; } to { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes beamDown { from { stroke-dashoffset: 80; opacity: 0; } to { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes ping { 0% { transform: scale(1); } 40% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@keyframes bump { 0% { transform: scale(0.96); } 45% { transform: scale(1.05); } 100% { transform: scale(1); } }
 @keyframes dash { to { stroke-dashoffset: -16; } }
 
 /* step log */
@@ -164,7 +178,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .chip.del { background: var(--visit-soft); color: var(--visit-ink); }
 .chip.cuckoo { background: var(--purple-soft); color: var(--purple); }
 .log ol { margin: 0; padding-left: 24px; font: 400 12.5px/1.65 var(--font-mono); }
-.log li { padding-left: 4px; overflow-wrap: anywhere; }
+.log li { padding-left: 4px; overflow-wrap: anywhere; animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
 .log .hint { font: 400 13px var(--font-body); color: var(--muted); }
 .log .err { color: var(--bad); font: 500 13px var(--font-mono); }
 
@@ -212,9 +226,44 @@ td code, .code { font: 500 12.5px var(--font-mono); }
 .panel.enter .lede, .panel.enter .bench, .panel.enter .topic { animation: rise 0.42s cubic-bezier(.2,.7,.2,1) both; }
 .panel.enter .bench { animation-delay: 0.05s; }
 .panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
-.log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
+.log li { padding-left: 4px; overflow-wrap: anywhere; animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
 .seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
+
+/* Exam & Interview Marks Section (2M, 4M, 6M) */
+.marks-section { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.marks-bar { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; gap: 8px; }
+.marks-title { font: 600 12px var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
+.marks-filters { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; background: var(--surface); }
+.marks-filter-btn { appearance: none; border: none; background: none; padding: 3px 9px; font: 600 11px var(--font-mono); color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.marks-filter-btn + .marks-filter-btn { border-left: 1px solid var(--line); }
+.marks-filter-btn.active { background: var(--accent); color: var(--accent-ink); }
+.marks-list { display: flex; flex-direction: column; }
+.mark-card { padding: 9px 12px; border-top: 1px solid var(--line); }
+.mark-card:first-child { border-top: none; }
+.mark-summary { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; list-style: none; font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.mark-summary::-webkit-details-marker { display: none; }
+.mark-summary::before { content: "▸"; font-family: var(--font-mono); color: var(--accent); display: inline-block; transition: transform 0.15s; font-size: 11px; margin-top: 2px; }
+details[open] > .mark-summary::before { transform: rotate(90deg); }
+.badge-mark { font: 700 10px var(--font-mono); padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0; margin-top: 1px; }
+.badge-mark.m2 { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+.badge-mark.m4 { background: var(--visit-soft); color: var(--visit-ink); border: 1px solid var(--visit); }
+.badge-mark.m6 { background: #ede9fe; color: #4c1d95; border: 1px solid #c084fc; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+}
+:root[data-theme="dark"] .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+.mark-body { margin-top: 8px; padding-left: 18px; font-size: 13px; line-height: 1.6; color: var(--ink); }
+.mark-body p { margin-top: 6px; }
+.mark-body p:first-child { margin-top: 0; }
+.mark-body ul, .mark-body ol { margin: 6px 0; padding-left: 18px; }
+.mark-body li { margin-top: 3px; }
+.mark-body pre { background: var(--surface-2); padding: 8px; border-radius: 4px; overflow-x: auto; margin: 6px 0; font-family: var(--font-mono); font-size: 12px; }
+.mark-body code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 4px; border-radius: 3px; }
+.mark-body .key-takeaway { margin-top: 8px; padding: 6px 10px; background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; font-size: 12px; }
+
 </style>
+</head>
+<body>
 <div class="page">
   <header class="top">
     <div>
@@ -222,6 +271,7 @@ td code, .code { font: 500 12.5px var(--font-mono); }
         <span class="eyebrow">Module 2 of 5</span>
         <a href="Module 1 Tree Lab.html" class="navlink" title="Previous Module: Trees">&larr; Module 1</a>
         <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="exam-suite.html" class="navlink" title="Master Exam Bank (72 Q&amp;As)">📝 Exam Bank</a>
         <a href="Module 3 Graph Lab.html" class="navlink next" title="Next Module: Graphs">Next: Module 3 (Graphs) &rarr;</a>
       </div>
       <h1>Hash Table, Collision Resolution, Cuckoo Hashing, Bloom Filters</h1>
@@ -261,6 +311,7 @@ td code, .code { font: 500 12.5px var(--font-mono); }
     <div class="stepper-actions">
       <a href="Module 1 Tree Lab.html" class="btn sm">&larr; Prev: Module 1 (Trees)</a>
       <a href="index.html" class="btn sm">🏠 Course Hub</a>
+      <a href="exam-suite.html" class="btn sm">📝 Exam Bank</a>
       <a href="Module 3 Graph Lab.html" class="btn primary" style="font-weight:600;">Next: Module 3 (Graphs) &rarr;</a>
     </div>
   </footer>
@@ -817,13 +868,16 @@ function renderCollisionTable(ct, res) {
     var entry = ct.table[i];
     var isHit = res && res.slot === i && (res.status === 'hit' || res.status === 'new');
     var isDel = entry && entry.tomb;
-    var cls = 'slot-rect' + (entry && !entry.tomb ? ' occupied' : '') + (isDel ? ' del' : '') + (isHit ? ' hit' : '');
+    var pathIdx = res && res.path ? res.path.indexOf(i) : -1;
+    var isProbed = pathIdx !== -1 && pathIdx < (res.path.length - 1);
+    var cls = 'slot-rect' + (entry && !entry.tomb ? ' occupied' : '') + (isDel ? ' del' : '') + (isHit ? ' hit' : '') + (isProbed ? ' probing' : '');
+    var animStyle = isProbed ? ' style="animation-delay: ' + (pathIdx * 180) + 'ms;"' : '';
 
     var textVal = '—';
     if (entry) textVal = entry.tomb ? '⚰️' : entry.k;
 
     svg += '<g transform="translate(' + x + ',' + startY + ')">' +
-      '<rect class="' + cls + '" width="' + slotW + '" height="' + slotH + '" rx="6" />' +
+      '<rect class="' + cls + '"' + animStyle + ' width="' + slotW + '" height="' + slotH + '" rx="6" />' +
       '<text class="slot-idx" x="' + (slotW / 2) + '" y="-7">[' + i + ']</text>' +
       '<text class="slot-text" x="' + (slotW / 2) + '" y="' + (slotH / 2) + '" font-size="' + (isDel ? '14' : '13') + '">' + esc(textVal) + '</text>' +
       '</g>';
@@ -838,9 +892,9 @@ function renderCollisionTable(ct, res) {
       var x2 = pad + toSlot * (slotW + pad) + slotW / 2;
       var arcHeight = 30 + Math.min(45, Math.abs(toSlot - fromSlot) * 6);
       var midX = (x1 + x2) / 2;
-      svg += '<path class="probe-arrow" d="M ' + x1 + ' ' + (startY - 12) + ' Q ' + midX + ' ' + (startY - 12 - arcHeight) + ' ' + x2 + ' ' + (startY - 12) + '" />';
-      svg += '<circle cx="' + midX + '" cy="' + (startY - 12 - arcHeight / 2) + '" r="9" fill="var(--visit-soft)" stroke="var(--visit)" stroke-width="1.2" />';
-      svg += '<text x="' + midX + '" y="' + (startY - 8 - arcHeight / 2) + '" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" font-weight="600" fill="var(--visit-ink)">' + (p + 1) + '</text>';
+      svg += '<path class="probe-arrow" style="--step: ' + p + ';" d="M ' + x1 + ' ' + (startY - 12) + ' Q ' + midX + ' ' + (startY - 12 - arcHeight) + ' ' + x2 + ' ' + (startY - 12) + '" />';
+      svg += '<g class="probe-badge" style="--step: ' + p + ';"><circle cx="' + midX + '" cy="' + (startY - 12 - arcHeight / 2) + '" r="9" fill="var(--visit-soft)" stroke="var(--visit)" stroke-width="1.2" />' +
+        '<text x="' + midX + '" y="' + (startY - 8 - arcHeight / 2) + '" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" font-weight="600" fill="var(--visit-ink)">' + (p + 1) + '</text></g>';
     }
   }
 
@@ -855,6 +909,8 @@ function renderCuckoo(ct, res) {
   var totalW = Math.max(540, tableW);
   var totalH = 260;
   var svg = '<svg width="' + totalW + '" height="' + totalH + '" viewBox="0 0 ' + totalW + ' ' + totalH + '" role="img" aria-label="Cuckoo Hash Tables">';
+
+  svg += '<defs><marker id="cuckoo-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--purple)" /></marker></defs>';
 
   // Table 1
   svg += '<text x="14" y="24" font-family="var(--font-mono)" font-size="12" font-weight="600" fill="var(--accent)">Table 1: h₁(k) = (3k + 1) mod ' + m + '</text>';
@@ -895,7 +951,7 @@ function renderCuckoo(ct, res) {
       var xEnd = 14 + (kick.toT === 1 ? ct.h1(kick.key) : ct.h2(kick.key)) * (slotW + pad) + slotW / 2;
       var yEnd = (kick.toT === 1) ? (y1 + slotH) : y2;
       var midY = (y1 + y2 + slotH) / 2;
-      svg += '<path class="cuckoo-kick-arrow" d="M ' + xStart + ' ' + yStart + ' C ' + xStart + ' ' + midY + ', ' + xEnd + ' ' + midY + ', ' + xEnd + ' ' + yEnd + '" />';
+      svg += '<path class="cuckoo-kick-arrow" style="--kick: ' + k + ';" marker-end="url(#cuckoo-arrow)" d="M ' + xStart + ' ' + yStart + ' C ' + xStart + ' ' + midY + ', ' + xEnd + ' ' + midY + ', ' + xEnd + ' ' + yEnd + '" />';
     }
   }
 
@@ -924,7 +980,7 @@ function renderBloom(bf, res) {
     if (res && res.hashes && res.hashes[k] !== undefined) {
       var targetBit = res.hashes[k];
       var bx = 10 + pad + targetBit * (bitW + pad) + bitW / 2;
-      svg += '<line x1="' + hx + '" y1="' + (hashY + 14) + '" x2="' + bx + '" y2="92" stroke="' + colors[k % colors.length] + '" stroke-width="1.8" stroke-dasharray="3 2" />';
+      svg += '<line class="bloom-beam" style="--k: ' + k + ';" x1="' + hx + '" y1="' + (hashY + 14) + '" x2="' + bx + '" y2="92" stroke="' + colors[k % colors.length] + '" stroke-width="1.8" stroke-dasharray="3 2" />';
     }
   }
 
@@ -1006,7 +1062,8 @@ var TOPICS = [
           'Load Factor &alpha; = n / m. When &alpha; exceeds 0.75, table capacity should double (Rehash).'
         ],
         extra: HASH_FUNC_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "Define Hash Table, Hash Function, and Load Factor (\u03b1). State the threshold when rehashing is triggered.", "a": "<p>A <strong>Hash Table</strong> is a data structure providing expected <code>O(1)</code> time dictionary operations by mapping keys into array indices using a <strong>Hash Function</strong> <code>h(k)</code>.</p><p><strong>Load Factor:</strong> <code>\u03b1 = n / m</code>, where <code>n</code> is the number of stored keys and <code>m</code> is total bucket capacity.</p><div class=\"key-takeaway\"><strong>Rehashing:</strong> When <code>\u03b1</code> exceeds <code>0.75</code> in open addressing (or <code>1.0</code> in chaining), the table capacity is typically doubled (<code>2m</code>) and all keys re-inserted to prevent long collision probe chains.</div>"}, {"marks": 4, "q": "Explain the Division Method and Multiplication Method of hashing with mathematical formulations and table size selection criteria.", "a": "<p><strong>1. Division Method:</strong></p><p><code>h(k) = k mod m</code></p><ul><li>Fast single CPU instruction.</li><li><em>Selection of m:</em> <code>m</code> must be a <strong>prime number not close to a power of 2</strong>. If <code>m = 2^p</code>, <code>h(k)</code> depends only on the lowest <code>p</code> bits of <code>k</code>, causing massive collisions if keys share common binary suffixes.</li></ul><p><strong>2. Multiplication Method (Knuth):</strong></p><p><code>h(k) = \u230am \u00b7 (k \u00b7 A mod 1)\u230b</code> where <code>(k \u00b7 A mod 1)</code> is the fractional part of <code>k \u00b7 A</code>.</p><ul><li>Knuth suggests the Golden Ratio reciprocal: <code>A = (\u221a5 - 1)/2 \u2248 0.6180339887</code>.</li><li><em>Selection of m:</em> <code>m</code> can safely be a power of 2 (e.g. <code>2^p</code>), which enables ultra-fast calculation using bit shifts and integer multiplication without slow hardware division instructions.</li></ul>"}, {"marks": 6, "q": "Discuss the Simple Uniform Hashing Assumption (SUHA), analyze expected search time under chaining, and detail dynamic table resizing and amortized complexity.", "a": "<p><strong>1. Simple Uniform Hashing Assumption (SUHA):</strong></p><p>SUHA assumes any given key <code>k</code> is equally likely to hash into any of the <code>m</code> slots, independently of where any other key has hashed: <code>P(h(k) = i) = 1/m</code> for all <code>0 \u2264 i < m</code>.</p><p><strong>2. Search Analysis with Separate Chaining:</strong></p><ul><li><em>Unsuccessful Search:</em> Must traverse entire list at bucket <code>h(k)</code>. Expected list length is load factor <code>\u03b1 = n/m</code>. Time = <code>\u0398(1 + \u03b1)</code>.</li><li><em>Successful Search:</em> Expected number of elements examined is <code>1 + \u03b1/2 - \u03b1/(2n) = \u0398(1 + \u03b1)</code>.</li><li>If <code>n = O(m)</code>, then <code>\u03b1 = O(1)</code>, ensuring search executes in strictly <code>O(1)</code> expected time.</li></ul><p><strong>3. Dynamic Resizing (Rehashing) & Amortized Analysis:</strong></p><p>When <code>n / m > \u03b1_{max}</code> (e.g., 0.75):</p><ol><li>Allocate new array of size <code>m' = 2m</code> (next prime).</li><li>Iterate through all <code>n</code> existing elements and recompute <code>h'(k) = k mod m'</code>.</li><li>Free old bucket array. Cost of single rehash is <code>O(n)</code>.</li></ol><div class=\"key-takeaway\"><strong>Amortized Cost:</strong> Doubling occurs after at least <code>n/2</code> insertions. Spreading the <code>O(n)</code> copy cost across <code>n/2</code> operations adds only <code>O(1)</code> amortized cost per insert.</div>"}],
+          tries: [
           { label: 'Insert 45 (mod 11 = 1)', reset: true, seq: [['insert', 45]] },
           { label: 'Insert 34 (mod 11 = 1 Collision)', reset: false, seq: [['insert', 34]] },
           { label: 'Search 45 (1 probe)', reset: false, seq: [['search', 45]] }
@@ -1029,7 +1086,8 @@ var TOPICS = [
           'Tombstones (⚰️ DEL): Open addressing cannot simply erase deleted slots; searches must probe past tombstones, while insertions can reuse them.'
         ],
         extra: COLLISION_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "Why are hash collisions inevitable by the Pigeonhole Principle, and what is the difference between Separate Chaining and Open Addressing?", "a": "<p><strong>Pigeonhole Principle:</strong> If universe size <code>|U| > m</code> (table capacity), there must exist distinct keys <code>k\u2081, k\u2082</code> such that <code>h(k\u2081) = h(k\u2082)</code>.</p><p><strong>Core Difference:</strong></p><ul><li><strong>Separate Chaining:</strong> Colliding keys are stored in linked lists or secondary structures <em>outside</em> the primary table array (load factor <code>\u03b1</code> can exceed 1).</li><li><strong>Open Addressing:</strong> All keys reside <em>inside</em> the table array itself; collisions are resolved by systematically probing alternative slots (load factor <code>\u03b1 \u2264 1</code> strictly).</li></ul>"}, {"marks": 4, "q": "Compare Linear Probing, Quadratic Probing, and Double Hashing, explaining Primary and Secondary clustering.", "a": "<p><strong>1. Linear Probing:</strong> <code>h(k, i) = (h\u2080 + i) mod m</code></p><ul><li>Checks slots <code>h\u2080, h\u2080+1, h\u2080+2...</code></li><li><em>Flaw:</em> Suffers from <strong>Primary Clustering</strong>\u2014adjacent occupied slots merge into long contiguous runs, drastically increasing probe counts.</li></ul><p><strong>2. Quadratic Probing:</strong> <code>h(k, i) = (h\u2080 + c\u2081i + c\u2082i\u00b2) mod m</code></p><ul><li>Jumps over linear clusters.</li><li><em>Flaw:</em> Suffers from <strong>Secondary Clustering</strong>\u2014keys with identical initial hash <code>h\u2080</code> follow the exact same probe sequence.</li></ul><p><strong>3. Double Hashing:</strong> <code>h(k, i) = (h\u2081(k) + i \u00b7 h\u2082(k)) mod m</code></p><ul><li>Uses a secondary hash <code>h\u2082(k)</code> as the step size.</li><li><em>Advantage:</em> Keys sharing <code>h\u2081</code> diverge immediately if <code>h\u2082(k\u2081) \u2260 h\u2082(k\u2082)</code>, eliminating primary and secondary clustering (requires <code>gcd(h\u2082(k), m) = 1</code>).</li></ul>"}, {"marks": 6, "q": "Explain Tombstone Deletion in Open Addressing, why physical deletion corrupts search chains, and analyze probe length bounds as a function of load factor \u03b1.", "a": "<p><strong>1. Why Physical Deletion Breaks Open Addressing:</strong></p><p>In open addressing, search terminates when it either finds the key OR encounters an <strong>EMPTY</strong> (null) slot. If slot <code>S</code> is cleared to <code>EMPTY</code>, any subsequent search for a key that collided with <code>S</code> and was placed further down the probe chain will prematurely abort at <code>S</code>, erroneously reporting that the key does not exist!</p><p><strong>2. The Tombstone Mechanism (\u26b0\ufe0f DEL Marker):</strong></p><ul><li>When deleting, replace the key with a sentinel marker: <code>TOMBSTONE</code> (or <code>DEL</code>).</li><li><strong>Search Rule:</strong> Treat <code>TOMBSTONE</code> as occupied\u2014continue probing past it until reaching target key or a genuine <code>EMPTY</code> slot.</li><li><strong>Insert Rule:</strong> Treat <code>TOMBSTONE</code> as available\u2014insert new key into the first tombstone slot encountered, reclaiming deleted space.</li></ul><p><strong>3. Mathematical Probe Length Analysis:</strong></p><p>Under uniform hashing, the expected number of probes for open addressing is:</p><ul><li><em>Unsuccessful Search / Insert:</em> <code>E[probes] = 1 / (1 - \u03b1)</code>. As <code>\u03b1 \u2192 0.9</code>, probes <code>= 1 / 0.1 = 10</code>!</li><li><em>Successful Search:</em> <code>E[probes] = (1 / \u03b1) \u00b7 ln(1 / (1 - \u03b1))</code>. At <code>\u03b1 = 0.5</code>, probes <code>\u2248 1.39</code>; at <code>\u03b1 = 0.9</code>, probes <code>\u2248 2.56</code>.</li></ul>"}],
+          tries: [
           { label: 'Primary Cluster (12, 23, 34)', reset: true, seq: [['insert', 12], ['insert', 23], ['insert', 34]] },
           { label: 'Tombstone Delete 23 then Search 34', reset: false, seq: [['delete', 23], ['search', 34]] },
           { label: 'Search 34 (Double Hashing)', reset: false, seq: [['search', 34]] }
@@ -1052,7 +1110,8 @@ var TOPICS = [
           'Load Factor Limit: Table capacity is typically kept at &alpha; &le; 0.50 to prevent frequent displacement cycles.'
         ],
         extra: CUCKOO_CASES,
-        tries: [
+        marks: [{"marks": 2, "q": "What is Cuckoo Hashing and what worst-case lookup guarantee does it offer?", "a": "<p><strong>Cuckoo Hashing</strong> (Pagh & Rodler) uses two distinct hash tables <code>T\u2081, T\u2082</code> and two independent hash functions <code>h\u2081, h\u2082</code>. A key <code>k</code> can reside <strong>only</strong> in <code>T\u2081[h\u2081(k)]</code> or <code>T\u2082[h\u2082(k)]</code>.</p><div class=\"key-takeaway\"><strong>Lookup Guarantee:</strong> Worst-case search examines at most <strong>2 slots</strong> (strictly <code>O(1)</code> worst-case time, zero probe chains).</div>"}, {"marks": 4, "q": "Explain the insertion and eviction/displacement mechanism in Cuckoo Hashing with an example.", "a": "<p><strong>Displacement Algorithm:</strong></p><ol><li>Attempt to place incoming key <code>x</code> into <code>T\u2081[h\u2081(x)]</code>.</li><li>If slot is vacant, insert <code>x</code> and finish.</li><li>If slot is occupied by resident key <code>y</code>: <code>x</code> <strong>kicks out</strong> <code>y</code> (displaces it).</li><li>Key <code>y</code> must now be placed into its alternate location in <code>T\u2082[h\u2082(y)]</code>.</li><li>If <code>T\u2082[h\u2082(y)]</code> is vacant, insert <code>y</code>. If occupied by <code>z</code>, <code>y</code> kicks out <code>z</code>, and <code>z</code> must move back to <code>T\u2081[h\u2081(z)]</code>.</li><li>This cascading displacement continues until an empty slot is found or an eviction loop is detected.</li></ol><p><em>Example:</em> Insert <code>18</code> into <code>T\u2081[1]</code> occupied by <code>10</code>. <code>18</code> displaces <code>10</code>. <code>10</code> computes <code>h\u2082(10) = 4</code> and moves to <code>T\u2082[4]</code>.</p>"}, {"marks": 6, "q": "Explain cycle detection in Cuckoo Hashing, maximum displacement threshold, full rehashing, and why capacity is capped at \u03b1 \u2264 0.50.", "a": "<p><strong>1. The Eviction Cycle Problem:</strong></p><p>A set of keys can form a closed dependency loop in the bipartite cuckoo graph (e.g. <code>k\u2081 \u2192 k\u2082 \u2192 k\u2083 \u2192 k\u2081</code>). Once entered, the eviction cascade will loop infinitely without ever finding an empty slot.</p><p><strong>2. Cycle Detection & Rehash Threshold:</strong></p><ul><li>Maintain a kick counter. If displacements exceed a threshold <code>MaxDisplacements = C \u00b7 log n</code> (typically 16 to 32), an infinite loop is declared.</li><li><strong>Rehash Procedure:</strong> Allocate new tables, pick fresh randomized hash function seeds, and re-insert all keys into the new tables. Rehash occurs with probability <code>O(1/n)</code>, maintaining <code>O(1)</code> amortized insertion time.</li></ul><p><strong>3. Load Factor Limitation (\u03b1 \u2264 0.50):</strong></p><p>Graph theory proves that the 2-table cuckoo graph undergoes a phase transition at <code>\u03b1 \u2248 0.50</code>. Above 50% capacity, the probability of cycles approaches 1. Modern variants (3 hash functions or small 4-slot stashes) achieve <code>\u03b1 > 0.90</code>.</p>"}],
+          tries: [
           { label: 'Direct Placements (10, 15)', reset: true, seq: [['insert', 10], ['insert', 15]] },
           { label: 'Single Kick (Insert 18 &rarr; kicks 10 to T2)', reset: false, seq: [['insert', 18]] },
           { label: 'Cascade Kicks (Insert 26)', reset: false, seq: [['insert', 26]] }
@@ -1074,7 +1133,8 @@ var TOPICS = [
           'Production Architectures: Google Bigtable, Apache Cassandra (skip disk reads for absent rows), Chromium (malicious URL blocklists), Akamai CDN.'
         ],
         extra: BLOOM_FORMULAS,
-        tries: [
+        marks: [{"marks": 2, "q": "Define a Bloom Filter. Why are false negatives impossible while false positives are possible?", "a": "<p>A <strong>Bloom Filter</strong> is a space-efficient probabilistic data structure using an <code>m</code>-bit array and <code>k</code> hash functions to test set membership.</p><ul><li><strong>Zero False Negatives:</strong> If any of the <code>k</code> hashed bits is <code>0</code>, the element was <em>definitely never inserted</em> (100% guarantee).</li><li><strong>False Positives Possible:</strong> If all <code>k</code> bits are <code>1</code>, the element is <em>probably present</em>, because those bits may have been set to <code>1</code> by other overlapping keys.</li></ul>"}, {"marks": 4, "q": "State the false positive probability formula for a Bloom Filter and derive the optimal number of hash functions k.", "a": "<p><strong>False Positive Probability (p):</strong></p><p>After inserting <code>n</code> elements using <code>k</code> hash functions into an <code>m</code>-bit array:</p><p>Probability a bit remains 0: <code>(1 - 1/m)^{kn} \u2248 e^{-kn/m}</code></p><p>Probability a bit is 1: <code>1 - e^{-kn/m}</code></p><p>Probability all <code>k</code> bits are 1 for an absent query: <code>p = (1 - e^{-kn/m})^k</code></p><p><strong>Optimal k Derivation:</strong></p><p>Taking natural logarithm <code>ln p = k \u00b7 ln(1 - e^{-kn/m})</code> and finding the minimum with respect to <code>k</code> gives:</p><p><code>k_{opt} = (m / n) \u00b7 ln 2 \u2248 0.693 \u00b7 (m / n)</code></p><div class=\"key-takeaway\">At optimal <code>k</code>, the bit array is exactly 50% filled with 1s, and false positive rate <code>p = (1/2)^k \u2248 (0.6185)^{m/n}</code>. For <code>1%</code> error rate, <code>m \u2248 9.6</code> bits per key with <code>k = 7</code>.</div>"}, {"marks": 6, "q": "Discuss real-world production architectures of Bloom Filters, explain why standard filters prohibit deletions, and describe Counting Bloom Filters (CBF).", "a": "<p><strong>1. Enterprise Production Architectures:</strong></p><ul><li><strong>Apache Cassandra / Google Bigtable:</strong> Stored on disk in SSTables. A Bloom Filter in RAM checks if a row key exists in an SSTable before performing expensive mechanical disk / NVMe read I/Os. If filter returns \"Absent\", disk read is completely avoided!</li><li><strong>Akamai / Squid Web Proxy:</strong> Uses Bloom Filters to check if an object has been requested before (\"One-Hit-Wonder\" prevention). Avoids caching objects requested only once.</li><li><strong>Google Chrome:</strong> Evaluates visited URLs against an in-browser Bloom Filter of known malicious sites before querying cloud security servers.</li></ul><p><strong>2. Why Deletions are Prohibited in Standard Bloom Filters:</strong></p><p>To delete key <code>x</code>, one would need to reset its <code>k</code> hashed bit positions to <code>0</code>. However, any of those bits may also be shared by another key <code>y</code>. Resetting a bit to <code>0</code> silently corrupts <code>y</code>, creating fatal <strong>False Negatives</strong>.</p><p><strong>3. Counting Bloom Filters (CBF):</strong></p><p>Replaces the 1-bit array with an array of small 4-bit counters (0 to 15):</p><ul><li><em>Insertion:</em> Increment the <code>k</code> counters by 1.</li><li><em>Deletion:</em> Decrement the <code>k</code> counters by 1 (allowed as long as counter > 0).</li><li><em>Tradeoff:</em> Consumes 4\u00d7 more memory than standard Bloom filters and risks counter overflow if skewed keys collide heavily.</li></ul>"}],
+          tries: [
           { label: 'Add {10, 25, 42}', reset: true, seq: [['insert', 10], ['insert', 25], ['insert', 42]] },
           { label: 'Query 10 (True Positive)', reset: false, seq: [['search', 10]] },
           { label: 'Query 99 (Definite Negative)', reset: false, seq: [['search', 99]] }
@@ -1123,7 +1183,51 @@ function $$(sel, root) { return Array.prototype.slice.call((root || document).qu
    ===================================================================== */
 var panels = {};
 
-function panelHTML(t) {
+
+  function renderMarksHTML(s) {
+    if (!s.marks || !s.marks.length) return '';
+    var items = s.marks.map(function (m) {
+      var cls = 'm' + m.marks;
+      return '<details class="mark-card ' + cls + '" open>' +
+        '<summary class="mark-summary">' +
+        '<span class="badge-mark ' + cls + '">' + m.marks + ' Marks</span>' +
+        '<span class="mark-q">' + esc(m.q) + '</span>' +
+        '</summary>' +
+        '<div class="mark-body">' + m.a + '</div>' +
+        '</details>';
+    }).join('');
+    return '<div class="marks-section">' +
+      '<div class="marks-bar">' +
+      '<div class="marks-title"><span>📝 Exam &amp; Interview Answers</span></div>' +
+      '<div class="marks-filters">' +
+      '<button class="marks-filter-btn active" data-mark-filter="all">All</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="2">2M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="4">4M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="6">6M</button>' +
+      '</div></div>' +
+      '<div class="marks-list">' + items + '</div>' +
+      '</div>';
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mark-filter]');
+    if (!b) return;
+    var filter = b.getAttribute('data-mark-filter');
+    var sec = b.closest('.marks-section');
+    if (sec) {
+      sec.querySelectorAll('[data-mark-filter]').forEach(function (x) { x.classList.toggle('active', x === b); });
+      sec.querySelectorAll('.mark-card').forEach(function (c) {
+        if (filter === 'all' || c.classList.contains('m' + filter)) {
+          c.style.display = '';
+          if (filter !== 'all') c.open = true;
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+  });
+
+  function panelHTML(t) {
   var id = t.id;
   var extras = '';
   if (id === 'hash-table') {
@@ -1166,7 +1270,7 @@ function panelHTML(t) {
     }).join('') + '</div>' : '';
     return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
       '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
-      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + renderMarksHTML(s) + '</article>';
   }).join('');
 
   var actionLabel = id === 'bloom' ? 'Add' : 'Insert';
@@ -1297,13 +1401,34 @@ function exec(p, act, key, silent) {
   return res;
 }
 
-function runSeq(p, seq) {
-  seq.forEach(function (st, i) {
-    var last = i === seq.length - 1;
-    exec(p, st[0], st[1], !last);
-  });
+var seqTimer = null;
+function stopSeq() {
+  if (seqTimer) { clearTimeout(seqTimer); seqTimer = null; }
+}
+
+function runSeq(p, seq, stepDelay) {
+  stopSeq();
   var lastKey = seq[seq.length - 1][1];
   p.input.value = lastKey;
+  if (reduce || !motionOn || seq.length <= 1) {
+    seq.forEach(function (st, i) {
+      var last = i === seq.length - 1;
+      exec(p, st[0], st[1], !last);
+    });
+    return;
+  }
+  var idx = 0;
+  var d = stepDelay || 650;
+  function next() {
+    if (idx >= seq.length) return;
+    var st = seq[idx];
+    exec(p, st[0], st[1], false);
+    idx++;
+    if (idx < seq.length) {
+      seqTimer = setTimeout(next, d);
+    }
+  }
+  next();
 }
 
 function readKey(p) {
@@ -1333,6 +1458,7 @@ function seed(p) {
 }
 
 function onAct(p, act) {
+  stopSeq();
   if (act === 'reset') {
     seed(p); draw(p);
     hint(p, 'Example table restored. Choose Insert, Search or Delete to trace execution.');
@@ -1355,21 +1481,23 @@ function onAct(p, act) {
 }
 
 function onPreset(p, name) {
+  stopSeq();
   if (name === 'ht-dist') {
     p.model = makeModel(p);
-    [14, 25, 36, 47, 58].forEach(function (k) { p.model.insert(k); });
-    draw(p); hint(p, 'Loaded 5 keys across table slots.');
+    var seq = [14, 25, 36, 47, 58].map(function (k) { return ['insert', k]; });
+    runSeq(p, seq, 480);
+    hint(p, 'Loaded 5 keys across table slots.');
   } else if (name === 'col-cluster') {
     p.model = makeModel(p);
-    runSeq(p, [['insert', 12], ['insert', 23], ['insert', 34]]);
+    runSeq(p, [['insert', 12], ['insert', 23], ['insert', 34]], 700);
     hint(p, 'Inserted keys 12, 23, 34 (all congruent mod 11 = 1). Demonstrates probe cluster.');
   } else if (name === 'cuckoo-kick') {
     p.model = makeModel(p);
-    runSeq(p, [['insert', 10], ['insert', 18], ['insert', 26]]);
+    runSeq(p, [['insert', 10], ['insert', 18], ['insert', 26]], 750);
     hint(p, 'Inserted 10, 18, 26 with identical h₁: observe eviction displacement kick into Table 2.');
   } else if (name === 'cuckoo-cycle') {
     p.model = makeModel(p);
-    runSeq(p, [['insert', 8], ['insert', 16], ['insert', 24], ['insert', 32], ['insert', 40]]);
+    runSeq(p, [['insert', 8], ['insert', 16], ['insert', 24], ['insert', 32], ['insert', 40]], 650);
     hint(p, 'Displacement chain triggered. Highlights cycle detection limit.');
   } else if (name === 'bloom-fp') {
     p.model = new BloomFilter(16, 2);
@@ -1381,13 +1509,14 @@ function onPreset(p, name) {
 }
 
 function onTry(p, spec) {
+  stopSeq();
   var parts = spec.split(':');
   var sub = null;
   p.topic.subs.forEach(function (s) { if (s.id === parts[0]) sub = s; });
   if (!sub) return;
   var tr = sub.tries[Number(parts[1])];
   if (tr.reset) seed(p);
-  runSeq(p, tr.seq);
+  runSeq(p, tr.seq, 700);
   var bench = $('.bench', p.el);
   if (bench && bench.scrollIntoView && window.innerWidth <= 940) {
     bench.scrollIntoView({ block: 'nearest', behavior: motionOn ? 'smooth' : 'auto' });

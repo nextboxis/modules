@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DSA Exam &amp; Interview Master Bank</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #edf1f4;
+  --surface: #fbfcfd;
+  --surface-2: #e2e9ee;
+  --ink: #10202c;
+  --muted: #526473;
+  --line: #cbd5dd;
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  --accent-soft: #d3eeea;
+  --visit: #b7791f;
+  --visit-soft: #f6e6c4;
+  --visit-ink: #774c06;
+  --bad: #b3372a;
+  --bad-soft: #f7dcd7;
+  --purple: #6b21a8;
+  --purple-soft: #f3e8ff;
+  --purple-ink: #4c1d95;
+  --blue: #1d4ed8;
+  --blue-soft: #dbeafe;
+  --blue-ink: #1e3a8a;
+  --grid: rgba(16, 32, 44, 0.06);
+  --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+    --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+    --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+    --bad: #f07a66; --bad-soft: #471f19;
+    --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+    --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe;
+    --grid: rgba(229, 237, 243, 0.06);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
+  --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
+  --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
+  --bad: #f07a66; --bad-soft: #471f19;
+  --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
+  --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe;
+  --grid: rgba(229, 237, 243, 0.06);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--font-body); margin: 0; padding: 0; }
+h1, h2, h3 { margin: 0; font-family: var(--font-display); text-wrap: balance; }
+p { margin: 0; }
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-block: 20px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.eyebrow {
+  font: 600 11px var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.navlink {
+  font: 500 12px var(--font-mono);
+  color: var(--muted);
+  text-decoration: none;
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.navlink:hover { border-color: var(--muted); color: var(--ink); }
+.navlink:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+h1 { font-size: clamp(22px, 3.2vw, 32px); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+
+.btn {
+  appearance: none;
+  font: 500 13px var(--font-body);
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.1s, border-color 0.15s, filter 0.15s, background 0.15s;
+}
+.btn:hover { border-color: var(--muted); }
+.btn:active { transform: scale(0.98); }
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.sm { padding: 4px 10px; font-size: 12px; }
+
+.hero-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 20px;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 14px;
+  font: 600 13.5px var(--font-body);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab:hover { color: var(--ink); }
+.tab.active, .tab[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+.cnt {
+  font: 500 11px var(--font-mono);
+  padding: 1px 7px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--muted);
+  transition: background 0.2s, color 0.2s;
+}
+.tab.active .cnt {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+}
+.search-input {
+  width: 100%;
+  padding: 8px 12px 8px 34px;
+  font: 400 13.5px var(--font-body);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.marks-filters {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+.marks-filter-btn {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 7px 12px;
+  font: 600 12px var(--font-mono);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.marks-filter-btn + .marks-filter-btn { border-left: 1px solid var(--line); }
+.marks-filter-btn.active { background: var(--accent); color: var(--accent-ink); }
+
+.meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: 500 12px var(--font-mono);
+  color: var(--muted);
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.exam-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.exam-card:hover { border-color: var(--muted); }
+.exam-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+  user-select: none;
+}
+.exam-summary::-webkit-details-marker { display: none; }
+.exam-summary::before {
+  content: "▸";
+  font-family: var(--font-mono);
+  color: var(--accent);
+  display: inline-block;
+  transition: transform 0.15s;
+  font-size: 12px;
+  margin-top: 2px;
+}
+details[open] > .exam-summary::before { transform: rotate(90deg); }
+
+.badge-mark {
+  font: 700 10.5px var(--font-mono);
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.badge-mark.m2 { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+.badge-mark.m4 { background: var(--visit-soft); color: var(--visit-ink); border: 1px solid var(--visit); }
+.badge-mark.m6 { background: #ede9fe; color: #4c1d95; border: 1px solid #c084fc; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+}
+:root[data-theme="dark"] .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+
+.q-meta {
+  font: 500 11px var(--font-mono);
+  color: var(--muted);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.q-title {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.exam-body {
+  padding: 14px 18px 16px 36px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.exam-body p { margin-top: 8px; }
+.exam-body p:first-child { margin-top: 0; }
+.exam-body ul, .exam-body ol { margin: 8px 0; padding-left: 20px; }
+.exam-body li { margin-top: 4px; }
+.exam-body pre {
+  background: var(--surface-2);
+  padding: 10px 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 10px 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  border: 1px solid var(--line);
+}
+.exam-body code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.exam-body pre code { background: none; padding: 0; border-radius: 0; }
+.exam-body table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12.5px; }
+.exam-body th, .exam-body td { padding: 6px 10px; border: 1px solid var(--line); text-align: left; }
+.exam-body th { background: var(--surface-2); font-weight: 600; }
+.exam-body .key-takeaway {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  font-size: 12.5px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font: 500 12px var(--font-mono);
+  color: var(--muted);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.card-actions a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.card-actions a:hover { text-decoration: underline; }
+
+.module-stepper {
+  margin-top: 40px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.stepper-info { display: flex; flex-direction: column; gap: 4px; }
+.stepper-step { font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+.stepper-title { font-size: 15px; font-weight: 600; margin: 0; }
+.stepper-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div>
+      <div class="top-nav">
+        <span class="eyebrow">Exam &amp; Interview Bank</span>
+        <a href="index.html" class="navlink" title="Course Hub">🏠 Course Hub</a>
+        <a href="Module 1 Tree Lab.html" class="navlink" title="Module 1: Trees">🌳 M1</a>
+        <a href="Module 2 Hashing Lab.html" class="navlink" title="Module 2: Hashing">🔑 M2</a>
+        <a href="Module 3 Graph Lab.html" class="navlink" title="Module 3: Graphs">🕸️ M3</a>
+        <a href="Module 4 String & Range Lab.html" class="navlink" title="Module 4: Strings">🔤 M4</a>
+        <a href="Module 5 Advanced & Spatial Lab.html" class="navlink" title="Module 5: Advanced & Spatial">🌐 M5</a>
+      </div>
+      <h1>DSA Exam &amp; Interview Master Bank</h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="cnt" style="font-size:12px;padding:3px 10px;">72 Questions Total</span>
+    </div>
+  </header>
+
+  <div class="hero-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <p style="max-width:72ch;color:var(--muted);font-size:14px;line-height:1.6;">
+        Curated <strong>2-Mark</strong> (short definitions &amp; bounds), <strong>4-Mark</strong> (step-by-step algorithms &amp; traces), and <strong>6-Mark</strong> (analytical proofs, kernel tradeoffs &amp; architecture) solutions covering every topic in Modules 1 through 5.
+      </p>
+      <button id="flashcard-toggle" class="btn sm" style="font-weight:600;">
+        <span>👁️</span> <span id="flashcard-label">Hide Answers (Quiz Mode)</span>
+      </button>
+    </div>
+
+    <!-- Controls Row -->
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input id="search-input" type="text" class="search-input" placeholder="Search topic, keyword, algorithm... (e.g., AVL, Bloom, CAS, KMP, Dijkstra)" />
+      </div>
+
+      <div class="marks-filters">
+        <button data-mark="all" class="marks-filter-btn active">All Marks</button>
+        <button data-mark="2" class="marks-filter-btn">2 Marks</button>
+        <button data-mark="4" class="marks-filter-btn">4 Marks</button>
+        <button data-mark="6" class="marks-filter-btn">6 Marks</button>
+      </div>
+    </div>
+
+    <!-- Module Tabs -->
+    <nav class="tabs" aria-label="Module Selection">
+      <button data-mod="all" class="tab active">All Modules <span class="cnt">72</span></button>
+      <button data-mod="1" class="tab">🌳 M1: Trees <span class="cnt">15</span></button>
+      <button data-mod="2" class="tab">🔑 M2: Hashing <span class="cnt">15</span></button>
+      <button data-mod="3" class="tab">🕸️ M3: Graphs <span class="cnt">15</span></button>
+      <button data-mod="4" class="tab">🔤 M4: Strings <span class="cnt">15</span></button>
+      <button data-mod="5" class="tab">🌐 M5: Advanced <span class="cnt">12</span></button>
+    </nav>
+  </div>
+
+  <!-- Meta bar -->
+  <div class="meta-bar">
+    <span id="counter">Showing 72 of 72 questions</span>
+    <span>Click any card to expand or collapse answer</span>
+  </div>
+
+  <!-- Questions Container -->
+  <div id="questions-list" class="questions-list"></div>
+
+  <!-- Stepper Footer -->
+  <footer class="module-stepper" aria-label="Lab Progression">
+    <div class="stepper-info">
+      <span class="stepper-step">Interactive Course Platform</span>
+      <h3 class="stepper-title">Ready to practice with interactive visual workbenches?</h3>
+    </div>
+    <div class="stepper-actions">
+      <a href="index.html" class="btn sm">🏠 Course Hub</a>
+      <a href="Module 1 Tree Lab.html" class="btn primary">🌳 Start Module 1 &rarr;</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+
+const DATA = [{"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "bt-ins", "topicName": "BST Insertion", "marks": 2, "q": "What is a Binary Search Tree (BST) and what rule governs insertion?", "a": "<p>A <strong>Binary Search Tree (BST)</strong> is a node-based binary tree where for every node with key <code>k</code>: all keys in its left subtree are strictly smaller (<code>key &lt; k</code>) and all keys in its right subtree are strictly larger (<code>key &gt; k</code>).</p><p><strong>Insertion Rule:</strong> Compare incoming key with current node: branch left if smaller, branch right if larger. When a <code>null</code> pointer is reached, insert the key as a new leaf node.</p><div class=\"key-takeaway\"><strong>Complexity:</strong> Average Time: <code>O(log n)</code>, Worst Case: <code>O(n)</code> (skewed), Auxiliary Space: <code>O(1)</code> iterative or <code>O(h)</code> recursive.</div>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "bt-ins", "topicName": "BST Insertion", "marks": 4, "q": "Explain the step-by-step BST insertion algorithm and analyze why worst-case performance degrades to O(n).", "a": "<p><strong>Step-by-Step Algorithm:</strong></p><ol><li>If tree is empty (<code>root == null</code>), allocate new node and designate it as <code>root</code>.</li><li>Otherwise, initialize a traversal pointer <code>curr = root</code> and trailing pointer <code>parent = null</code>.</li><li>While <code>curr != null</code>:<ul><li>If <code>key == curr.key</code>: reject duplicate or increment counter.</li><li>If <code>key &lt; curr.key</code>: set <code>parent = curr</code>, move <code>curr = curr.left</code>.</li><li>If <code>key &gt; curr.key</code>: set <code>parent = curr</code>, move <code>curr = curr.right</code>.</li></ul></li><li>Attach <code>newNode</code> as <code>parent.left</code> (if <code>key &lt; parent.key</code>) or <code>parent.right</code>.</li></ol><p><strong>Worst-Case Degradation to O(n):</strong></p><p>If keys arrive already sorted (e.g., <code>[10, 20, 30, 40, 50]</code>) or reverse-sorted, each node has only one child. The tree degenerates into a linear chain (linked list), causing height <code>h = n</code>. Every lookup and insertion must traverse all <code>n</code> nodes sequentially.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "bt-ins", "topicName": "BST Insertion", "marks": 6, "q": "Discuss BST insertion in detail: write iterative/recursive implementations, evaluate duplicate handling strategies, and explain how self-balancing trees prevent skewing.", "a": "<p><strong>1. Implementation (Iterative - O(1) Auxiliary Space):</strong></p><pre><code>Node* insert(Node* root, int key) {\n  Node* nn = createNode(key);\n  if (!root) return nn;\n  Node *curr = root, *parent = NULL;\n  while (curr) {\n    parent = curr;\n    if (key == curr->key) { free(nn); return root; } // Duplicate\n    else if (key < curr->key) curr = curr->left;\n    else curr = curr->right;\n  }\n  if (key < parent->key) parent->left = nn;\n  else parent->right = nn;\n  return root;\n}</code></pre><p><strong>2. Duplicate Handling Tradeoffs:</strong></p><ul><li><strong>Rejection:</strong> Strict mathematical set behavior; returns error or false.</li><li><strong>Frequency Count:</strong> Store an integer <code>count</code> inside each node. Preserves minimal tree height and prevents node allocation overhead.</li><li><strong>Subtree Convention:</strong> Place duplicates strictly in left (or right) branch. Increases tree depth unevenly and complicates deletion logic.</li></ul><p><strong>3. Solution to Degeneracy (Self-Balancing Trees):</strong></p><p>Standard BSTs cannot guarantee logarithmic height. Self-balancing trees (AVL, Red-Black) enforce strict height or color invariants. After every insertion, they retrace the path back to the root and perform <code>O(1)</code> pointer rotations (LL, RR, LR, RL) at the lowest unbalanced node, restoring height strictly to <code>O(log n)</code> regardless of input permutation.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "bt-del", "topicName": "BST Deletion", "marks": 2, "q": "State the three structural cases encountered when deleting a node from a BST.", "a": "<ol><li><strong>Case 1 (Leaf Node - 0 children):</strong> Simply disconnect the parent's pointer to this node by setting it to <code>null</code> and deallocate memory.</li><li><strong>Case 2 (Single Child - 1 child):</strong> Bypass the node by linking the parent directly to the node's only child.</li><li><strong>Case 3 (Two Children - 2 children):</strong> Find the node's in-order successor (minimum in right subtree) or in-order predecessor, copy its value into the target node, then recursively delete that successor.</li></ol>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "bt-del", "topicName": "BST Deletion", "marks": 4, "q": "Explain how to delete a node having two children in a BST with an illustrative example.", "a": "<p><strong>Mechanism for Two-Child Deletion:</strong></p><p>A node with two children cannot be simply spliced out because doing so would orphan two distinct subtrees. Instead, we replace its key with the closest value that preserves BST ordering:</p><ol><li>Locate target node <code>Z</code> to delete.</li><li>Find <code>Z</code>'s <strong>in-order successor</strong> <code>S</code>: the node with the minimum key in <code>Z</code>'s right subtree (traverse left pointers starting from <code>Z.right</code>).</li><li>Copy <code>S.key</code> into <code>Z.key</code>.</li><li>Recursively delete node <code>S</code> from the right subtree. Because <code>S</code> was the minimum, it is guaranteed to have <strong>at most one child</strong> (a right child), reducing this step to Case 1 or Case 2.</li></ol><p><em>Example:</em> Deleting root <code>50</code> from tree with subtrees <code>[30, 40]</code> and <code>[70, 60, 80]</code>. The in-order successor is <code>60</code>. Copy <code>60</code> to root, and delete the leaf node <code>60</code> from right subtree.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "bt-del", "topicName": "BST Deletion", "marks": 6, "q": "Write the comprehensive recursive BST deletion algorithm, prove that in-order successor replacement maintains the BST invariant, and analyze its complexity.", "a": "<p><strong>1. Complete Recursive Implementation:</strong></p><pre><code>Node* deleteNode(Node* root, int key) {\n  if (!root) return NULL;\n  if (key < root->key) root->left = deleteNode(root->left, key);\n  else if (key > root->key) root->right = deleteNode(root->right, key);\n  else {\n    // Node found: handle 0 or 1 child\n    if (!root->left) { Node* t = root->right; free(root); return t; }\n    if (!root->right) { Node* t = root->left; free(root); return t; }\n    // 2 children: find inorder successor (min in right subtree)\n    Node* succ = root->right;\n    while (succ->left) succ = succ->left;\n    root->key = succ->key; // Copy key\n    root->right = deleteNode(root->right, succ->key); // Delete successor\n  }\n  return root;\n}</code></pre><p><strong>2. Proof of Invariant Preservation:</strong></p><p>Let node <code>Z</code> have left subtree <code>L</code> and right subtree <code>R</code>. For all <code>x \u2208 L</code>, <code>x &lt; Z.key</code>. For all <code>y \u2208 R</code>, <code>y &gt; Z.key</code>. The in-order successor <code>S = min(R)</code> satisfies: <code>S &lt; y</code> for all other <code>y \u2208 R</code>, and since <code>S \u2208 R</code>, <code>S &gt; x</code> for all <code>x \u2208 L</code>. Thus replacing <code>Z.key</code> with <code>S.key</code> maintains <code>L &lt; S.key &lt; R \\ {S}</code> perfectly.</p><div class=\"key-takeaway\"><strong>Complexity:</strong> Time: <code>O(h)</code> where <code>h</code> is height (<code>O(log n)</code> average, <code>O(n)</code> worst). Auxiliary Space: <code>O(h)</code> due to call stack frames.</div>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "bt-srch", "topicName": "BST Search & Traversals", "marks": 2, "q": "Why is BST search O(log n) on average but O(n) in the worst case?", "a": "<p>On a <strong>balanced BST</strong>, each comparison at a node discards roughly half of the remaining subtrees, yielding a logarithmic recurrence <code>T(n) = T(n/2) + O(1) \u21d2 O(log n)</code>.</p><p>However, if keys were inserted in sequential order, the tree degenerates into a single path of length <code>n</code> (height <code>h = n</code>). In this <strong>skewed BST</strong>, search behaves like sequential search over an unindexed linked list, requiring <code>O(n)</code> comparisons in the worst case.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "bt-srch", "topicName": "BST Search & Traversals", "marks": 4, "q": "Compare BST tree traversal strategies (In-order, Pre-order, Post-order, Level-order) and explain how In-order yields sorted order.", "a": "<p><strong>Traversal Orders:</strong></p><ul><li><strong>In-order (L-Root-R):</strong> Traverses left subtree, visits root, traverses right subtree. Yields keys in monotonically increasing sorted order.</li><li><strong>Pre-order (Root-L-R):</strong> Visits root first. Essential for tree cloning and prefix serialization.</li><li><strong>Post-order (L-R-Root):</strong> Visits children before root. Essential for bottom-up memory deallocation and postfix evaluation.</li><li><strong>Level-order (BFS):</strong> Traverses nodes depth-by-depth using a FIFO Queue.</li></ul><p><strong>Proof for Sorted In-Order:</strong> By definition, all nodes in the left subtree are smaller than root, and all nodes in the right subtree are greater. By induction, traversing <code>L</code> prints all smaller elements in sorted order, then <code>Root</code>, then all larger elements in <code>R</code> in sorted order.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "bt-srch", "topicName": "BST Search & Traversals", "marks": 6, "q": "Explain iterative BST search, contrast its hardware cache behavior against sorted array binary search, and explain Morris In-Order Traversal (O(1) space).", "a": "<p><strong>1. Iterative Search Implementation:</strong></p><pre><code>Node* search(Node* root, int key) {\n  Node* curr = root;\n  while (curr && curr->key != key) {\n    curr = (key < curr->key) ? curr->left : curr->right;\n  }\n  return curr;\n}</code></pre><p><strong>2. BST vs Sorted Array Cache Locality:</strong></p><ul><li><strong>Sorted Array Binary Search:</strong> Stored in contiguous memory. While binary jumps incur some cache misses, sequential elements benefit from hardware prefetching. However, insertion/deletion takes <code>O(n)</code> time due to shifting elements.</li><li><strong>BST:</strong> Nodes are dynamically allocated on the heap at arbitrary memory addresses. Following child pointers induces random memory lookups (pointer chasing), leading to frequent L1/L2 CPU cache misses despite <code>O(log n)</code> algorithmic complexity.</li></ul><p><strong>3. Morris Traversal (O(1) Auxiliary Space):</strong></p><p>Standard recursion or stack traversal requires <code>O(h)</code> auxiliary memory. Morris Traversal utilizes <em>threaded binary trees</em>: if <code>curr->left</code> exists, it finds the in-order predecessor and temporarily points its right child to <code>curr</code>. On the second visit, it breaks the thread, prints <code>curr</code>, and moves right. Time: <code>O(n)</code>, Space: strictly <code>O(1)</code>.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "avl-id", "topicName": "AVL Insert, Delete & BF", "marks": 2, "q": "Define an AVL tree and state the Balance Factor (BF) formula and validity range.", "a": "<p>An <strong>AVL Tree</strong> (Adelson-Velsky and Landis) is a self-balancing binary search tree where the heights of the two child subtrees of any node differ by at most one.</p><p><strong>Balance Factor Formula:</strong> <code>BF(node) = height(left_subtree) - height(right_subtree)</code></p><p><strong>Invariant:</strong> For every node <code>v</code>, <code>BF(v) \u2208 {-1, 0, +1}</code>. If <code>BF(v)</code> becomes <code>+2</code> or <code>-2</code> after an update, rotations must be executed immediately.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "avl-id", "topicName": "AVL Insert, Delete & BF", "marks": 4, "q": "Why does an AVL insertion require at most one rotation (single or double) while an AVL deletion may trigger up to O(log n) rotations?", "a": "<p><strong>Insertion (At most 1 rotation):</strong></p><p>When an insertion causes an imbalance (<code>BF = \u00b12</code>), executing a rotation at the lowest unbalanced ancestor reduces the height of that entire subtree back to its pre-insertion height. Because the height of this subtree is restored, all higher ancestor balance factors remain unchanged. The rebalancing process halts immediately (<code>O(1)</code> rotations).</p><p><strong>Deletion (Up to O(log n) rotations):</strong></p><p>Deleting a node and rebalancing a subtree can reduce that subtree's overall height by 1. This height decrease can propagate upwards and violate the balance factor of its parent node. In the worst case, rotations must be performed at every level up to the root, requiring <code>O(log n)</code> rotations.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "avl-id", "topicName": "AVL Insert, Delete & BF", "marks": 6, "q": "Derive the mathematical proof for the maximum height of an AVL tree with n nodes and establish why its lookup is strictly O(log n).", "a": "<p><strong>1. Minimum Nodes for Height h (Fibonacci Relation):</strong></p><p>Let <code>N(h)</code> be the minimum number of nodes in an AVL tree of height <code>h</code>. To minimize nodes while maximizing height, one subtree must have height <code>h - 1</code> and the other <code>h - 2</code>:</p><p><code>N(h) = 1 + N(h - 1) + N(h - 2)</code> with base cases <code>N(0) = 0</code>, <code>N(1) = 1</code>, <code>N(2) = 2</code>, <code>N(3) = 4</code>.</p><p>This matches Fibonacci shifted: <code>N(h) = F_{h+2} - 1</code>, where <code>F_k \u2248 \u03c6^k / \u221a5</code> and golden ratio <code>\u03c6 = (1 + \u221a5)/2 \u2248 1.618</code>.</p><p><strong>2. Height Upper Bound:</strong></p><p><code>n \u2265 N(h) \u2248 (\u03c6^{h+2} / \u221a5) - 1</code></p><p><code>\u03c6^{h+2} \u2264 \u221a5(n + 1) \u21d2 (h + 2) log\u2082 \u03c6 \u2264 log\u2082(\u221a5(n + 1))</code></p><p><code>h \u2264 (1 / log\u2082 1.618) \u00b7 log\u2082 n \u2248 1.4404 log\u2082 n</code></p><div class=\"key-takeaway\"><strong>Conclusion:</strong> An AVL tree with <code>n</code> nodes can never exceed a height of <code>1.44 log\u2082 n</code>. Consequently, search, insert, and delete operations have a strict worst-case time bound of <code>O(log n)</code>, completely eliminating BST skewing.</div>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "avl-rot", "topicName": "AVL Rotations (LL, RR, LR, RL)", "marks": 2, "q": "List the four AVL tree imbalance rotation cases and specify the corrective rotation for each.", "a": "<ol><li><strong>LL Case (Left-Left):</strong> Inserted into left subtree of left child (<code>BF = +2</code>, child <code>BF \u2265 0</code>) \u2192 <strong>Single Right Rotation</strong>.</li><li><strong>RR Case (Right-Right):</strong> Inserted into right subtree of right child (<code>BF = -2</code>, child <code>BF \u2264 0</code>) \u2192 <strong>Single Left Rotation</strong>.</li><li><strong>LR Case (Left-Right):</strong> Inserted into right subtree of left child (<code>BF = +2</code>, child <code>BF = -1</code>) \u2192 <strong>Double Rotation: Left rotate child, then Right rotate root</strong>.</li><li><strong>RL Case (Right-Left):</strong> Inserted into left subtree of right child (<code>BF = -2</code>, child <code>BF = +1</code>) \u2192 <strong>Double Rotation: Right rotate child, then Left rotate root</strong>.</li></ol>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "avl-rot", "topicName": "AVL Rotations (LL, RR, LR, RL)", "marks": 4, "q": "Illustrate Single Right Rotation (LL) and Single Left Rotation (RR) with before-and-after tree diagrams and pointer assignments.", "a": "<p><strong>1. Single Right Rotation (LL Case at Node Z):</strong></p><pre><code>      Z (+2)                 Y (0)\n     / \\                    /   \\\n    Y   T3     ===>        X     Z\n   / \\                    / \\   / \\\n  X   T2                 T0 T1 T2 T3\n / \\\nT0 T1</code></pre><p><em>Pointer logic:</em> <code>Node* Y = Z->left; Z->left = Y->right; Y->right = Z;</code></p><p><strong>2. Single Left Rotation (RR Case at Node Z):</strong></p><pre><code>    Z (-2)                   Y (0)\n   / \\                      /   \\\n  T1  Y        ===>        Z     X\n     / \\                  / \\   / \\\n    T2  X                T1 T2 T3 T4\n       / \\\n      T3 T4</code></pre><p><em>Pointer logic:</em> <code>Node* Y = Z->right; Z->right = Y->left; Y->left = Z;</code></p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "avl-rot", "topicName": "AVL Rotations (LL, RR, LR, RL)", "marks": 6, "q": "Explain the LR (Left-Right) and RL (Right-Left) double rotations in detail: why a single rotation fails, step-by-step subtree re-linking, and balance factor updates.", "a": "<p><strong>Why Single Rotation Fails on LR/RL:</strong></p><p>In an LR imbalance, the offending node is placed in the <em>inner</em> subtree (right subtree of the left child). Performing a single right rotation at <code>Z</code> simply shifts the inner kink to the other side without reducing overall height. A two-step transformation is strictly required.</p><p><strong>LR Double Rotation (Two Steps):</strong></p><ol><li><strong>Step 1 (Left rotate left child Y):</strong> Straightens the bend from Left-Right into a linear Left-Left configuration. Node <code>X</code> (child of <code>Y</code>) moves up to become <code>Z</code>'s left child, and <code>Y</code> becomes <code>X</code>'s left child.</li><li><strong>Step 2 (Right rotate root Z):</strong> Node <code>X</code> rises to become the root of the entire subtree. <code>Y</code> becomes <code>X</code>'s left child, and <code>Z</code> becomes <code>X</code>'s right child.</li></ol><pre><code>     Z (+2)                  Z                     X (0)\n    / \\                     / \\                  /   \\\n   Y (-1) T4   =Step 1=>   X   T4   =Step 2=>   Y     Z\n  / \\                     / \\                  / \\   / \\\n T1  X                   Y  T3                T1 T2 T3 T4\n    / \\                 / \\\n   T2 T3               T1 T2</code></pre><p><strong>Balance Factor Updates for X, Y, and Z:</strong></p><ul><li>If <code>X</code> originally had <code>BF = +1</code> (inserted in <code>T2</code>): after rotation, <code>BF(Y) = 0</code>, <code>BF(Z) = -1</code>, <code>BF(X) = 0</code>.</li><li>If <code>X</code> originally had <code>BF = -1</code> (inserted in <code>T3</code>): after rotation, <code>BF(Y) = +1</code>, <code>BF(Z) = 0</code>, <code>BF(X) = 0</code>.</li><li>If <code>X</code> was the inserted leaf (<code>BF = 0</code>): <code>BF(Y) = 0</code>, <code>BF(Z) = 0</code>, <code>BF(X) = 0</code>.</li></ul>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "avl-srch", "topicName": "AVL Search & Height Bound", "marks": 2, "q": "How does searching in an AVL tree differ from a standard BST?", "a": "<p>The search logic is identical to a standard BST: compare key, move left if smaller, right if larger. However, because AVL height is strictly bounded by <code>1.44 log\u2082 n</code>, AVL search is <strong>guaranteed O(log n) in the worst case</strong>, whereas standard BST search can degenerate to <code>O(n)</code>.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "avl-srch", "topicName": "AVL Search & Height Bound", "marks": 4, "q": "Compare AVL Trees and Red-Black Trees in terms of balance strictness, lookup speed, and rotation frequency.", "a": "<table style=\"width:100%;font-size:12px;\"><thead><tr><th>Property</th><th>AVL Tree</th><th>Red-Black Tree</th></tr></thead><tbody><tr><td>Balance Invariant</td><td>Strict: <code>|h_L - h_R| \u2264 1</code></td><td>Relaxed: Longest path \u2264 2 \u00d7 Shortest path</td></tr><tr><td>Maximum Height</td><td><code>\u2248 1.44 log\u2082 n</code> (Shallow)</td><td><code>\u2248 2.0 log\u2082 n</code> (Taller)</td></tr><tr><td>Search Performance</td><td>Faster (fewer pointer hops)</td><td>Slightly slower</td></tr><tr><td>Insertion Rotations</td><td>At most 1 rotation</td><td>At most 2 rotations</td></tr><tr><td>Deletion Rotations</td><td>Up to <code>O(log n)</code> rotations</td><td>At most 3 rotations</td></tr><tr><td>Primary Use Case</td><td>Read-heavy datasets</td><td>Write-heavy / general associative maps (C++ <code>std::map</code>)</td></tr></tbody></table>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "avl-srch", "topicName": "AVL Search & Height Bound", "marks": 6, "q": "Explain how node metadata is represented in production AVL trees (Height vs Balance Factor bits) and analyze memory overhead.", "a": "<p><strong>1. Method A: Storing Explicit Height (Integer):</strong></p><ul><li>Each node stores <code>int height</code> (4 bytes).</li><li><code>BF(node) = node->left->height - node->right->height</code>.</li><li><em>Tradeoff:</em> Code is simple and intuitive, but adds 4 bytes of padding per node. On a 64-bit system with two child pointers (16 bytes) and an integer key (4 bytes), padding often rounds node size to 32 bytes.</li></ul><p><strong>2. Method B: Storing Balance Factor in 2 Bits:</strong></p><ul><li>The Balance Factor only takes values in <code>{-1, 0, +1}</code>. These 3 states can be represented using <strong>2 bits</strong>.</li><li><em>Pointer Tagging:</em> In modern 64-bit architectures, pointers are 8-byte aligned, meaning the lowest 3 bits of every pointer address are always <code>000</code>. We can embed the 2 balance bits directly into the unused lowest bits of the child pointer!</li><li><em>Tradeoff:</em> Zero extra memory allocated per node! Requires bitwise masking (<code>ptr & ~0x07</code>) before dereferencing.</li></ul><div class=\"key-takeaway\"><strong>Summary:</strong> High-performance in-memory systems use 2-bit tagged pointers to reduce heap footprint by up to 25%, drastically improving CPU cache line packing.</div>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "splay", "topicName": "Splay Tree Heuristics", "marks": 2, "q": "What is a Splay Tree and what fundamental property defines its amortized efficiency?", "a": "<p>A <strong>Splay Tree</strong> is a self-adjusting binary search tree that stores zero balance metadata. Every time a node is accessed (via search, insert, or delete), it is moved to the root through a sequence of rotations called <strong>Splaying</strong>.</p><p>Its fundamental property is <strong>amortized O(log n) time per operation</strong>. While an individual operation can take <code>O(n)</code> on a degenerate tree, any sequence of <code>m</code> operations takes <code>O(m log n)</code> time, halving search depth for frequently used keys.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "splay", "topicName": "Splay Tree Heuristics", "marks": 4, "q": "Explain the three Splay Tree rotation steps: Zig, Zig-Zig, and Zig-Zag.", "a": "<p><strong>1. Zig Step (Terminal):</strong></p><p>Executed when parent <code>P</code> is the root. Perform a single rotation (left or right) around the root to make accessed node <code>X</code> the new root.</p><p><strong>2. Zig-Zig Step (Same Side):</strong></p><p>Executed when <code>X</code> and <code>P</code> are either both left children or both right children. Rotate grandparent <code>G</code> first, then rotate parent <code>P</code>. <em>Crucial Note:</em> Rotating <code>G</code> before <code>P</code> roughly halves the depth of all nodes along the access path!</p><p><strong>3. Zig-Zag Step (Opposite Sides):</strong></p><p>Executed when <code>X</code> is a right child and <code>P</code> is a left child (or vice versa). Rotate parent <code>P</code> first, then rotate grandparent <code>G</code> in the opposite direction (identical to an AVL double rotation).</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "splay", "topicName": "Splay Tree Heuristics", "marks": 6, "q": "Explain the Potential Method analysis of Splay Trees and describe practical applications where Splay Trees outperform AVL trees.", "a": "<p><strong>1. Potential Method Analysis (Sleator & Tarjan):</strong></p><p>Define the size <code>s(x)</code> of node <code>x</code> as the number of nodes in its subtree. Define rank <code>r(x) = log\u2082(s(x))</code>.</p><p>Define the tree potential <code>\u03a6 = \u2211_{x \u2208 T} r(x)</code>. The amortized cost of an operation is <code>a_i = c_i + \u03a6_i - \u03a6_{i-1}</code>.</p><p><em>The Access Lemma:</em> Splaying node <code>x</code> to the root in a tree of size <code>n</code> has an amortized cost bounded by: <code>a_i \u2264 3(r(root) - r(x)) + 1 = O(log n)</code>. Over <code>m</code> operations, telescoping potential guarantees total time <code>O(m log n)</code>.</p><p><strong>2. Where Splay Trees Outperform AVL / Red-Black Trees:</strong></p><ul><li><strong>Working Set Property:</strong> If a subset of <code>k</code> keys is accessed 90% of the time (80/20 Pareto principle), accessing those <code>k</code> keys costs only <code>O(log k)</code> amortized time because they cluster near the root.</li><li><strong>Zero Storage Overhead:</strong> No balance factors, heights, or color bits need to be stored in nodes.</li><li><strong>Simpler Code:</strong> No complex case balancing tables; a single <code>splay(key)</code> primitive implements search, insert, and delete.</li><li><em>Applications:</em> Network router routing-table caches, memory allocators (e.g. tracking free memory chunks), and adaptive data compression.</li></ul>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "btree", "topicName": "B-Tree & B+ Tree", "marks": 2, "q": "Define a B-Tree of order m and state the minimum and maximum keys allowed per node.", "a": "<p>A <strong>B-Tree of order m</strong> is a balanced, multi-way search tree where:</p><ul><li>Every node has at most <code>m</code> children (and at most <code>m - 1</code> keys).</li><li>Every non-root internal node has at least <code>\u2308m/2\u2309</code> children (and at least <code>\u2308m/2\u2309 - 1</code> keys).</li><li>The root has at least 2 children if it is not a leaf.</li><li>All leaves appear at the exact same depth.</li></ul>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "btree", "topicName": "B-Tree & B+ Tree", "marks": 4, "q": "Explain node splitting in a B-Tree during insertion with a step-by-step example.", "a": "<p><strong>Node Splitting Procedure:</strong></p><ol><li>Traverse the B-Tree down to the appropriate leaf node and insert the key in sorted order.</li><li>If the leaf now contains <code>m</code> keys (overflow), it must split around its median key at index <code>\u230am/2\u230b</code>:<ul><li>Keys to the left of the median remain in the original left node.</li><li>Keys to the right of the median are placed into a newly allocated right sibling node.</li><li>The median key is promoted up into the parent node.</li></ul></li><li>If the parent node also overflows, the split propagates recursively up to the root.</li><li>If the root splits, a new root is created containing the single median key and two children, increasing tree height by 1.</li></ol><p><em>Example (Order 4):</em> Node with keys <code>[10, 20, 30]</code> receives <code>25</code> \u2192 temporary <code>[10, 20, 25, 30]</code>. Median <code>25</code> moves up; left leaf retains <code>[10, 20]</code>, right leaf receives <code>[30]</code>.</p>"}, {"moduleId": 1, "moduleName": "Module 1: Trees & B-Trees", "moduleIcon": "\ud83c\udf33", "moduleFile": "Module 1 Tree Lab.html", "topicId": "btree", "topicName": "B-Tree & B+ Tree", "marks": 6, "q": "Compare B-Trees and B+ Trees in comprehensive detail and explain why B+ Trees are universally selected for relational database indexes.", "a": "<table style=\"width:100%;font-size:12px;\"><thead><tr><th>Feature</th><th>B-Tree</th><th>B+ Tree</th></tr></thead><tbody><tr><td>Data Storage Location</td><td>Keys and data records stored in <strong>all nodes</strong> (internal and leaf).</td><td>Data records stored <strong>only in leaf nodes</strong>; internal nodes hold only routing keys.</td></tr><tr><td>Leaf Structure</td><td>Leaves are independent nodes.</td><td>All leaves are connected via a <strong>doubly linked list</strong>.</td></tr><tr><td>Range Queries</td><td>Requires costly in-order tree traversal jumping across disk pages.</td><td>Direct sequential scan along leaf links in <code>O(k)</code> disk reads.</td></tr><tr><td>Node Key Capacity</td><td>Lower (data records consume space in internal nodes).</td><td>Higher (internal nodes hold only keys, maximizing fan-out).</td></tr><tr><td>Tree Height</td><td>Taller for same number of keys.</td><td>Noticeably shorter (typically 3-4 levels for billions of records).</td></tr><tr><td>Search Latency</td><td>Variable: ends early if key is in root or internal node.</td><td>Predictable: every search proceeds to a leaf node.</td></tr></tbody></table><p><strong>Why Databases (MySQL InnoDB, Postgres) Use B+ Trees:</strong></p><ol><li><strong>High Fan-out minimizes Disk I/O:</strong> A database page is typically 16KB. A B+ Tree internal node holding 8-byte keys and 8-byte pointers can achieve fan-out <code>m > 1000</code>. A 3-level tree indexes over 1 billion records with at most 3 disk reads.</li><li><strong>Lightning Fast Range Scans:</strong> SQL queries with <code>BETWEEN x AND y</code> find <code>x</code> in <code>O(log_m n)</code>, then follow linked leaf pointers sequentially without re-traversing internal nodes.</li></ol>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "ht-func", "topicName": "Hash Tables & Functions", "marks": 2, "q": "Define Hash Table, Hash Function, and Load Factor (\u03b1). State the threshold when rehashing is triggered.", "a": "<p>A <strong>Hash Table</strong> is a data structure providing expected <code>O(1)</code> time dictionary operations by mapping keys into array indices using a <strong>Hash Function</strong> <code>h(k)</code>.</p><p><strong>Load Factor:</strong> <code>\u03b1 = n / m</code>, where <code>n</code> is the number of stored keys and <code>m</code> is total bucket capacity.</p><div class=\"key-takeaway\"><strong>Rehashing:</strong> When <code>\u03b1</code> exceeds <code>0.75</code> in open addressing (or <code>1.0</code> in chaining), the table capacity is typically doubled (<code>2m</code>) and all keys re-inserted to prevent long collision probe chains.</div>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "ht-func", "topicName": "Hash Tables & Functions", "marks": 4, "q": "Explain the Division Method and Multiplication Method of hashing with mathematical formulations and table size selection criteria.", "a": "<p><strong>1. Division Method:</strong></p><p><code>h(k) = k mod m</code></p><ul><li>Fast single CPU instruction.</li><li><em>Selection of m:</em> <code>m</code> must be a <strong>prime number not close to a power of 2</strong>. If <code>m = 2^p</code>, <code>h(k)</code> depends only on the lowest <code>p</code> bits of <code>k</code>, causing massive collisions if keys share common binary suffixes.</li></ul><p><strong>2. Multiplication Method (Knuth):</strong></p><p><code>h(k) = \u230am \u00b7 (k \u00b7 A mod 1)\u230b</code> where <code>(k \u00b7 A mod 1)</code> is the fractional part of <code>k \u00b7 A</code>.</p><ul><li>Knuth suggests the Golden Ratio reciprocal: <code>A = (\u221a5 - 1)/2 \u2248 0.6180339887</code>.</li><li><em>Selection of m:</em> <code>m</code> can safely be a power of 2 (e.g. <code>2^p</code>), which enables ultra-fast calculation using bit shifts and integer multiplication without slow hardware division instructions.</li></ul>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "ht-func", "topicName": "Hash Tables & Functions", "marks": 6, "q": "Discuss the Simple Uniform Hashing Assumption (SUHA), analyze expected search time under chaining, and detail dynamic table resizing and amortized complexity.", "a": "<p><strong>1. Simple Uniform Hashing Assumption (SUHA):</strong></p><p>SUHA assumes any given key <code>k</code> is equally likely to hash into any of the <code>m</code> slots, independently of where any other key has hashed: <code>P(h(k) = i) = 1/m</code> for all <code>0 \u2264 i < m</code>.</p><p><strong>2. Search Analysis with Separate Chaining:</strong></p><ul><li><em>Unsuccessful Search:</em> Must traverse entire list at bucket <code>h(k)</code>. Expected list length is load factor <code>\u03b1 = n/m</code>. Time = <code>\u0398(1 + \u03b1)</code>.</li><li><em>Successful Search:</em> Expected number of elements examined is <code>1 + \u03b1/2 - \u03b1/(2n) = \u0398(1 + \u03b1)</code>.</li><li>If <code>n = O(m)</code>, then <code>\u03b1 = O(1)</code>, ensuring search executes in strictly <code>O(1)</code> expected time.</li></ul><p><strong>3. Dynamic Resizing (Rehashing) & Amortized Analysis:</strong></p><p>When <code>n / m > \u03b1_{max}</code> (e.g., 0.75):</p><ol><li>Allocate new array of size <code>m' = 2m</code> (next prime).</li><li>Iterate through all <code>n</code> existing elements and recompute <code>h'(k) = k mod m'</code>.</li><li>Free old bucket array. Cost of single rehash is <code>O(n)</code>.</li></ol><div class=\"key-takeaway\"><strong>Amortized Cost:</strong> Doubling occurs after at least <code>n/2</code> insertions. Spreading the <code>O(n)</code> copy cost across <code>n/2</code> operations adds only <code>O(1)</code> amortized cost per insert.</div>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "col-res", "topicName": "Collision Strategies & Probing", "marks": 2, "q": "Why are hash collisions inevitable by the Pigeonhole Principle, and what is the difference between Separate Chaining and Open Addressing?", "a": "<p><strong>Pigeonhole Principle:</strong> If universe size <code>|U| > m</code> (table capacity), there must exist distinct keys <code>k\u2081, k\u2082</code> such that <code>h(k\u2081) = h(k\u2082)</code>.</p><p><strong>Core Difference:</strong></p><ul><li><strong>Separate Chaining:</strong> Colliding keys are stored in linked lists or secondary structures <em>outside</em> the primary table array (load factor <code>\u03b1</code> can exceed 1).</li><li><strong>Open Addressing:</strong> All keys reside <em>inside</em> the table array itself; collisions are resolved by systematically probing alternative slots (load factor <code>\u03b1 \u2264 1</code> strictly).</li></ul>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "col-res", "topicName": "Collision Strategies & Probing", "marks": 4, "q": "Compare Linear Probing, Quadratic Probing, and Double Hashing, explaining Primary and Secondary clustering.", "a": "<p><strong>1. Linear Probing:</strong> <code>h(k, i) = (h\u2080 + i) mod m</code></p><ul><li>Checks slots <code>h\u2080, h\u2080+1, h\u2080+2...</code></li><li><em>Flaw:</em> Suffers from <strong>Primary Clustering</strong>\u2014adjacent occupied slots merge into long contiguous runs, drastically increasing probe counts.</li></ul><p><strong>2. Quadratic Probing:</strong> <code>h(k, i) = (h\u2080 + c\u2081i + c\u2082i\u00b2) mod m</code></p><ul><li>Jumps over linear clusters.</li><li><em>Flaw:</em> Suffers from <strong>Secondary Clustering</strong>\u2014keys with identical initial hash <code>h\u2080</code> follow the exact same probe sequence.</li></ul><p><strong>3. Double Hashing:</strong> <code>h(k, i) = (h\u2081(k) + i \u00b7 h\u2082(k)) mod m</code></p><ul><li>Uses a secondary hash <code>h\u2082(k)</code> as the step size.</li><li><em>Advantage:</em> Keys sharing <code>h\u2081</code> diverge immediately if <code>h\u2082(k\u2081) \u2260 h\u2082(k\u2082)</code>, eliminating primary and secondary clustering (requires <code>gcd(h\u2082(k), m) = 1</code>).</li></ul>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "col-res", "topicName": "Collision Strategies & Probing", "marks": 6, "q": "Explain Tombstone Deletion in Open Addressing, why physical deletion corrupts search chains, and analyze probe length bounds as a function of load factor \u03b1.", "a": "<p><strong>1. Why Physical Deletion Breaks Open Addressing:</strong></p><p>In open addressing, search terminates when it either finds the key OR encounters an <strong>EMPTY</strong> (null) slot. If slot <code>S</code> is cleared to <code>EMPTY</code>, any subsequent search for a key that collided with <code>S</code> and was placed further down the probe chain will prematurely abort at <code>S</code>, erroneously reporting that the key does not exist!</p><p><strong>2. The Tombstone Mechanism (\u26b0\ufe0f DEL Marker):</strong></p><ul><li>When deleting, replace the key with a sentinel marker: <code>TOMBSTONE</code> (or <code>DEL</code>).</li><li><strong>Search Rule:</strong> Treat <code>TOMBSTONE</code> as occupied\u2014continue probing past it until reaching target key or a genuine <code>EMPTY</code> slot.</li><li><strong>Insert Rule:</strong> Treat <code>TOMBSTONE</code> as available\u2014insert new key into the first tombstone slot encountered, reclaiming deleted space.</li></ul><p><strong>3. Mathematical Probe Length Analysis:</strong></p><p>Under uniform hashing, the expected number of probes for open addressing is:</p><ul><li><em>Unsuccessful Search / Insert:</em> <code>E[probes] = 1 / (1 - \u03b1)</code>. As <code>\u03b1 \u2192 0.9</code>, probes <code>= 1 / 0.1 = 10</code>!</li><li><em>Successful Search:</em> <code>E[probes] = (1 / \u03b1) \u00b7 ln(1 / (1 - \u03b1))</code>. At <code>\u03b1 = 0.5</code>, probes <code>\u2248 1.39</code>; at <code>\u03b1 = 0.9</code>, probes <code>\u2248 2.56</code>.</li></ul>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "cuckoo-hash", "topicName": "Cuckoo Hashing & Evictions", "marks": 2, "q": "What is Cuckoo Hashing and what worst-case lookup guarantee does it offer?", "a": "<p><strong>Cuckoo Hashing</strong> (Pagh & Rodler) uses two distinct hash tables <code>T\u2081, T\u2082</code> and two independent hash functions <code>h\u2081, h\u2082</code>. A key <code>k</code> can reside <strong>only</strong> in <code>T\u2081[h\u2081(k)]</code> or <code>T\u2082[h\u2082(k)]</code>.</p><div class=\"key-takeaway\"><strong>Lookup Guarantee:</strong> Worst-case search examines at most <strong>2 slots</strong> (strictly <code>O(1)</code> worst-case time, zero probe chains).</div>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "cuckoo-hash", "topicName": "Cuckoo Hashing & Evictions", "marks": 4, "q": "Explain the insertion and eviction/displacement mechanism in Cuckoo Hashing with an example.", "a": "<p><strong>Displacement Algorithm:</strong></p><ol><li>Attempt to place incoming key <code>x</code> into <code>T\u2081[h\u2081(x)]</code>.</li><li>If slot is vacant, insert <code>x</code> and finish.</li><li>If slot is occupied by resident key <code>y</code>: <code>x</code> <strong>kicks out</strong> <code>y</code> (displaces it).</li><li>Key <code>y</code> must now be placed into its alternate location in <code>T\u2082[h\u2082(y)]</code>.</li><li>If <code>T\u2082[h\u2082(y)]</code> is vacant, insert <code>y</code>. If occupied by <code>z</code>, <code>y</code> kicks out <code>z</code>, and <code>z</code> must move back to <code>T\u2081[h\u2081(z)]</code>.</li><li>This cascading displacement continues until an empty slot is found or an eviction loop is detected.</li></ol><p><em>Example:</em> Insert <code>18</code> into <code>T\u2081[1]</code> occupied by <code>10</code>. <code>18</code> displaces <code>10</code>. <code>10</code> computes <code>h\u2082(10) = 4</code> and moves to <code>T\u2082[4]</code>.</p>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "cuckoo-hash", "topicName": "Cuckoo Hashing & Evictions", "marks": 6, "q": "Explain cycle detection in Cuckoo Hashing, maximum displacement threshold, full rehashing, and why capacity is capped at \u03b1 \u2264 0.50.", "a": "<p><strong>1. The Eviction Cycle Problem:</strong></p><p>A set of keys can form a closed dependency loop in the bipartite cuckoo graph (e.g. <code>k\u2081 \u2192 k\u2082 \u2192 k\u2083 \u2192 k\u2081</code>). Once entered, the eviction cascade will loop infinitely without ever finding an empty slot.</p><p><strong>2. Cycle Detection & Rehash Threshold:</strong></p><ul><li>Maintain a kick counter. If displacements exceed a threshold <code>MaxDisplacements = C \u00b7 log n</code> (typically 16 to 32), an infinite loop is declared.</li><li><strong>Rehash Procedure:</strong> Allocate new tables, pick fresh randomized hash function seeds, and re-insert all keys into the new tables. Rehash occurs with probability <code>O(1/n)</code>, maintaining <code>O(1)</code> amortized insertion time.</li></ul><p><strong>3. Load Factor Limitation (\u03b1 \u2264 0.50):</strong></p><p>Graph theory proves that the 2-table cuckoo graph undergoes a phase transition at <code>\u03b1 \u2248 0.50</code>. Above 50% capacity, the probability of cycles approaches 1. Modern variants (3 hash functions or small 4-slot stashes) achieve <code>\u03b1 > 0.90</code>.</p>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "bloom-filter", "topicName": "Bloom Filters & Sets", "marks": 2, "q": "Define a Bloom Filter. Why are false negatives impossible while false positives are possible?", "a": "<p>A <strong>Bloom Filter</strong> is a space-efficient probabilistic data structure using an <code>m</code>-bit array and <code>k</code> hash functions to test set membership.</p><ul><li><strong>Zero False Negatives:</strong> If any of the <code>k</code> hashed bits is <code>0</code>, the element was <em>definitely never inserted</em> (100% guarantee).</li><li><strong>False Positives Possible:</strong> If all <code>k</code> bits are <code>1</code>, the element is <em>probably present</em>, because those bits may have been set to <code>1</code> by other overlapping keys.</li></ul>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "bloom-filter", "topicName": "Bloom Filters & Sets", "marks": 4, "q": "State the false positive probability formula for a Bloom Filter and derive the optimal number of hash functions k.", "a": "<p><strong>False Positive Probability (p):</strong></p><p>After inserting <code>n</code> elements using <code>k</code> hash functions into an <code>m</code>-bit array:</p><p>Probability a bit remains 0: <code>(1 - 1/m)^{kn} \u2248 e^{-kn/m}</code></p><p>Probability a bit is 1: <code>1 - e^{-kn/m}</code></p><p>Probability all <code>k</code> bits are 1 for an absent query: <code>p = (1 - e^{-kn/m})^k</code></p><p><strong>Optimal k Derivation:</strong></p><p>Taking natural logarithm <code>ln p = k \u00b7 ln(1 - e^{-kn/m})</code> and finding the minimum with respect to <code>k</code> gives:</p><p><code>k_{opt} = (m / n) \u00b7 ln 2 \u2248 0.693 \u00b7 (m / n)</code></p><div class=\"key-takeaway\">At optimal <code>k</code>, the bit array is exactly 50% filled with 1s, and false positive rate <code>p = (1/2)^k \u2248 (0.6185)^{m/n}</code>. For <code>1%</code> error rate, <code>m \u2248 9.6</code> bits per key with <code>k = 7</code>.</div>"}, {"moduleId": 2, "moduleName": "Module 2: Hashing & Bloom", "moduleIcon": "\ud83d\udd11", "moduleFile": "Module 2 Hashing Lab.html", "topicId": "bloom-filter", "topicName": "Bloom Filters & Sets", "marks": 6, "q": "Discuss real-world production architectures of Bloom Filters, explain why standard filters prohibit deletions, and describe Counting Bloom Filters (CBF).", "a": "<p><strong>1. Enterprise Production Architectures:</strong></p><ul><li><strong>Apache Cassandra / Google Bigtable:</strong> Stored on disk in SSTables. A Bloom Filter in RAM checks if a row key exists in an SSTable before performing expensive mechanical disk / NVMe read I/Os. If filter returns \"Absent\", disk read is completely avoided!</li><li><strong>Akamai / Squid Web Proxy:</strong> Uses Bloom Filters to check if an object has been requested before (\"One-Hit-Wonder\" prevention). Avoids caching objects requested only once.</li><li><strong>Google Chrome:</strong> Evaluates visited URLs against an in-browser Bloom Filter of known malicious sites before querying cloud security servers.</li></ul><p><strong>2. Why Deletions are Prohibited in Standard Bloom Filters:</strong></p><p>To delete key <code>x</code>, one would need to reset its <code>k</code> hashed bit positions to <code>0</code>. However, any of those bits may also be shared by another key <code>y</code>. Resetting a bit to <code>0</code> silently corrupts <code>y</code>, creating fatal <strong>False Negatives</strong>.</p><p><strong>3. Counting Bloom Filters (CBF):</strong></p><p>Replaces the 1-bit array with an array of small 4-bit counters (0 to 15):</p><ul><li><em>Insertion:</em> Increment the <code>k</code> counters by 1.</li><li><em>Deletion:</em> Decrement the <code>k</code> counters by 1 (allowed as long as counter > 0).</li><li><em>Tradeoff:</em> Consumes 4\u00d7 more memory than standard Bloom filters and risks counter overflow if skewed keys collide heavily.</li></ul>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "graph-rep-sub", "topicName": "Graph Representations & Handshaking", "marks": 2, "q": "State the Handshaking Lemma and define the space complexity difference between Adjacency Matrix and Adjacency List.", "a": "<p><strong>Handshaking Lemma:</strong> In every finite undirected graph, the sum of all vertex degrees equals twice the number of edges: <code>\u2211_{v \u2208 V} deg(v) = 2|E|</code>.</p><p><strong>Space Complexity Difference:</strong></p><ul><li><strong>Adjacency Matrix:</strong> Requires <code>O(V\u00b2)</code> memory regardless of edge count (inefficient for sparse graphs).</li><li><strong>Adjacency List:</strong> Requires <code>O(V + E)</code> memory for directed and <code>O(V + 2E)</code> for undirected graphs (optimal for sparse graphs).</li></ul>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "graph-rep-sub", "topicName": "Graph Representations & Handshaking", "marks": 4, "q": "Compare Adjacency Matrix and Adjacency List across Space, Edge Existence lookup, Finding Neighbors, and Edge Insertion.", "a": "<table style=\"width:100%;font-size:12px;\"><thead><tr><th>Operation</th><th>Adjacency Matrix (V\u00d7V)</th><th>Adjacency List</th></tr></thead><tbody><tr><td>Memory Space</td><td><code>O(V\u00b2)</code></td><td><code>O(V + E)</code> (Optimal)</td></tr><tr><td>Edge Query <code>(u, v)</code></td><td><code>O(1)</code> (Direct cell lookup)</td><td><code>O(deg(u))</code> (Scan neighbor list)</td></tr><tr><td>Find All Neighbors of <code>u</code></td><td><code>O(V)</code> (Scan row <code>u</code>)</td><td><code>O(deg(u))</code> (Iterate list)</td></tr><tr><td>Add Edge <code>(u, v)</code></td><td><code>O(1)</code></td><td><code>O(1)</code> (Prepend to list)</td></tr><tr><td>Remove Edge <code>(u, v)</code></td><td><code>O(1)</code></td><td><code>O(deg(u))</code></td></tr><tr><td>Ideal Graph Topology</td><td>Dense (<code>E \u2248 V\u00b2</code>)</td><td>Sparse (<code>E \u226a V\u00b2</code>)</td></tr></tbody></table>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "graph-rep-sub", "topicName": "Graph Representations & Handshaking", "marks": 6, "q": "Explain Compressed Sparse Row (CSR) graph format, hardware cache locality implications, and when Adjacency Matrix outperforms Adjacency List.", "a": "<p><strong>1. Limitations of Standard Adjacency Lists:</strong></p><p>Standard Adjacency Lists use pointers to allocate linked list nodes dynamically across heap memory. Iterating through neighbors of vertex <code>u</code> causes pointer chasing and cache misses, severely stalling modern high-performance CPU/GPU memory pipelines.</p><p><strong>2. Compressed Sparse Row (CSR) Representation:</strong></p><p>CSR packs a sparse graph into two contiguous arrays with zero pointer overhead:</p><ul><li><code>col_idx[]</code>: An array of size <code>|E|</code> storing the target neighbors of all edges contiguously.</li><li><code>row_ptr[]</code>: An array of size <code>|V| + 1</code> where <code>row_ptr[u]</code> stores the starting index of vertex <code>u</code>'s neighbors in <code>col_idx</code>.</li><li><em>Neighbors of u:</em> Given by slice <code>col_idx[row_ptr[u] : row_ptr[u+1]]</code> in <code>O(deg(u))</code> time with 100% contiguous CPU cache prefetching!</li></ul><p><strong>3. When Adjacency Matrix Outperforms Adjacency List:</strong></p><ul><li>Dense graphs where <code>|E| \u2248 V(V-1)/2</code>.</li><li>SIMD / GPU matrix operations (e.g., graph algorithms expressed via linear algebra in GraphBLAS).</li><li>Transitive closure (Warshall's algorithm) using bitwise word parallelism (64 edge queries in 1 CPU cycle).</li></ul>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "bfs-dfs-sub", "topicName": "BFS, DFS & Topological Sort", "marks": 2, "q": "What data structures power BFS and DFS, and what are their time complexities on an adjacency list?", "a": "<p><strong>Breadth-First Search (BFS):</strong> Uses a <strong>FIFO Queue</strong> (iterative level-order wave).</p><p><strong>Depth-First Search (DFS):</strong> Uses a <strong>LIFO Stack</strong> (or function call recursion).</p><div class=\"key-takeaway\"><strong>Time & Space Complexity:</strong> Both BFS and DFS run in <code>O(V + E)</code> time and consume <code>O(V)</code> auxiliary space to store visited markers and queue/stack state.</div>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "bfs-dfs-sub", "topicName": "BFS, DFS & Topological Sort", "marks": 4, "q": "Explain cycle detection in directed graphs using DFS three-color marking (White, Gray, Black) and classify DFS edge types.", "a": "<p><strong>Three-Color Vertex States:</strong></p><ol><li><strong>WHITE (0):</strong> Vertex is unvisited.</li><li><strong>GRAY (1):</strong> Vertex is currently on the active recursion call stack (discovered, but exploration of its descendants is incomplete).</li><li><strong>BLACK (2):</strong> Vertex and all its reachable descendants have completed exploration.</li></ol><p><strong>Cycle Detection Theorem:</strong> A directed graph contains a cycle if and only if DFS encounters an edge <code>(u, v)</code> where vertex <code>v</code> is currently <strong>GRAY</strong> (a <strong>Back Edge</strong> to an active ancestor).</p><p><strong>Four DFS Edge Classifications:</strong></p><ul><li><em>Tree Edge:</em> Discovers an unvisited WHITE vertex.</li><li><em>Back Edge:</em> Connects to an active GRAY ancestor (indicates cycle).</li><li><em>Forward Edge:</em> Connects to an already explored BLACK descendant.</li><li><em>Cross Edge:</em> Connects to a BLACK vertex in a different subtree/branch.</li></ul>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "bfs-dfs-sub", "topicName": "BFS, DFS & Topological Sort", "marks": 6, "q": "Explain Topological Sort on Directed Acyclic Graphs (DAGs) in full detail: contrast Kahn's In-Degree Algorithm against DFS Post-Order Reversal.", "a": "<p><strong>Definition:</strong> A <strong>Topological Sort</strong> of a DAG is a linear ordering of vertices such that for every directed edge <code>u \u2192 v</code>, vertex <code>u</code> appears before vertex <code>v</code> in the ordering. If the graph contains a directed cycle, no topological ordering exists.</p><p><strong>Method 1: Kahn's Algorithm (BFS In-Degree Queue):</strong></p><ol><li>Calculate in-degree <code>in_deg[v]</code> for all vertices <code>v \u2208 V</code>.</li><li>Enqueue all vertices with <code>in_deg[v] == 0</code> into a FIFO Queue <code>Q</code>.</li><li>While <code>Q</code> is not empty:<ul><li>Dequeue vertex <code>u</code>, append <code>u</code> to topological order list.</li><li>For each outgoing neighbor <code>v</code> of <code>u</code>, decrement <code>in_deg[v]--</code>.</li><li>If <code>in_deg[v] == 0</code>, enqueue <code>v</code>.</li></ul></li><li><em>Cycle Check:</em> If output list contains fewer than <code>|V|</code> vertices, graph contains a cycle!</li></ol><p><strong>Method 2: DFS Finish-Time Algorithm:</strong></p><ol><li>Run DFS on all unvisited vertices.</li><li>When a vertex finishes exploring all descendants (turns BLACK), push it onto a Stack.</li><li>Pop all elements from the stack: the resulting sequence is a valid topological sort (vertices ordered by decreasing DFS finish times).</li></ol><div class=\"key-takeaway\"><strong>Applications:</strong> Build system compilation order (Make, CMake), task workflow dependency resolution (Airflow, Celery), course prerequisite sequencing.</div>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "mst-kruskal-sub", "topicName": "MST & Kruskal DSU", "marks": 2, "q": "Define a Minimum Spanning Tree (MST) and state the Cut Property.", "a": "<p>A <strong>Minimum Spanning Tree (MST)</strong> of an undirected, connected, weighted graph <code>G = (V, E)</code> is a spanning subgraph that connects all <code>V</code> vertices using exactly <code>V - 1</code> edges with no cycles, such that the total sum of edge weights is minimized.</p><p><strong>Cut Property:</strong> For any partition (cut) of vertices into sets <code>S</code> and <code>V \\ S</code>, the edge with the strictly minimum weight crossing the cut must belong to the MST.</p>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "mst-kruskal-sub", "topicName": "MST & Kruskal DSU", "marks": 4, "q": "Explain Kruskal's algorithm step-by-step and how Disjoint Set Union (DSU) prevents cycles.", "a": "<p><strong>Kruskal's Algorithm Steps:</strong></p><ol><li>Sort all <code>|E|</code> edges in non-decreasing order of their weight: <code>w(e\u2081) \u2264 w(e\u2082) \u2264 ... \u2264 w(e_E)</code> (takes <code>O(E log E)</code> time).</li><li>Initialize a Disjoint Set Union (DSU) structure where each vertex <code>v \u2208 V</code> is in its own isolated set (<code>MakeSet(v)</code>).</li><li>Initialize <code>mst = []</code> and edge count <code>count = 0</code>.</li><li>For each edge <code>(u, v)</code> in sorted order:<ul><li>Find the set representatives: <code>root_u = Find(u)</code> and <code>root_v = Find(v)</code>.</li><li><strong>Cycle Check:</strong> If <code>root_u == root_v</code>, adding <code>(u, v)</code> would create a cycle; discard edge!</li><li>If <code>root_u \u2260 root_v</code>, accept edge: add <code>(u, v)</code> to <code>mst</code>, call <code>Union(root_u, root_v)</code>, increment <code>count++</code>.</li><li>If <code>count == V - 1</code>, terminate early.</li></ul></li></ol>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "mst-kruskal-sub", "topicName": "MST & Kruskal DSU", "marks": 6, "q": "Write the complete Disjoint Set Union (DSU) with Path Compression and Union by Rank, analyze its amortized complexity, and compare Kruskal vs Prim.", "a": "<p><strong>1. Complete DSU Implementation (C / C++):</strong></p><pre><code>struct DSU {\n  vector<int> parent, rank;\n  DSU(int n) : parent(n), rank(n, 0) {\n    for (int i = 0; i < n; i++) parent[i] = i;\n  }\n  int find(int i) { // Path Compression\n    if (parent[i] == i) return i;\n    return parent[i] = find(parent[i]);\n  }\n  bool unite(int i, int j) { // Union by Rank\n    int root_i = find(i), root_j = find(j);\n    if (root_i == root_j) return false; // Cycle\n    if (rank[root_i] < rank[root_j]) parent[root_i] = root_j;\n    else if (rank[root_i] > rank[root_j]) parent[root_j] = root_i;\n    else { parent[root_j] = root_i; rank[root_i]++; }\n    return true;\n  }\n};</code></pre><p><strong>2. Complexity Analysis (Tarjan's Theorem):</strong></p><p>With both Path Compression and Union by Rank, any sequence of <code>m</code> operations on <code>n</code> elements runs in <code>O(m \u00b7 \u03b1(n))</code> time, where <code>\u03b1(n)</code> is the inverse Ackermann function. Because <code>\u03b1(n) \u2264 4</code> for all universe sizes up to <code>10^{80}</code>, DSU operations run in strictly <strong>amortized O(1)</strong> time!</p><p><strong>3. Kruskal's vs Prim's Algorithm:</strong></p><ul><li><strong>Kruskal's:</strong> <code>O(E log E)</code>. Operates on edges. Outperforms Prim on <strong>sparse graphs</strong> (<code>E \u226a V\u00b2</code>).</li><li><strong>Prim's (with Fibonacci Heap):</strong> <code>O(E + V log V)</code>. Operates on vertices. Vastly superior on <strong>dense graphs</strong> (<code>E \u2248 V\u00b2</code>).</li></ul>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "shortest-path-sub", "topicName": "Dijkstra & Floyd-Warshall", "marks": 2, "q": "What is edge relaxation in shortest path algorithms, and why does Dijkstra's algorithm fail on graphs with negative edge weights?", "a": "<p><strong>Edge Relaxation:</strong> For directed edge <code>(u, v)</code> with weight <code>w</code>, if <code>dist[u] + w < dist[v]</code>, update <code>dist[v] = dist[u] + w</code>.</p><p><strong>Why Dijkstra Fails on Negative Weights:</strong> Dijkstra relies on a greedy invariant: once a vertex <code>u</code> is extracted from the min-priority queue, its shortest path <code>dist[u]</code> is considered final. A subsequent negative edge could produce a cheaper path to <code>u</code> later, violating this greedy assumption and producing incorrect distances.</p>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "shortest-path-sub", "topicName": "Dijkstra & Floyd-Warshall", "marks": 4, "q": "Explain Dijkstra's Single Source Shortest Path algorithm with a Min-Priority Queue and analyze time complexity.", "a": "<p><strong>Algorithm Steps:</strong></p><ol><li>Set <code>dist[src] = 0</code> and <code>dist[v] = \u221e</code> for all other vertices.</li><li>Insert pair <code>(0, src)</code> into a Min-Priority Queue <code>PQ</code>.</li><li>While <code>PQ</code> is not empty:<ul><li>Extract vertex <code>u</code> with smallest tentative distance <code>d</code>.</li><li>If <code>d > dist[u]</code>, skip (stale entry).</li><li>For each outgoing neighbor <code>v</code> with weight <code>w</code>:<ul><li>If <code>dist[u] + w < dist[v]</code>: set <code>dist[v] = dist[u] + w</code> and insert <code>(dist[v], v)</code> into <code>PQ</code>.</li></ul></li></ul></li></ol><p><strong>Time Complexity Analysis:</strong></p><ul><li>With Binary Heap: Each of <code>V</code> vertices is extracted (<code>V log V</code>) and up to <code>E</code> edges are relaxed (<code>E log V</code>), yielding <code>O((V + E) log V)</code>.</li><li>With Fibonacci Heap: Decrease-Key runs in <code>O(1)</code> amortized time, yielding optimal <code>O(E + V log V)</code>.</li></ul>"}, {"moduleId": 3, "moduleName": "Module 3: Graphs & Paths", "moduleIcon": "\ud83d\udd78\ufe0f", "moduleFile": "Module 3 Graph Lab.html", "topicId": "shortest-path-sub", "topicName": "Dijkstra & Floyd-Warshall", "marks": 6, "q": "Explain the Floyd-Warshall All-Pairs Shortest Path dynamic programming recurrence, show how negative cycles are detected, and contrast with running Dijkstra V times.", "a": "<p><strong>1. Floyd-Warshall Dynamic Programming Recurrence:</strong></p><p>Let <code>D^{(k)}[i][j]</code> be the length of the shortest path from vertex <code>i</code> to vertex <code>j</code> using only intermediate vertices from the subset <code>{1, 2, ..., k}</code>.</p><p><code>D^{(k)}[i][j] = min( D^{(k-1)}[i][j], D^{(k-1)}[i][k] + D^{(k-1)}[k][j] )</code></p><p><em>Base Case (k=0):</em> <code>D[i][j] = w(i, j)</code> if edge exists, <code>0</code> if <code>i == j</code>, and <code>\u221e</code> otherwise.</p><p><strong>2. In-Place Triple Loop (O(V\u00b3) Time, O(V\u00b2) Space):</strong></p><pre><code>for (int k = 0; k < V; k++) {\n  for (int i = 0; i < V; i++) {\n    for (int j = 0; j < V; j++) {\n      if (D[i][k] < INF && D[k][j] < INF)\n        D[i][j] = min(D[i][j], D[i][k] + D[k][j]);\n    }\n  }\n}</code></pre><p><strong>3. Negative Cycle Detection:</strong></p><p>After the <code>k</code> loop completes, inspect diagonal entries: if any <code>D[i][i] < 0</code>, vertex <code>i</code> belongs to a <strong>negative-weight cycle</strong> (cost can decrease indefinitely by repeatedly looping through this cycle).</p><p><strong>4. Comparison with Running Dijkstra V Times:</strong></p><ul><li><em>Dijkstra \u00d7 V:</em> Takes <code>O(V(V + E) log V) = O(V\u00b2 log V + V E log V)</code>. On sparse graphs (<code>E \u2248 V</code>), runs in <code>O(V\u00b2 log V)</code>, vastly faster than Floyd-Warshall's <code>O(V\u00b3)</code>! However, Dijkstra <em>cannot</em> handle negative edge weights.</li><li><em>Floyd-Warshall:</em> Handles arbitrary negative edge weights, detects negative cycles, has simple cache-friendly loops, and requires no auxiliary heap data structures.</li></ul>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "trie-types-sub", "topicName": "Tries & Compressed Radix Trees", "marks": 2, "q": "What is a Trie (Prefix Tree) and what is the time complexity of searching a key of length m?", "a": "<p>A <strong>Trie</strong> is an ordered tree data structure used to store a dynamic associative array of strings where keys share common prefixes. Each node represents a prefix, with edges labeled by characters.</p><div class=\"key-takeaway\"><strong>Time Complexity:</strong> Search, insertion, and deletion execute in <code>O(m)</code> time, where <code>m</code> is the length of the query string, <strong>completely independent of the total number of keys n stored in the trie</strong>.</div>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "trie-types-sub", "topicName": "Tries & Compressed Radix Trees", "marks": 4, "q": "Compare Standard Tries, Compressed Radix Trees (Patricia Tries), and Ternary Search Trees (TST) in terms of structure and memory usage.", "a": "<table style=\"width:100%;font-size:12px;\"><thead><tr><th>Property</th><th>Standard Trie</th><th>Compressed Radix Tree</th><th>Ternary Search Tree (TST)</th></tr></thead><tbody><tr><td>Edge Representation</td><td>Single character per edge</td><td>Edge labels contain full substrings</td><td>Characters stored inside nodes</td></tr><tr><td>Child Pointers</td><td>Fixed array of size <code>\u03a3</code> (e.g. 26)</td><td>Variable list of outgoing edge chunks</td><td>Exactly 3 pointers (<code>low</code>, <code>equal</code>, <code>high</code>)</td></tr><tr><td>Single-Child Chains</td><td>Retained (wastes memory)</td><td>Compacted into a single edge</td><td>Retained as <code>equal</code> child chain</td></tr><tr><td>Memory Efficiency</td><td>Poor (many null pointers)</td><td>High (minimal nodes allocated)</td><td>Very High (BST economy with Trie speed)</td></tr><tr><td>Primary Application</td><td>Dictionary lookups</td><td>IP routing CIDR tables, IP lookup</td><td>In-memory autocomplete engines</td></tr></tbody></table>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "trie-types-sub", "topicName": "Tries & Compressed Radix Trees", "marks": 6, "q": "Explain the design and implementation of an Auto-Complete and Prefix Matching engine using a Trie, and evaluate memory optimization techniques.", "a": "<p><strong>1. Trie Node Structure:</strong></p><pre><code>struct TrieNode {\n  bool isEndOfWord;\n  unordered_map<char, TrieNode*> children;\n  // For autocomplete: store top-k suggested words directly at node\n  vector<string> topSuggestions;\n};</code></pre><p><strong>2. Autocomplete Query Workflow:</strong></p><ol><li>Given query prefix <code>P = c\u2081c\u2082...c_m</code>: traverse the trie following characters of <code>P</code> from root.</li><li>If any character edge is missing: return empty list (no words match prefix).</li><li>Once target node <code>N_P</code> is reached: run a DFS from <code>N_P</code> to collect all descendants marked <code>isEndOfWord == true</code>.</li><li><em>Optimization:</em> Precompute and cache the top-5 highest-ranking completions directly inside <code>N_P->topSuggestions</code> during insertion. Autocomplete query response drops from <code>O(m + Subtree_Size)</code> to instant <code>O(m)</code>!</li></ol><p><strong>3. Memory Optimizations for Massive Dictionaries:</strong></p><ul><li><strong>Fixed Array vs Hash Map:</strong> A fixed array <code>TrieNode* child[26]</code> takes <code>26 \u00d7 8 = 208</code> bytes per node, where >80% of pointers are typically <code>null</code>. Replacing with an <code>unordered_map</code> or sorted flat vector saves up to 70% RAM.</li><li><strong>Patricia / Radix Compression:</strong> Compressing non-branching node chains (e.g., <code>t -> e -> s -> t</code> into single edge <code>\"test\"</code>) eliminates up to 60% of all tree nodes.</li><li><strong>Double-Array Trie (DAT):</strong> Flattens the entire trie into two integer arrays (<code>BASE</code> and <code>CHECK</code>), providing <code>O(1)</code> child access with zero pointer overhead.</li></ul>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "suffix-array-sub", "topicName": "Suffix Arrays & Kasai LCP", "marks": 2, "q": "Define a Suffix Array and Longest Common Prefix (LCP) Array for a string S.", "a": "<p><strong>Suffix Array (SA):</strong> An integer array of length <code>n</code> containing the starting indices of all suffixes of string <code>S$</code> sorted in lexicographical order.</p><p><strong>LCP Array:</strong> An array of length <code>n</code> where <code>LCP[i]</code> stores the length of the Longest Common Prefix between consecutive sorted suffixes: <code>LCP[i] = length(lcp(Suffix(SA[i-1]), Suffix(SA[i])))</code>.</p>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "suffix-array-sub", "topicName": "Suffix Arrays & Kasai LCP", "marks": 4, "q": "Explain how substring pattern matching is performed in O(m log n) time using binary search on a Suffix Array.", "a": "<p><strong>Binary Search Pattern Matching:</strong></p><p>Because the Suffix Array stores suffixes in strictly sorted alphabetical order, any occurrence of a pattern <code>P</code> of length <code>m</code> must appear as a prefix of one or more adjacent suffixes in the array.</p><ol><li>Perform binary search for <code>P</code> across the suffix array:<ul><li>Evaluate midpoint <code>mid = (L + R) / 2</code>.</li><li>Compare string <code>P</code> with the prefix of suffix starting at <code>S[SA[mid]...]</code> (takes <code>O(m)</code> string comparison).</li><li>If <code>P < S[SA[mid]...]</code>: search left half (<code>R = mid - 1</code>).</li><li>If <code>P > S[SA[mid]...]</code>: search right half (<code>L = mid + 1</code>).</li></ul></li><li>Binary search takes <code>log n</code> iterations, with <code>m</code> comparisons per step: total time = <code>O(m log n)</code>.</li><li>Running two binary searches finds the first and last occurrence bounds <code>[start, end]</code>, returning all <code>k</code> occurrences in <code>O(m log n + k)</code>.</li></ol>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "suffix-array-sub", "topicName": "Suffix Arrays & Kasai LCP", "marks": 6, "q": "Explain Kasai's linear-time O(n) algorithm for constructing the LCP array, prove its height invariant, and show how to find the Longest Repeated Substring.", "a": "<p><strong>1. Kasai's Linear-Time Algorithm (O(n)):</strong></p><p>A naive LCP comparison between adjacent suffixes takes <code>O(n\u00b2)</code>. Kasai observed that if suffixes are processed in <strong>original text order</strong> (suffix at index 0, then 1, 2, ...), the common prefix length decreases by at most 1 in the next step!</p><pre><code>vector<int> buildLCP(string s, vector<int>& sa) {\n  int n = s.length(), h = 0;\n  vector<int> rank(n, 0), lcp(n, 0);\n  for (int i = 0; i < n; i++) rank[sa[i]] = i;\n  for (int i = 0; i < n; i++) {\n    if (rank[i] > 0) {\n      int j = sa[rank[i] - 1];\n      while (i + h < n && j + h < n && s[i + h] == s[j + h]) h++;\n      lcp[rank[i]] = h;\n      if (h > 0) h--; // Crucial invariant!\n    }\n  }\n  return lcp;\n}</code></pre><p><strong>2. Proof of O(n) Time:</strong></p><p>At each step, <code>h</code> decreases by at most 1 (<code>h--</code>). Since <code>h</code> can never exceed <code>n</code>, the inner while loop can increment <code>h</code> at most <code>2n</code> times across the entire algorithm. Hence, Kasai's algorithm is strictly <code>O(n)</code>.</p><p><strong>3. Longest Repeated Substring:</strong></p><p>The longest substring that appears at least twice in string <code>S</code> corresponds exactly to the maximum value in the LCP array: <code>max_{1 \u2264 i < n} LCP[i]</code>. The substring is <code>S[SA[k] : SA[k] + max_len]</code> where <code>k = argmax LCP[i]</code>.</p>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "string-index-sub", "topicName": "KMP & Aho-Corasick Automaton", "marks": 2, "q": "What is the KMP prefix function (\u03c0-table) and how does it prevent backtracking over the target text?", "a": "<p>The <strong>KMP \u03c0-table</strong> (Prefix Function) defines for each pattern prefix <code>P[0...i]</code> the length of the longest proper prefix that is also a suffix: <code>\u03c0[i] = max{k : k < i+1 and P[0...k-1] == P[i-k+1...i]}</code>.</p><div class=\"key-takeaway\"><strong>No Backtracking:</strong> When a mismatch occurs between pattern character <code>P[j]</code> and text character <code>T[i]</code>, the text pointer <code>i</code> never moves backwards. Instead, the pattern shifts forward by setting <code>j = \u03c0[j - 1]</code> in <code>O(1)</code> time, guaranteeing overall <code>O(n + m)</code> matching time.</div>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "string-index-sub", "topicName": "KMP & Aho-Corasick Automaton", "marks": 4, "q": "Trace the construction of the KMP \u03c0-table for the pattern \"ababcaba\" and explain the mismatch shift rule.", "a": "<p><strong>Pattern:</strong> <code>P = \"ababcaba\"</code> (length 8)</p><table style=\"width:100%;font-size:12px;\"><thead><tr><th>Index i</th><th>Substr P[0...i]</th><th>Longest Prefix = Suffix</th><th>\u03c0[i]</th></tr></thead><tbody><tr><td>0</td><td>\"a\"</td><td>none</td><td>0</td></tr><tr><td>1</td><td>\"ab\"</td><td>none</td><td>0</td></tr><tr><td>2</td><td>\"aba\"</td><td>\"a\"</td><td>1</td></tr><tr><td>3</td><td>\"abab\"</td><td>\"ab\"</td><td>2</td></tr><tr><td>4</td><td>\"ababc\"</td><td>none</td><td>0</td></tr><tr><td>5</td><td>\"ababca\"</td><td>\"a\"</td><td>1</td></tr><tr><td>6</td><td>\"ababcab\"</td><td>\"ab\"</td><td>2</td></tr><tr><td>7</td><td>\"ababcaba\"</td><td>\"aba\"</td><td>3</td></tr></tbody></table><p><strong>Mismatch Shift Rule:</strong> If characters match up to index <code>j = 4</code> (matched <code>\"abab\"</code>) and mismatch on the next character, instead of restarting at index 0, KMP consults <code>\u03c0[3] = 2</code> and continues matching against <code>P[2]</code>, preserving the already-matched prefix <code>\"ab\"</code> without touching previous text characters.</p>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "string-index-sub", "topicName": "KMP & Aho-Corasick Automaton", "marks": 6, "q": "Explain the Aho-Corasick multi-pattern matching automaton: Trie construction, Failure Links, Output Dictionary Links, and simultaneous text scanning.", "a": "<p><strong>1. Problem Definition:</strong></p><p>Given text of length <code>n</code> and a dictionary of <code>k</code> patterns <code>{P\u2081, P\u2082, ..., P_k}</code> of total length <code>m</code>. Naive scanning takes <code>O(k \u00b7 n)</code>. Aho-Corasick matches <strong>all k patterns simultaneously</strong> in <code>O(n + m + z)</code> time, where <code>z</code> is the number of pattern occurrences.</p><p><strong>2. Three Construction Phases:</strong></p><ol><li><strong>Trie Construction:</strong> Insert all <code>k</code> dictionary patterns into a standard Trie. Nodes where patterns end are tagged with their pattern IDs.</li><li><strong>Failure Links (Computed via BFS):</strong> Similar to KMP, a failure link from node <code>u</code> points to node <code>v</code> representing the longest proper suffix of the string ending at <code>u</code> that exists in the trie.<ul><li>Root's children have failure links pointing to root.</li><li>For node <code>u</code> with child <code>c</code> via character <code>a</code>: walk failure links from <code>u</code> until finding an edge labeled <code>a</code>. That target is <code>fail(c)</code>.</li></ul></li><li><strong>Dictionary Output Links:</strong> Links each node to the nearest node reachable via failure links that represents an authentic dictionary pattern, allowing multiple matches ending at the same character to be reported in <code>O(1)</code>.</li></ol><p><strong>3. Scanning the Text:</strong></p><p>Feed text characters sequentially into the automaton. Follow Trie edges on match; follow failure links on mismatch. At each state, follow output links to enumerate all matching dictionary patterns.</p><div class=\"key-takeaway\"><strong>Production Systems:</strong> Used in Network Intrusion Detection Systems (Snort, Suricata) for multi-rule packet inspection and Antivirus engines (ClamAV) for virus signature scanning.</div>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "segment-tree-sub", "topicName": "Segment Trees & Lazy Propagation", "marks": 2, "q": "What is a Segment Tree and why is its array representation allocated to size 4n?", "a": "<p>A <strong>Segment Tree</strong> is a binary tree used for efficient range queries (sum, min, max, gcd) and point updates over an array of size <code>n</code> in <code>O(log n)</code> time.</p><div class=\"key-takeaway\"><strong>Why Size 4n:</strong> If <code>n</code> is not a power of 2, the bottom level of the binary tree is partially filled. The smallest power of 2 greater than or equal to <code>n</code> is bounded by <code>2n</code>. In a complete binary tree, the total nodes is <code>2 \u00d7 (2n) - 1 < 4n</code>. Hence, an array of size <code>4n</code> is guaranteed to prevent index out-of-bounds without dynamic allocation.</div>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "segment-tree-sub", "topicName": "Segment Trees & Lazy Propagation", "marks": 4, "q": "Explain the Range Minimum Query (RMQ) algorithm on a Segment Tree and why query time is bounded by O(log n).", "a": "<p><strong>Query Algorithm for Range [L, R]:</strong></p><ol><li>Start at root node representing interval <code>[start, end]</code>.</li><li><strong>Case 1 (Disjoint):</strong> If <code>[start, end]</code> is completely outside <code>[L, R]</code>, return identity (<code>+\u221e</code> for RMQ).</li><li><strong>Case 2 (Complete Overlap):</strong> If <code>[start, end]</code> is completely inside <code>[L, R]</code>, return the cached value <code>tree[node]</code> immediately!</li><li><strong>Case 3 (Partial Overlap):</strong> Midpoint <code>mid = (start + end) / 2</code>. Recurse left child on <code>[start, mid]</code> and right child on <code>[mid+1, end]</code>, returning <code>min(left_ans, right_ans)</code>.</li></ol><p><strong>Why O(log n) Time:</strong> At any depth level of the tree, at most <strong>2 nodes</strong> can have partial overlap with <code>[L, R]</code> (the left boundary <code>L</code> and right boundary <code>R</code>). All nodes between them are completely covered (Case 2, returning in <code>O(1)</code>). With height <code>\u2308log\u2082 n\u2309</code>, at most <code>4 log n</code> nodes are visited.</p>"}, {"moduleId": 4, "moduleName": "Module 4: Strings & Range", "moduleIcon": "\ud83d\udd24", "moduleFile": "Module 4 String & Range Lab.html", "topicId": "segment-tree-sub", "topicName": "Segment Trees & Lazy Propagation", "marks": 6, "q": "Explain Lazy Propagation in Segment Trees: why naive range updates degrade to O(n log n), how lazy tags defer updates, and write the push-down update logic.", "a": "<p><strong>1. The Problem with Naive Range Updates:</strong></p><p>Updating all elements in range <code>[L, R]</code> by calling point update for each element takes <code>(R - L + 1) \u00b7 O(log n) = O(n log n)</code> time, completely eliminating the algorithmic benefit of trees.</p><p><strong>2. The Lazy Propagation Solution:</strong></p><p>When an interval is completely covered by <code>[L, R]</code>, update its cached value and record the pending addition in a <code>lazy[]</code> array tag. <strong>Do not update its children!</strong> Defer updating children until a subsequent query or update actually visits them.</p><p><strong>3. Implementation with Push-Down:</strong></p><pre><code>void pushDown(int node, int start, int end) {\n  if (lazy[node] != 0) {\n    tree[node] += (end - start + 1) * lazy[node]; // For range sum\n    if (start != end) { // Not a leaf: propagate tag to children\n      lazy[2 * node] += lazy[node];\n      lazy[2 * node + 1] += lazy[node];\n    }\n    lazy[node] = 0; // Clear current tag\n  }\n}\n\nvoid updateRange(int node, int start, int end, int L, int R, int val) {\n  pushDown(node, start, end);\n  if (end < L || start > R) return; // Disjoint\n  if (start >= L && end <= R) { // Full cover\n    lazy[node] += val;\n    pushDown(node, start, end);\n    return;\n  }\n  int mid = (start + end) / 2;\n  updateRange(2 * node, start, mid, L, R, val);\n  updateRange(2 * node + 1, mid + 1, end, L, R, val);\n  tree[node] = tree[2 * node] + tree[2 * node + 1];\n}</code></pre><div class=\"key-takeaway\"><strong>Result:</strong> Both range updates and range queries execute in strictly <code>O(log n)</code> time.</div>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "skip-list-sub", "topicName": "Skip Lists & CAS Concurrency", "marks": 2, "q": "What is a Skip List and how does probabilistic promotion achieve O(log n) average search without complex tree rotations?", "a": "<p>A <strong>Skip List</strong> (William Pugh) is a multi-level linked list data structure where higher forward pointer lanes skip over multiple nodes, mimicking binary search over a linked list.</p><div class=\"key-takeaway\"><strong>Probabilistic Promotion:</strong> When inserting a key, its level height is determined by tossing a fair coin (probability <code>p = 0.5</code>). It reaches Level <code>k</code> with probability <code>(1/2)^k</code>. This geometric distribution guarantees expected height <code>O(log n)</code> and average search/insert/delete time of <code>O(log n)</code> without balancing rotations.</div>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "skip-list-sub", "topicName": "Skip Lists & CAS Concurrency", "marks": 4, "q": "Explain the search and insertion algorithms in a Skip List with multi-level pointer updates.", "a": "<p><strong>Search Algorithm:</strong></p><ol><li>Start at top level of head sentinel.</li><li>Traverse horizontally along current level as long as <code>curr->forward[level]->key < target</code>.</li><li>When next key is <code>\u2265 target</code> or <code>null</code>, drop down one level vertically: <code>level = level - 1</code>.</li><li>Repeat until reaching bottom Level 0. If <code>curr->forward[0]->key == target</code>, key is found!</li></ol><p><strong>Insertion Algorithm:</strong></p><ol><li>Perform search while recording a tracking array <code>update[0...MAX_LEVEL]</code> storing the rightmost node visited at each level.</li><li>Generate random level <code>lvl</code> for the new node via coin flips.</li><li>Allocate new node and for each level <code>0 \u2264 i \u2264 lvl</code>, splice node into list: <code>newNode->forward[i] = update[i]->forward[i]; update[i]->forward[i] = newNode;</code>.</li></ol>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "skip-list-sub", "topicName": "Skip Lists & CAS Concurrency", "marks": 6, "q": "Analyze the space/time complexity of Skip Lists, explain lock-free concurrent Skip Lists using CAS, and explain why Redis uses Skip Lists for Sorted Sets (ZSET).", "a": "<p><strong>1. Mathematical Complexity Analysis:</strong></p><ul><li><em>Expected Height:</em> With promotion probability <code>p = 0.5</code>, expected maximum level for <code>n</code> items is <code>log_{1/p} n = log\u2082 n</code>.</li><li><em>Search Cost:</em> Bounded by walking backwards up and left. At each step, we either drop down a level with probability <code>1 - p</code> or step left with probability <code>p</code>. Expected comparisons <code>= (log_{1/p} n) / (1 - p) = 2 log\u2082 n = O(log n)</code>.</li><li><em>Total Memory:</em> Expected pointers per node is <code>\u2211_{i=1}^\u221e p^{i-1} = 1 / (1 - p) = 2</code> pointers. Total auxiliary space is strictly <code>O(n)</code>.</li></ul><p><strong>2. Lock-Free Concurrent Skip Lists:</strong></p><p>Balancing trees (AVL, Red-Black) requires multi-node rotations that touch grandparents and uncles, making lock-free concurrent writes virtually impossible. Skip lists require updating <strong>only local forward pointers</strong>, easily achieved with atomic Compare-And-Swap (CAS) instructions (e.g. Java's <code>ConcurrentSkipListMap</code>) without mutex locking!</p><p><strong>3. Why Redis Uses Skip Lists for ZSET:</strong></p><ul><li>Range scans (<code>ZRANGEBYSCORE</code>) simply traverse Level 0 linked list pointers sequentially with minimal CPU cache overhead.</li><li>Memory-tunable: Setting <code>p = 0.25</code> uses an average of only 1.33 pointers per node, consuming less RAM than a Red-Black tree while retaining <code>O(log n)</code> lookups.</li><li>Much simpler and more resilient code than balanced tree implementations.</li></ul>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "persistent-sub", "topicName": "Persistent Trees & Path Copying", "marks": 2, "q": "What is a Persistent Data Structure? Contrast partial persistence with full persistence.", "a": "<p>A <strong>Persistent Data Structure</strong> preserves all previous historical versions of itself whenever modified, rendering mutations non-destructive.</p><ul><li><strong>Partial Persistence:</strong> All historical versions can be queried, but <strong>only the newest version</strong> can be modified (linear version timeline).</li><li><strong>Full Persistence:</strong> <strong>Any version</strong> can be queried and modified, creating a branching version tree (like Git branches).</li></ul>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "persistent-sub", "topicName": "Persistent Trees & Path Copying", "marks": 4, "q": "Explain the Path Copying technique in persistent binary search trees and illustrate with a structural sharing diagram.", "a": "<p><strong>Path Copying Technique:</strong></p><p>To insert or modify a node in a persistent binary search tree:</p><ol><li>Do NOT clone the entire tree (which would take <code>O(n)</code> time and memory).</li><li>Copy <strong>only the nodes along the direct path</strong> from the root down to the modified node (exactly <code>h = O(log n)</code> nodes).</li><li>All subtrees not on this access path are <strong>shared structurally</strong> between the old and new version roots.</li><li>Create a new version root pointer pointing to the newly copied top node.</li></ol><pre><code>Version 0:     Root_0 (A)               Version 1:    Root_1 (A')\n               /        \\                             /        \\\n             (B)        (C)                         (B)        (C')\n             / \\        / \\                         / \\        / \\\n           (D) (E)    (F) (G)                     (D) (E)    (F) (G') [Modified]\n           [Subtree B shared completely]</code></pre>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "persistent-sub", "topicName": "Persistent Trees & Path Copying", "marks": 6, "q": "Analyze the time and space complexity of Path Copying, explain Persistent Hash Maps (HAMT) in functional languages, and describe Git's DAG architecture.", "a": "<p><strong>1. Complexity Analysis:</strong></p><ul><li><em>Time Complexity:</em> <code>O(log n)</code> to traverse and copy nodes along the path.</li><li><em>Space Allocation:</em> Only <code>h = \u2308log\u2082 n\u2309</code> newly allocated nodes per modification.</li><li><em>Historical Query:</em> Any past version <code>v</code> can be queried in <code>O(log n)</code> time by traversing from <code>Root_v</code>.</li></ul><p><strong>2. Hash Array Mapped Tries (HAMT):</strong></p><p>Standard persistent trees have fan-out 2, requiring <code>log\u2082 n</code> copies per update. Functional languages (Clojure, Scala, Rust, JavaScript Immutable.js) use <strong>HAMT</strong> with fan-out 32:</p><ul><li>The 32-bit hash of key is split into 5-bit chunks (<code>2\u2075 = 32</code>).</li><li>Each trie node has a 32-bit bitmap mask tracking occupied children.</li><li>Depth is at most <code>\u230832 / 5\u2309 = 7</code> levels! A modification copies at most 7 nodes, achieving near <code>O(1)</code> persistent mutations with immense structural sharing.</li></ul><p><strong>3. Git Commit Object Graph:</strong></p><p>Git's commit history is a fully persistent tree where directories are Tree Objects and files are Blobs identified by SHA-1/SHA-256 hashes. Editing one file in a repo copies only the directory tree path up to the commit root, while all untouched gigabytes of project files are structurally shared via immutable hashes.</p>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "kd-tree-sub", "topicName": "KD-Trees & Spatial Splitting", "marks": 2, "q": "What is a KD-Tree and what rule dictates the splitting dimension at each depth level?", "a": "<p>A <strong>KD-Tree</strong> (k-Dimensional Tree) is a space-partitioning binary search tree for organizing points in <code>k</code>-dimensional coordinate space.</p><div class=\"key-takeaway\"><strong>Splitting Rule:</strong> At depth level <code>d</code>, the cutting dimension is chosen cycling through coordinates: <code>axis = d mod k</code>. For 2D points: Level 0 splits on X (vertical line), Level 1 on Y (horizontal line), Level 2 on X, and so on. Points with <code>coord[axis] < node.coord[axis]</code> branch left; others branch right.</div>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "kd-tree-sub", "topicName": "KD-Trees & Spatial Splitting", "marks": 4, "q": "Explain the Nearest Neighbor (1-NN) search algorithm on a 2D KD-Tree and explain the bounding plane pruning condition.", "a": "<p><strong>Nearest Neighbor Algorithm:</strong></p><ol><li>Traverse down the KD-Tree comparing coordinates along the splitting axis to reach the target point's candidate leaf.</li><li>Initialize <code>best_node = leaf</code> and <code>best_dist = distance(query, leaf)</code>.</li><li>Backtrack up the recursion path:<ul><li>If current node is closer than <code>best_dist</code>, update <code>best_node</code> and <code>best_dist</code>.</li><li><strong>Pruning Condition (Hyperplane Intersection):</strong> Calculate the perpendicular distance from query point to the splitting axis plane: <code>plane_dist = |query[axis] - node.coord[axis]|</code>.</li><li>If <code>plane_dist < best_dist</code>: a closer point <em>could</em> lie on the other side of the cutting plane; recursively explore the opposite subtree.</li><li>If <code>plane_dist \u2265 best_dist</code>: <strong>prune the entire opposite subtree</strong> without inspecting any of its nodes!</li></ul></li></ol>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "kd-tree-sub", "topicName": "KD-Trees & Spatial Splitting", "marks": 6, "q": "Explain multi-dimensional range search on KD-Trees, analyze query complexity O(n^{1 - 1/k}), explain the Curse of Dimensionality, and contrast with R-Trees.", "a": "<p><strong>1. Multi-Dimensional Range Query:</strong></p><p>Given a query bounding box <code>[X_{min}, X_{max}] \u00d7 [Y_{min}, Y_{max}]</code>:</p><ul><li>If node's bounding region is completely inside the query box: report all points in its subtree.</li><li>If node's bounding region is completely disjoint: prune subtree.</li><li>If bounding region partially intersects: check point and recurse on both subtrees.</li></ul><p><strong>2. Complexity Derivation:</strong></p><p>For a 2D KD-Tree (<code>k = 2</code>), an orthogonal line intersects at most 2 out of 4 regions at depth 2: <code>T(n) = 2 T(n/4) + O(1)</code>. By the Master Theorem, range search takes <code>O(\u221an) = O(n^{1/2})</code>. For <code>k</code> dimensions, search takes <code>O(n^{1 - 1/k})</code>.</p><p><strong>3. The Curse of Dimensionality:</strong></p><p>As dimension <code>k</code> increases (e.g. <code>k > 20</code> in machine learning embeddings):</p><ul><li>The volume of the hypercube grows exponentially. Almost all points reside near the boundary of the hypersphere.</li><li>The pruning condition <code>plane_dist < best_dist</code> almost always evaluates to true, forcing search to inspect virtually every branch. KD-Tree performance degrades to an exhaustive <code>O(n)</code> linear scan!</li></ul><p><strong>4. Comparison with R-Trees:</strong></p><ul><li><em>KD-Tree:</em> Divides space with infinite planes; ideal for static points in memory.</li><li><em>R-Tree:</em> Groups objects into hierarchical Minimum Bounding Boxes (MBR); handles spatial objects (polygons, line segments, areas) and powers disk-based spatial databases (PostGIS, SQLite R*Tree).</li></ul>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "spatial-concurrent-sub", "topicName": "Quadtrees & Atomic Lock-Free Stack", "marks": 2, "q": "What is a Quadtree and how are its four quadrants (NW, NE, SW, SE) created when point capacity is exceeded?", "a": "<p>A <strong>Quadtree</strong> is a 2D spatial tree where each internal node has exactly 4 children representing spatial quadrants: <strong>NW (North-West)</strong>, <strong>NE (North-East)</strong>, <strong>SW (South-West)</strong>, and <strong>SE (South-East)</strong>.</p><div class=\"key-takeaway\"><strong>Subdivision Rule:</strong> A leaf node holds a capacity of <code>C</code> points (e.g. <code>C = 4</code>). When the <code>(C + 1)</code>-th point is inserted, the node subdivides its 2D bounding rectangle into 4 equal quadrants and distributes its existing points into the corresponding child quadrants.</div>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "spatial-concurrent-sub", "topicName": "Quadtrees & Atomic Lock-Free Stack", "marks": 4, "q": "Explain the Compare-And-Swap (CAS) atomic hardware instruction and how a lock-free Treiber Stack implements concurrent push and pop.", "a": "<p><strong>Compare-And-Swap (CAS) Primitive:</strong></p><p>An atomic CPU instruction: <code>CAS(address, expected_val, new_val)</code></p><p>Atomically checks if <code>*address == expected_val</code>: if true, writes <code>new_val</code> and returns true; otherwise leaves memory unmodified and returns false without locking the CPU bus.</p><p><strong>Treiber Lock-Free Stack:</strong></p><pre><code>void push(Node* node) {\n  do {\n    node->next = top;\n  } while (!atomic_compare_and_swap(&top, node->next, node));\n}\n\nNode* pop() {\n  Node* old_top;\n  do {\n    old_top = top;\n    if (!old_top) return NULL;\n  } while (!atomic_compare_and_swap(&top, old_top, old_top->next));\n  return old_top;\n}</code></pre><p>If multiple threads attempt to push or pop concurrently, one succeeds immediately while others fail CAS and retry in a tight spin loop with zero thread sleep/context switch overhead.</p>"}, {"moduleId": 5, "moduleName": "Module 5: Advanced & Spatial", "moduleIcon": "\ud83c\udf10", "moduleFile": "Module 5 Advanced & Spatial Lab.html", "topicId": "spatial-concurrent-sub", "topicName": "Quadtrees & Atomic Lock-Free Stack", "marks": 6, "q": "Explain the ABA Problem in lock-free concurrent programming, how it corrupts memory in a concurrent stack, and detail mitigation strategies.", "a": "<p><strong>1. The ABA Problem Scenario:</strong></p><ol><li>Thread 1 reads <code>top = A</code> and observes <code>A->next = B</code>.</li><li>Thread 1 is preempted by the OS scheduler.</li><li>Thread 2 runs: pops <code>A</code>, pops <code>B</code>, and then pushes a newly allocated node that happens to reuse memory address <code>A</code> (or pushes <code>A</code> back). Stack state is now: <code>top \u2192 A \u2192 C</code>.</li><li>Thread 1 resumes: executes <code>CAS(&top, A, B)</code>.</li><li>Because <code>top</code> is indeed <code>A</code>, CAS succeeds! <code>top</code> is now pointed to <code>B</code>, which has <strong>already been freed/deallocated</strong>! The stack is severely corrupted.</li></ol><p><strong>2. Mitigation Strategies:</strong></p><ul><li><strong>Tagged / Versioned Pointers (Double-Word CAS):</strong> Pair every pointer with an integer version counter (e.g. <code>struct { Node* ptr; uint64_t tag; }</code>). Every push/pop increments <code>tag</code>. <code>CAS64 / CMPXCHG16B</code> compares both pointer AND tag: <code>(A, 0) \u2260 (A, 1)</code>, instantly preventing ABA.</li><li><strong>Hazard Pointers:</strong> Reader threads publish addresses they are currently accessing to a thread-local hazard pointer list. Memory deallocation is deferred until no thread holds a hazard pointer to that address.</li><li><strong>Read-Copy-Update (RCU):</strong> Linux kernel synchronization: readers access data lock-free; writers allocate a modified copy and swap pointers. Old memory is reclaimed only after a \"grace period\" where all CPU cores have context-switched.</li></ul><p><strong>3. Quadtrees vs Spatial Hashing in Game Physics:</strong></p><ul><li><em>Quadtrees:</em> Adapts dynamically to non-uniform clusters of game entities; requires tree traversals.</li><li><em>Spatial Hash Grids:</em> Maps 2D coordinates into a 1D hash table in <code>O(1)</code> time; superior when entities are uniformly distributed and moving continuously.</li></ul>"}];
+
+  let currentMod = 'all';
+  let currentMark = 'all';
+  let searchQuery = '';
+  let quizMode = false;
+
+  const listEl = document.getElementById('questions-list');
+  const counterEl = document.getElementById('counter');
+  const searchInput = document.getElementById('search-input');
+  const flashcardToggle = document.getElementById('flashcard-toggle');
+  const flashcardLabel = document.getElementById('flashcard-label');
+
+  function render() {
+    const query = searchQuery.toLowerCase().trim();
+    const filtered = DATA.filter(item => {
+      if (currentMod !== 'all' && String(item.moduleId) !== String(currentMod)) return false;
+      if (currentMark !== 'all' && String(item.marks) !== String(currentMark)) return false;
+      if (query) {
+        const matchQ = item.q.toLowerCase().includes(query);
+        const matchA = item.a.toLowerCase().includes(query);
+        const matchTopic = item.topicName.toLowerCase().includes(query);
+        const matchMod = item.moduleName.toLowerCase().includes(query);
+        if (!matchQ && !matchA && !matchTopic && !matchMod) return false;
+      }
+      return true;
+    });
+
+    counterEl.textContent = 'Showing ' + filtered.length + ' of ' + DATA.length + ' questions';
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<div style="text-align:center;padding:36px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:8px;">No exam questions match your filters. Try clearing your search or filters.</div>';
+      return;
+    }
+
+    listEl.innerHTML = filtered.map((item, idx) => {
+      const markBadgeClass = item.marks === 2 ? 'm2' : (item.marks === 4 ? 'm4' : 'm6');
+
+      return `
+        <details class="exam-card" ${quizMode ? '' : 'open'}>
+          <summary class="exam-summary">
+            <span class="badge-mark ${markBadgeClass}">${item.marks}M</span>
+            <div style="flex:1;">
+              <div class="q-meta">
+                <span>${item.moduleIcon} ${item.moduleName.split(':')[0]}</span>
+                <span>&bull;</span>
+                <span>${item.topicName}</span>
+              </div>
+              <div class="q-title">${item.q}</div>
+            </div>
+          </summary>
+          <div class="exam-body">
+            <div>${item.a}</div>
+            <div class="card-actions">
+              <a href="${item.moduleFile}">
+                <span>Open Lab: ${item.moduleName} &rarr;</span>
+              </a>
+              <button class="btn sm copy-btn" data-idx="${idx}">
+                📋 Copy Answer
+              </button>
+            </div>
+          </div>
+        </details>
+      `;
+    }).join('');
+
+    // Wire copy buttons
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = btn.getAttribute('data-idx');
+        const it = filtered[idx];
+        if (it) {
+          const temp = document.createElement('div');
+          temp.innerHTML = it.a;
+          const plainText = `Q (${it.marks} Marks): ${it.q}\n\nAnswer:\n` + temp.textContent.trim();
+          navigator.clipboard.writeText(plainText).then(() => {
+            btn.textContent = '✅ Copied!';
+            setTimeout(() => { btn.textContent = '📋 Copy Answer'; }, 1800);
+          });
+        }
+      });
+    });
+  }
+
+  // Filter Listeners
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMod = btn.getAttribute('data-mod');
+      render();
+    });
+  });
+
+  document.querySelectorAll('.marks-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.marks-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMark = btn.getAttribute('data-mark');
+      render();
+    });
+  });
+
+  searchInput.addEventListener('input', (e) => {
+    searchQuery = e.target.value;
+    render();
+  });
+
+  flashcardToggle.addEventListener('click', () => {
+    quizMode = !quizMode;
+    flashcardLabel.textContent = quizMode ? 'Show Answers' : 'Hide Answers (Quiz Mode)';
+    render();
+  });
+
+  // Initial render
+  render();
+</script>
+</body>
+</html>

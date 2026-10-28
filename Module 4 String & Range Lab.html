@@ -1,10 +1,11 @@
-<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Module 4 String &amp; Range Lab</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
 /* Layout concept: syllabus header with a progress strip, one tab per topic,
    a graph-paper workbench on the left and the concept notes on the right. */
 :root {
@@ -142,12 +143,12 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .canvas svg { display: block; margin: auto; max-width: 100%; flex: none; }
 
 /* SVG Visuals */
-.t-node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.8; transition: fill 0.2s, stroke 0.2s; }
+.t-node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.8; transition: fill 0.2s, stroke 0.2s; transform-box: fill-box; transform-origin: center; }
 .t-node.end circle { stroke: var(--accent); stroke-width: 3.5; }
-.t-node.visit circle { fill: var(--visit-soft); stroke: var(--visit); }
-.t-node.hit circle { fill: var(--accent-soft); stroke: var(--accent); }
+.t-node.visit circle { fill: var(--visit-soft); stroke: var(--visit); stroke-width: 2.8; animation: pulseRing 0.4s ease-out backwards; }
+.t-node.hit circle { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 3.2; animation: bump 0.4s ease-out backwards; }
 .t-node text.char { font: 600 13px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
-.t-edge { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+.t-edge { stroke: var(--muted); stroke-width: 1.5; fill: none; transition: stroke 0.2s; }
 .t-edge.active { stroke: var(--accent); stroke-width: 2.8; }
 .t-edge-txt { font: 600 11px var(--font-mono); fill: var(--muted); text-anchor: middle; dominant-baseline: central; }
 
@@ -156,17 +157,20 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .sa-table { border-collapse: collapse; width: 100%; font-family: var(--font-mono); font-size: 12.5px; }
 .sa-table th, .sa-table td { border-bottom: 1px solid var(--line); padding: 6px 10px; text-align: left; }
 .sa-table th { font-size: 11px; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
-.sa-table tr.hit td { background: var(--accent-soft); font-weight: 600; }
-.sa-table tr.active td { background: var(--visit-soft); }
+.sa-table tr.hit td { background: var(--accent-soft); font-weight: 600; animation: bump 0.4s ease-out; }
+.sa-table tr.active td { background: var(--visit-soft); animation: pulseRing 0.35s ease-out; }
 .lcp-bar { display: inline-block; height: 7px; background: var(--accent); border-radius: 2px; vertical-align: middle; margin-right: 6px; }
 
 /* Segment Tree Visuals */
-.st-node rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; transition: all 0.2s; rx: 5; }
-.st-node.cover rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5; }
-.st-node.visit rect { fill: var(--visit-soft); stroke: var(--visit); }
+.st-node rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; transition: all 0.2s; rx: 5; transform-box: fill-box; transform-origin: center; }
+.st-node.cover rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.8; animation: bump 0.4s ease-out backwards; }
+.st-node.visit rect { fill: var(--visit-soft); stroke: var(--visit); stroke-width: 2.5; animation: pulseRing 0.4s ease-out backwards; }
 .st-node.lazy rect { stroke: var(--purple); stroke-dasharray: 3 2; }
 .st-val { font: 700 13px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
 .st-range { font: 500 10px var(--font-mono); fill: var(--muted); text-anchor: middle; }
+
+@keyframes pulseRing { 0% { transform: scale(0.92); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+@keyframes bump { 0% { transform: scale(0.95); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
 
 /* step log */
 .log { border-top: 1px solid var(--line); padding-top: 12px; min-height: 120px; }
@@ -229,7 +233,42 @@ td code, .code { font: 500 12.5px var(--font-mono); }
 .panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
 .log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
 .seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
+
+/* Exam & Interview Marks Section (2M, 4M, 6M) */
+.marks-section { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.marks-bar { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; gap: 8px; }
+.marks-title { font: 600 12px var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
+.marks-filters { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; background: var(--surface); }
+.marks-filter-btn { appearance: none; border: none; background: none; padding: 3px 9px; font: 600 11px var(--font-mono); color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.marks-filter-btn + .marks-filter-btn { border-left: 1px solid var(--line); }
+.marks-filter-btn.active { background: var(--accent); color: var(--accent-ink); }
+.marks-list { display: flex; flex-direction: column; }
+.mark-card { padding: 9px 12px; border-top: 1px solid var(--line); }
+.mark-card:first-child { border-top: none; }
+.mark-summary { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; list-style: none; font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.mark-summary::-webkit-details-marker { display: none; }
+.mark-summary::before { content: "▸"; font-family: var(--font-mono); color: var(--accent); display: inline-block; transition: transform 0.15s; font-size: 11px; margin-top: 2px; }
+details[open] > .mark-summary::before { transform: rotate(90deg); }
+.badge-mark { font: 700 10px var(--font-mono); padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0; margin-top: 1px; }
+.badge-mark.m2 { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+.badge-mark.m4 { background: var(--visit-soft); color: var(--visit-ink); border: 1px solid var(--visit); }
+.badge-mark.m6 { background: #ede9fe; color: #4c1d95; border: 1px solid #c084fc; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+}
+:root[data-theme="dark"] .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+.mark-body { margin-top: 8px; padding-left: 18px; font-size: 13px; line-height: 1.6; color: var(--ink); }
+.mark-body p { margin-top: 6px; }
+.mark-body p:first-child { margin-top: 0; }
+.mark-body ul, .mark-body ol { margin: 6px 0; padding-left: 18px; }
+.mark-body li { margin-top: 3px; }
+.mark-body pre { background: var(--surface-2); padding: 8px; border-radius: 4px; overflow-x: auto; margin: 6px 0; font-family: var(--font-mono); font-size: 12px; }
+.mark-body code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 4px; border-radius: 3px; }
+.mark-body .key-takeaway { margin-top: 8px; padding: 6px 10px; background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; font-size: 12px; }
+
 </style>
+</head>
+<body>
 <div class="page">
   <header class="top">
     <div>
@@ -237,6 +276,7 @@ td code, .code { font: 500 12.5px var(--font-mono); }
         <span class="eyebrow">Module 4 of 5</span>
         <a href="Module 3 Graph Lab.html" class="navlink" title="Previous Module: Graphs">&larr; Module 3</a>
         <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="exam-suite.html" class="navlink" title="Master Exam Bank (72 Q&amp;As)">📝 Exam Bank</a>
         <a href="Module 5 Advanced & Spatial Lab.html" class="navlink next" title="Next Module: Advanced & Spatial">Next: Module 5 (Advanced &amp; Spatial) &rarr;</a>
       </div>
       <h1>Tries, Suffix Arrays, String Indexing, Segment Trees</h1>
@@ -276,6 +316,7 @@ td code, .code { font: 500 12.5px var(--font-mono); }
     <div class="stepper-actions">
       <a href="Module 3 Graph Lab.html" class="btn sm">&larr; Prev: Module 3 (Graphs)</a>
       <a href="index.html" class="btn sm">🏠 Course Hub</a>
+      <a href="exam-suite.html" class="btn sm">📝 Exam Bank</a>
       <a href="Module 5 Advanced & Spatial Lab.html" class="btn primary" style="font-weight:600;">Next: Module 5 (Advanced &amp; Spatial) &rarr;</a>
     </div>
   </footer>
@@ -291,8 +332,10 @@ function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&
 /* ---------------------------------------------------------------------
    1. Standard & Compressed Trie Implementation
    --------------------------------------------------------------------- */
+var _trieNodeIdSeq = 0;
 class TrieNode {
   constructor(char, isEnd) {
+    this.id = ++_trieNodeIdSeq;
     this.char = char || '';
     this.isEnd = !!isEnd;
     this.children = {}; // char -> TrieNode
@@ -306,8 +349,9 @@ class TrieModel {
   }
   insert(word) {
     word = word.toLowerCase().trim();
-    if (!word) return { steps: ['Empty word ignored.'], status: 'miss', word: word };
+    if (!word) return { steps: ['Empty word ignored.'], status: 'miss', word: word, path: [] };
     var steps = [];
+    var path = [this.root.id];
     var cur = this.root;
     steps.push('Begin insertion of "' + word + '" at Root.');
 
@@ -320,17 +364,19 @@ class TrieModel {
         steps.push('• Char \'' + ch + '\' already exists: reuse edge.');
       }
       cur = cur.children[ch];
+      path.push(cur.id);
     }
     var wasEnd = cur.isEnd;
     cur.isEnd = true;
     if (this.words.indexOf(word) === -1) this.words.push(word);
 
     steps.push(wasEnd ? 'Word "' + word + '" already existed in Trie.' : 'Mark final node \'' + word[word.length - 1] + '\' as isEndOfWord = true.');
-    return { steps: steps, status: wasEnd ? 'dup' : 'new', word: word };
+    return { steps: steps, status: wasEnd ? 'dup' : 'new', word: word, path: path, targetId: cur.id };
   }
   search(word) {
     word = word.toLowerCase().trim();
     var steps = [];
+    var path = [this.root.id];
     var cur = this.root;
     steps.push('Search for exact word "' + word + '".');
 
@@ -338,21 +384,23 @@ class TrieModel {
       var ch = word[i];
       if (!cur.children[ch]) {
         steps.push('• Char \'' + ch + '\' absent: search terminates at depth ' + i + '. Word NOT found.');
-        return { steps: steps, status: 'miss', word: word, matchLength: i };
+        return { steps: steps, status: 'miss', word: word, matchLength: i, path: path, targetId: null };
       }
       steps.push('• Follow child \'' + ch + '\'.');
       cur = cur.children[ch];
+      path.push(cur.id);
     }
     if (cur.isEnd) {
       steps.push('Reached final node and isEndOfWord = true: exact word "' + word + '" FOUND (O(m)).');
-      return { steps: steps, status: 'hit', word: word, matchLength: word.length };
+      return { steps: steps, status: 'hit', word: word, matchLength: word.length, path: path, targetId: cur.id };
     }
     steps.push('Prefix exists in Trie, but isEndOfWord = false. Exact word "' + word + '" NOT in dictionary.');
-    return { steps: steps, status: 'miss', word: word, matchLength: word.length };
+    return { steps: steps, status: 'miss', word: word, matchLength: word.length, path: path, targetId: cur.id };
   }
   startsWith(prefix) {
     prefix = prefix.toLowerCase().trim();
     var steps = [];
+    var path = [this.root.id];
     var cur = this.root;
     steps.push('Query prefix startsWith("' + prefix + '").');
 
@@ -360,19 +408,20 @@ class TrieModel {
       var ch = prefix[i];
       if (!cur.children[ch]) {
         steps.push('• Char \'' + ch + '\' missing: no words start with "' + prefix + '".');
-        return { steps: steps, status: 'miss', word: prefix };
+        return { steps: steps, status: 'miss', word: prefix, path: path, targetId: null };
       }
       cur = cur.children[ch];
+      path.push(cur.id);
     }
     // Collect autocompletions
     var results = [];
-    function dfsCollect(node, path) {
-      if (node.isEnd) results.push(path);
-      for (var k in node.children) dfsCollect(node.children[k], path + k);
+    function dfsCollect(node, pathStr) {
+      if (node.isEnd) results.push(pathStr);
+      for (var k in node.children) dfsCollect(node.children[k], pathStr + k);
     }
     dfsCollect(cur, prefix);
     steps.push('Prefix found! Autocomplete suggestions: [' + results.slice(0, 5).join(', ') + (results.length > 5 ? '...' : '') + '].');
-    return { steps: steps, status: 'hit', word: prefix, suggestions: results };
+    return { steps: steps, status: 'hit', word: prefix, suggestions: results, path: path, targetId: cur.id };
   }
 }
 
@@ -536,13 +585,13 @@ function renderTrieSVG(trie, res) {
 
   var nodes = [];
   var edges = [];
-  var idCounter = 0;
+  var path = (res && res.path) ? res.path : [];
+  var targetId = res ? res.targetId : null;
 
   function layout(node, depth, minX, maxX) {
-    var myId = idCounter++;
     var x = (minX + maxX) / 2;
     var y = 35 + depth * 55;
-    nodes.push({ id: myId, char: node.char || '●', isEnd: node.isEnd, x: x, y: y });
+    nodes.push({ id: node.id, char: node.char || '●', isEnd: node.isEnd, x: x, y: y });
 
     var keys = Object.keys(node.children);
     var step = (maxX - minX) / (keys.length || 1);
@@ -550,8 +599,19 @@ function renderTrieSVG(trie, res) {
       var child = node.children[keys[i]];
       var childX1 = minX + i * step;
       var childX2 = childX1 + step;
-      var childId = idCounter;
-      edges.push({ from: myId, to: childId, x1: x, y1: y, x2: (childX1 + childX2) / 2, y2: 35 + (depth + 1) * 55, char: keys[i] });
+      var childMidX = (childX1 + childX2) / 2;
+      var childY = 35 + (depth + 1) * 55;
+
+      var fromIdx = path.indexOf(node.id);
+      var toIdx = path.indexOf(child.id);
+      var isPathEdge = (fromIdx !== -1 && toIdx !== -1 && toIdx === fromIdx + 1);
+
+      edges.push({
+        x1: x, y1: y, x2: childMidX, y2: childY,
+        char: keys[i],
+        active: isPathEdge,
+        step: fromIdx
+      });
       layout(child, depth + 1, childX1, childX2);
     }
   }
@@ -560,7 +620,9 @@ function renderTrieSVG(trie, res) {
 
   // Draw Edges
   edges.forEach(function (e) {
-    svg += '<line class="t-edge" x1="' + e.x1 + '" y1="' + e.y1 + '" x2="' + e.x2 + '" y2="' + e.y2 + '" />';
+    var cls = 't-edge' + (e.active ? ' active' : '');
+    var edgeStyle = (e.active && motionOn) ? ' style="animation: bump 0.35s ease-out ' + (e.step * 120) + 'ms both;"' : '';
+    svg += '<line class="' + cls + '" x1="' + e.x1 + '" y1="' + e.y1 + '" x2="' + e.x2 + '" y2="' + e.y2 + '"' + edgeStyle + ' />';
     var mx = (e.x1 + e.x2) / 2 - 8;
     var my = (e.y1 + e.y2) / 2;
     svg += '<text class="t-edge-txt" x="' + mx + '" y="' + my + '">' + e.char + '</text>';
@@ -568,9 +630,20 @@ function renderTrieSVG(trie, res) {
 
   // Draw Nodes
   nodes.forEach(function (n) {
-    var isHit = res && res.status === 'hit' && n.isEnd;
-    var cls = 't-node' + (n.isEnd ? ' end' : '') + (isHit ? ' hit' : '');
-    svg += '<g class="' + cls + '" transform="translate(' + n.x + ',' + n.y + ')">' +
+    var pIdx = path.indexOf(n.id);
+    var isVisited = pIdx !== -1;
+    var isTarget = n.id === targetId;
+    var cls = 't-node' + (n.isEnd ? ' end' : '');
+    if (isTarget) {
+      cls += (res && res.status === 'hit' ? ' hit' : ' visit');
+    } else if (isVisited && n.id !== trie.root.id) {
+      cls += ' visit';
+    }
+    var animStyle = '';
+    if (isVisited && motionOn) {
+      animStyle = ' style="animation: bump 0.4s ease-out ' + (pIdx * 120) + 'ms both;"';
+    }
+    svg += '<g class="' + cls + '" transform="translate(' + n.x + ',' + n.y + ')"' + animStyle + '>' +
       '<circle r="15" />' +
       '<text class="char" y="1">' + n.char + '</text>' +
       '</g>';
@@ -615,9 +688,17 @@ function renderSegmentTreeSVG(st, meta) {
 
   // Draw Nodes
   nodeElements.forEach(function (n) {
-    var isVis = visited.some(function (v) { return v.node === n.node; });
+    var vIdx = -1;
+    for (var vi = 0; vi < visited.length; vi++) {
+      if (visited[vi].node === n.node) { vIdx = vi; break; }
+    }
+    var isVis = vIdx !== -1;
     var cls = 'st-node' + (isVis ? ' cover' : '');
-    svg += '<g class="' + cls + '" transform="translate(' + (n.x - 22) + ',' + (n.y - 18) + ')">' +
+    var animStyle = '';
+    if (isVis && motionOn) {
+      animStyle = ' style="animation: bump 0.38s ease-out ' + (vIdx * 110) + 'ms both;"';
+    }
+    svg += '<g class="' + cls + '" transform="translate(' + (n.x - 22) + ',' + (n.y - 18) + ')"' + animStyle + '>' +
       '<rect width="44" height="36" />' +
       '<text class="st-val" x="22" y="15">' + n.val + '</text>' +
       '<text class="st-range" x="22" y="28">[' + n.l + ',' + n.r + ']</text>' +
@@ -692,7 +773,8 @@ var TOPICS = [
           'Ternary Search Tree (TST): Replaces 26 pointers per node with 3 pointers (less, equal, greater), combining BST memory efficiency with Trie prefix speed.'
         ],
         extra: TRIE_TYPES_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "What is a Trie (Prefix Tree) and what is the time complexity of searching a key of length m?", "a": "<p>A <strong>Trie</strong> is an ordered tree data structure used to store a dynamic associative array of strings where keys share common prefixes. Each node represents a prefix, with edges labeled by characters.</p><div class=\"key-takeaway\"><strong>Time Complexity:</strong> Search, insertion, and deletion execute in <code>O(m)</code> time, where <code>m</code> is the length of the query string, <strong>completely independent of the total number of keys n stored in the trie</strong>.</div>"}, {"marks": 4, "q": "Compare Standard Tries, Compressed Radix Trees (Patricia Tries), and Ternary Search Trees (TST) in terms of structure and memory usage.", "a": "<table style=\"width:100%;font-size:12px;\"><thead><tr><th>Property</th><th>Standard Trie</th><th>Compressed Radix Tree</th><th>Ternary Search Tree (TST)</th></tr></thead><tbody><tr><td>Edge Representation</td><td>Single character per edge</td><td>Edge labels contain full substrings</td><td>Characters stored inside nodes</td></tr><tr><td>Child Pointers</td><td>Fixed array of size <code>\u03a3</code> (e.g. 26)</td><td>Variable list of outgoing edge chunks</td><td>Exactly 3 pointers (<code>low</code>, <code>equal</code>, <code>high</code>)</td></tr><tr><td>Single-Child Chains</td><td>Retained (wastes memory)</td><td>Compacted into a single edge</td><td>Retained as <code>equal</code> child chain</td></tr><tr><td>Memory Efficiency</td><td>Poor (many null pointers)</td><td>High (minimal nodes allocated)</td><td>Very High (BST economy with Trie speed)</td></tr><tr><td>Primary Application</td><td>Dictionary lookups</td><td>IP routing CIDR tables, IP lookup</td><td>In-memory autocomplete engines</td></tr></tbody></table>"}, {"marks": 6, "q": "Explain the design and implementation of an Auto-Complete and Prefix Matching engine using a Trie, and evaluate memory optimization techniques.", "a": "<p><strong>1. Trie Node Structure:</strong></p><pre><code>struct TrieNode {\n  bool isEndOfWord;\n  unordered_map<char, TrieNode*> children;\n  // For autocomplete: store top-k suggested words directly at node\n  vector<string> topSuggestions;\n};</code></pre><p><strong>2. Autocomplete Query Workflow:</strong></p><ol><li>Given query prefix <code>P = c\u2081c\u2082...c_m</code>: traverse the trie following characters of <code>P</code> from root.</li><li>If any character edge is missing: return empty list (no words match prefix).</li><li>Once target node <code>N_P</code> is reached: run a DFS from <code>N_P</code> to collect all descendants marked <code>isEndOfWord == true</code>.</li><li><em>Optimization:</em> Precompute and cache the top-5 highest-ranking completions directly inside <code>N_P->topSuggestions</code> during insertion. Autocomplete query response drops from <code>O(m + Subtree_Size)</code> to instant <code>O(m)</code>!</li></ol><p><strong>3. Memory Optimizations for Massive Dictionaries:</strong></p><ul><li><strong>Fixed Array vs Hash Map:</strong> A fixed array <code>TrieNode* child[26]</code> takes <code>26 \u00d7 8 = 208</code> bytes per node, where >80% of pointers are typically <code>null</code>. Replacing with an <code>unordered_map</code> or sorted flat vector saves up to 70% RAM.</li><li><strong>Patricia / Radix Compression:</strong> Compressing non-branching node chains (e.g., <code>t -> e -> s -> t</code> into single edge <code>\"test\"</code>) eliminates up to 60% of all tree nodes.</li><li><strong>Double-Array Trie (DAT):</strong> Flattens the entire trie into two integer arrays (<code>BASE</code> and <code>CHECK</code>), providing <code>O(1)</code> child access with zero pointer overhead.</li></ul>"}],
+          tries: [
           { label: 'Insert "cat", "car", "card"', reset: true, act: 'insert-sample' },
           { label: 'Search "car" (Hit)', reset: false, act: 'search-car' },
           { label: 'Prefix startsWith("ca")', reset: false, act: 'prefix-ca' }
@@ -714,7 +796,8 @@ var TOPICS = [
           'Longest Repeated Substring: Equal to the maximum value in the LCP array.'
         ],
         extra: SA_LCP_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "Define a Suffix Array and Longest Common Prefix (LCP) Array for a string S.", "a": "<p><strong>Suffix Array (SA):</strong> An integer array of length <code>n</code> containing the starting indices of all suffixes of string <code>S$</code> sorted in lexicographical order.</p><p><strong>LCP Array:</strong> An array of length <code>n</code> where <code>LCP[i]</code> stores the length of the Longest Common Prefix between consecutive sorted suffixes: <code>LCP[i] = length(lcp(Suffix(SA[i-1]), Suffix(SA[i])))</code>.</p>"}, {"marks": 4, "q": "Explain how substring pattern matching is performed in O(m log n) time using binary search on a Suffix Array.", "a": "<p><strong>Binary Search Pattern Matching:</strong></p><p>Because the Suffix Array stores suffixes in strictly sorted alphabetical order, any occurrence of a pattern <code>P</code> of length <code>m</code> must appear as a prefix of one or more adjacent suffixes in the array.</p><ol><li>Perform binary search for <code>P</code> across the suffix array:<ul><li>Evaluate midpoint <code>mid = (L + R) / 2</code>.</li><li>Compare string <code>P</code> with the prefix of suffix starting at <code>S[SA[mid]...]</code> (takes <code>O(m)</code> string comparison).</li><li>If <code>P < S[SA[mid]...]</code>: search left half (<code>R = mid - 1</code>).</li><li>If <code>P > S[SA[mid]...]</code>: search right half (<code>L = mid + 1</code>).</li></ul></li><li>Binary search takes <code>log n</code> iterations, with <code>m</code> comparisons per step: total time = <code>O(m log n)</code>.</li><li>Running two binary searches finds the first and last occurrence bounds <code>[start, end]</code>, returning all <code>k</code> occurrences in <code>O(m log n + k)</code>.</li></ol>"}, {"marks": 6, "q": "Explain Kasai's linear-time O(n) algorithm for constructing the LCP array, prove its height invariant, and show how to find the Longest Repeated Substring.", "a": "<p><strong>1. Kasai's Linear-Time Algorithm (O(n)):</strong></p><p>A naive LCP comparison between adjacent suffixes takes <code>O(n\u00b2)</code>. Kasai observed that if suffixes are processed in <strong>original text order</strong> (suffix at index 0, then 1, 2, ...), the common prefix length decreases by at most 1 in the next step!</p><pre><code>vector<int> buildLCP(string s, vector<int>& sa) {\n  int n = s.length(), h = 0;\n  vector<int> rank(n, 0), lcp(n, 0);\n  for (int i = 0; i < n; i++) rank[sa[i]] = i;\n  for (int i = 0; i < n; i++) {\n    if (rank[i] > 0) {\n      int j = sa[rank[i] - 1];\n      while (i + h < n && j + h < n && s[i + h] == s[j + h]) h++;\n      lcp[rank[i]] = h;\n      if (h > 0) h--; // Crucial invariant!\n    }\n  }\n  return lcp;\n}</code></pre><p><strong>2. Proof of O(n) Time:</strong></p><p>At each step, <code>h</code> decreases by at most 1 (<code>h--</code>). Since <code>h</code> can never exceed <code>n</code>, the inner while loop can increment <code>h</code> at most <code>2n</code> times across the entire algorithm. Hence, Kasai's algorithm is strictly <code>O(n)</code>.</p><p><strong>3. Longest Repeated Substring:</strong></p><p>The longest substring that appears at least twice in string <code>S</code> corresponds exactly to the maximum value in the LCP array: <code>max_{1 \u2264 i < n} LCP[i]</code>. The substring is <code>S[SA[k] : SA[k] + max_len]</code> where <code>k = argmax LCP[i]</code>.</p>"}],
+          tries: [
           { label: 'Build SA for "banana$"', reset: true, text: 'banana$' },
           { label: 'Search "ana" in Suffix Array', reset: false, pat: 'ana' },
           { label: 'Build SA for "mississippi$"', reset: true, text: 'mississippi$' }
@@ -736,7 +819,8 @@ var TOPICS = [
           'Burrows-Wheeler Transform (BWT): Reversible permutation grouping identical characters together; powers the FM-Index in genomic sequencing.'
         ],
         extra: AC_KMP_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "What is the KMP prefix function (\u03c0-table) and how does it prevent backtracking over the target text?", "a": "<p>The <strong>KMP \u03c0-table</strong> (Prefix Function) defines for each pattern prefix <code>P[0...i]</code> the length of the longest proper prefix that is also a suffix: <code>\u03c0[i] = max{k : k < i+1 and P[0...k-1] == P[i-k+1...i]}</code>.</p><div class=\"key-takeaway\"><strong>No Backtracking:</strong> When a mismatch occurs between pattern character <code>P[j]</code> and text character <code>T[i]</code>, the text pointer <code>i</code> never moves backwards. Instead, the pattern shifts forward by setting <code>j = \u03c0[j - 1]</code> in <code>O(1)</code> time, guaranteeing overall <code>O(n + m)</code> matching time.</div>"}, {"marks": 4, "q": "Trace the construction of the KMP \u03c0-table for the pattern \"ababcaba\" and explain the mismatch shift rule.", "a": "<p><strong>Pattern:</strong> <code>P = \"ababcaba\"</code> (length 8)</p><table style=\"width:100%;font-size:12px;\"><thead><tr><th>Index i</th><th>Substr P[0...i]</th><th>Longest Prefix = Suffix</th><th>\u03c0[i]</th></tr></thead><tbody><tr><td>0</td><td>\"a\"</td><td>none</td><td>0</td></tr><tr><td>1</td><td>\"ab\"</td><td>none</td><td>0</td></tr><tr><td>2</td><td>\"aba\"</td><td>\"a\"</td><td>1</td></tr><tr><td>3</td><td>\"abab\"</td><td>\"ab\"</td><td>2</td></tr><tr><td>4</td><td>\"ababc\"</td><td>none</td><td>0</td></tr><tr><td>5</td><td>\"ababca\"</td><td>\"a\"</td><td>1</td></tr><tr><td>6</td><td>\"ababcab\"</td><td>\"ab\"</td><td>2</td></tr><tr><td>7</td><td>\"ababcaba\"</td><td>\"aba\"</td><td>3</td></tr></tbody></table><p><strong>Mismatch Shift Rule:</strong> If characters match up to index <code>j = 4</code> (matched <code>\"abab\"</code>) and mismatch on the next character, instead of restarting at index 0, KMP consults <code>\u03c0[3] = 2</code> and continues matching against <code>P[2]</code>, preserving the already-matched prefix <code>\"ab\"</code> without touching previous text characters.</p>"}, {"marks": 6, "q": "Explain the Aho-Corasick multi-pattern matching automaton: Trie construction, Failure Links, Output Dictionary Links, and simultaneous text scanning.", "a": "<p><strong>1. Problem Definition:</strong></p><p>Given text of length <code>n</code> and a dictionary of <code>k</code> patterns <code>{P\u2081, P\u2082, ..., P_k}</code> of total length <code>m</code>. Naive scanning takes <code>O(k \u00b7 n)</code>. Aho-Corasick matches <strong>all k patterns simultaneously</strong> in <code>O(n + m + z)</code> time, where <code>z</code> is the number of pattern occurrences.</p><p><strong>2. Three Construction Phases:</strong></p><ol><li><strong>Trie Construction:</strong> Insert all <code>k</code> dictionary patterns into a standard Trie. Nodes where patterns end are tagged with their pattern IDs.</li><li><strong>Failure Links (Computed via BFS):</strong> Similar to KMP, a failure link from node <code>u</code> points to node <code>v</code> representing the longest proper suffix of the string ending at <code>u</code> that exists in the trie.<ul><li>Root's children have failure links pointing to root.</li><li>For node <code>u</code> with child <code>c</code> via character <code>a</code>: walk failure links from <code>u</code> until finding an edge labeled <code>a</code>. That target is <code>fail(c)</code>.</li></ul></li><li><strong>Dictionary Output Links:</strong> Links each node to the nearest node reachable via failure links that represents an authentic dictionary pattern, allowing multiple matches ending at the same character to be reported in <code>O(1)</code>.</li></ol><p><strong>3. Scanning the Text:</strong></p><p>Feed text characters sequentially into the automaton. Follow Trie edges on match; follow failure links on mismatch. At each state, follow output links to enumerate all matching dictionary patterns.</p><div class=\"key-takeaway\"><strong>Production Systems:</strong> Used in Network Intrusion Detection Systems (Snort, Suricata) for multi-rule packet inspection and Antivirus engines (ClamAV) for virus signature scanning.</div>"}],
+          tries: [
           { label: 'Compute KMP &pi; for "ababcaba"', reset: true, act: 'kmp-sample' },
           { label: 'Compute KMP &pi; for "aabaabaaa"', reset: true, act: 'kmp-aa' }
         ]
@@ -757,7 +841,8 @@ var TOPICS = [
           'Lazy Propagation: Defers updating descendent nodes during range additions by caching pending changes, preserving O(log n) range updates.'
         ],
         extra: SEGTREE_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "What is a Segment Tree and why is its array representation allocated to size 4n?", "a": "<p>A <strong>Segment Tree</strong> is a binary tree used for efficient range queries (sum, min, max, gcd) and point updates over an array of size <code>n</code> in <code>O(log n)</code> time.</p><div class=\"key-takeaway\"><strong>Why Size 4n:</strong> If <code>n</code> is not a power of 2, the bottom level of the binary tree is partially filled. The smallest power of 2 greater than or equal to <code>n</code> is bounded by <code>2n</code>. In a complete binary tree, the total nodes is <code>2 \u00d7 (2n) - 1 < 4n</code>. Hence, an array of size <code>4n</code> is guaranteed to prevent index out-of-bounds without dynamic allocation.</div>"}, {"marks": 4, "q": "Explain the Range Minimum Query (RMQ) algorithm on a Segment Tree and why query time is bounded by O(log n).", "a": "<p><strong>Query Algorithm for Range [L, R]:</strong></p><ol><li>Start at root node representing interval <code>[start, end]</code>.</li><li><strong>Case 1 (Disjoint):</strong> If <code>[start, end]</code> is completely outside <code>[L, R]</code>, return identity (<code>+\u221e</code> for RMQ).</li><li><strong>Case 2 (Complete Overlap):</strong> If <code>[start, end]</code> is completely inside <code>[L, R]</code>, return the cached value <code>tree[node]</code> immediately!</li><li><strong>Case 3 (Partial Overlap):</strong> Midpoint <code>mid = (start + end) / 2</code>. Recurse left child on <code>[start, mid]</code> and right child on <code>[mid+1, end]</code>, returning <code>min(left_ans, right_ans)</code>.</li></ol><p><strong>Why O(log n) Time:</strong> At any depth level of the tree, at most <strong>2 nodes</strong> can have partial overlap with <code>[L, R]</code> (the left boundary <code>L</code> and right boundary <code>R</code>). All nodes between them are completely covered (Case 2, returning in <code>O(1)</code>). With height <code>\u2308log\u2082 n\u2309</code>, at most <code>4 log n</code> nodes are visited.</p>"}, {"marks": 6, "q": "Explain Lazy Propagation in Segment Trees: why naive range updates degrade to O(n log n), how lazy tags defer updates, and write the push-down update logic.", "a": "<p><strong>1. The Problem with Naive Range Updates:</strong></p><p>Updating all elements in range <code>[L, R]</code> by calling point update for each element takes <code>(R - L + 1) \u00b7 O(log n) = O(n log n)</code> time, completely eliminating the algorithmic benefit of trees.</p><p><strong>2. The Lazy Propagation Solution:</strong></p><p>When an interval is completely covered by <code>[L, R]</code>, update its cached value and record the pending addition in a <code>lazy[]</code> array tag. <strong>Do not update its children!</strong> Defer updating children until a subsequent query or update actually visits them.</p><p><strong>3. Implementation with Push-Down:</strong></p><pre><code>void pushDown(int node, int start, int end) {\n  if (lazy[node] != 0) {\n    tree[node] += (end - start + 1) * lazy[node]; // For range sum\n    if (start != end) { // Not a leaf: propagate tag to children\n      lazy[2 * node] += lazy[node];\n      lazy[2 * node + 1] += lazy[node];\n    }\n    lazy[node] = 0; // Clear current tag\n  }\n}\n\nvoid updateRange(int node, int start, int end, int L, int R, int val) {\n  pushDown(node, start, end);\n  if (end < L || start > R) return; // Disjoint\n  if (start >= L && end <= R) { // Full cover\n    lazy[node] += val;\n    pushDown(node, start, end);\n    return;\n  }\n  int mid = (start + end) / 2;\n  updateRange(2 * node, start, mid, L, R, val);\n  updateRange(2 * node + 1, mid + 1, end, L, R, val);\n  tree[node] = tree[2 * node] + tree[2 * node + 1];\n}</code></pre><div class=\"key-takeaway\"><strong>Result:</strong> Both range updates and range queries execute in strictly <code>O(log n)</code> time.</div>"}],
+          tries: [
           { label: 'Query Range Sum [1, 3] on [1,3,5,7,9,11]', reset: true, act: 'query-1-3' },
           { label: 'Update A[2] = 10', reset: false, act: 'update-2-10' },
           { label: 'Switch to Range Minimum (RMQ)', reset: true, act: 'switch-rmq' }
@@ -806,7 +891,51 @@ function $$(sel, root) { return Array.prototype.slice.call((root || document).qu
    ===================================================================== */
 var panels = {};
 
-function panelHTML(t) {
+
+  function renderMarksHTML(s) {
+    if (!s.marks || !s.marks.length) return '';
+    var items = s.marks.map(function (m) {
+      var cls = 'm' + m.marks;
+      return '<details class="mark-card ' + cls + '" open>' +
+        '<summary class="mark-summary">' +
+        '<span class="badge-mark ' + cls + '">' + m.marks + ' Marks</span>' +
+        '<span class="mark-q">' + esc(m.q) + '</span>' +
+        '</summary>' +
+        '<div class="mark-body">' + m.a + '</div>' +
+        '</details>';
+    }).join('');
+    return '<div class="marks-section">' +
+      '<div class="marks-bar">' +
+      '<div class="marks-title"><span>📝 Exam &amp; Interview Answers</span></div>' +
+      '<div class="marks-filters">' +
+      '<button class="marks-filter-btn active" data-mark-filter="all">All</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="2">2M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="4">4M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="6">6M</button>' +
+      '</div></div>' +
+      '<div class="marks-list">' + items + '</div>' +
+      '</div>';
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mark-filter]');
+    if (!b) return;
+    var filter = b.getAttribute('data-mark-filter');
+    var sec = b.closest('.marks-section');
+    if (sec) {
+      sec.querySelectorAll('[data-mark-filter]').forEach(function (x) { x.classList.toggle('active', x === b); });
+      sec.querySelectorAll('.mark-card').forEach(function (c) {
+        if (filter === 'all' || c.classList.contains('m' + filter)) {
+          c.style.display = '';
+          if (filter !== 'all') c.open = true;
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+  });
+
+  function panelHTML(t) {
   var id = t.id;
   var extras = '';
 
@@ -855,7 +984,7 @@ function panelHTML(t) {
     }).join('') + '</div>' : '';
     return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
       '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
-      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + renderMarksHTML(s) + '</article>';
   }).join('');
 
   return '<section class="panel" id="panel-' + id + '" role="tabpanel" aria-labelledby="tab-' + id + '" hidden>' +
@@ -964,8 +1093,14 @@ function refreshProgress() {
 /* =====================================================================
    Tabs & Navigation
    ===================================================================== */
+var seqTimer = null;
+function stopSeq() {
+  if (seqTimer) { clearTimeout(seqTimer); seqTimer = null; }
+}
+
 var current = null;
 function showTab(id) {
+  stopSeq();
   var t = TOPICS.filter(function (x) { return x.id === id; })[0] || TOPICS[0];
   current = t.id;
   TOPICS.forEach(function (x) {
@@ -1031,6 +1166,7 @@ function fromHash() {
     // Event Delegation
     el.addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b || !el.contains(b)) return;
+      if (!b.hasAttribute('data-try')) stopSeq();
 
       // Studied Checkbox
       if (b.hasAttribute('data-done')) {
@@ -1168,9 +1304,21 @@ function fromHash() {
         var tr = sub.tries[tryIdx];
 
         if (tr.act === 'insert-sample') {
+          stopSeq();
           p.trie = new TrieModel();
-          ['cat', 'car', 'card'].forEach(function (w) { p.trie.insert(w); });
-          draw(p); hint(p, 'Inserted "cat", "car", and "card". Observe shared "ca" prefix node.');
+          var seqWords = ['cat', 'car', 'card'];
+          var sIdx = 0;
+          function stepIns() {
+            if (sIdx >= seqWords.length) return;
+            var w = seqWords[sIdx++];
+            var res = p.trie.insert(w);
+            draw(p, res);
+            showLog(p, 'Step ' + sIdx + '/' + seqWords.length + ': Insert "' + w + '"', res.status === 'dup' ? 'Duplicate' : 'Inserted', 'hit', res.steps);
+            if (sIdx < seqWords.length) {
+              seqTimer = setTimeout(stepIns, motionOn ? 700 : 0);
+            }
+          }
+          stepIns();
         } else if (tr.act === 'search-car') {
           $('#word-' + t.id, el).value = 'car';
           $('[data-act="trie-search"]', el).click();

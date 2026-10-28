@@ -1,10 +1,11 @@
-<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Module 3 Graph Lab</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
 /* Layout concept: syllabus header with a progress strip, one tab per topic,
    a graph-paper workbench on the left and the concept notes on the right. */
 :root {
@@ -27,6 +28,7 @@
   --purple-ink: #4c1d95;
   --blue: #1d4ed8;
   --blue-soft: #dbeafe;
+  --blue-ink: #1e3a8a;
   --grid: rgba(16, 32, 44, 0.06);
   --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
   --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -38,7 +40,7 @@
     --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
     --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
     --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
-    --blue: #60a5fa; --blue-soft: #172554;
+    --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe;
     --grid: rgba(229, 237, 243, 0.06);
     color-scheme: dark;
   }
@@ -48,7 +50,7 @@
   --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
   --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
   --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
-  --blue: #60a5fa; --blue-soft: #172554;
+  --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe;
   --grid: rgba(229, 237, 243, 0.06);
   color-scheme: dark;
 }
@@ -141,19 +143,23 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .canvas svg { display: block; margin: auto; max-width: 100%; flex: none; }
 
 /* SVG Graph Elements */
-.g-node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 2; transition: fill 0.25s, stroke 0.25s; }
-.g-node.active circle { fill: var(--visit-soft); stroke: var(--visit); stroke-width: 3; }
-.g-node.visited circle, .g-node.settled circle { fill: var(--accent); stroke: var(--accent); }
+.g-node circle { fill: var(--surface); stroke: var(--ink); stroke-width: 2; transition: fill 0.25s, stroke 0.25s; transform-box: fill-box; transform-origin: center; }
+.g-node.active circle { fill: var(--visit-soft); stroke: var(--visit); stroke-width: 3.5; animation: pulseRing 0.4s ease-out; }
+.g-node.visited circle, .g-node.settled circle { fill: var(--accent); stroke: var(--accent); animation: bump 0.4s ease-out; }
 .g-node text.nl { font: 700 14px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
 .g-node.visited text.nl, .g-node.settled text.nl { fill: var(--accent-ink); }
 .g-node text.badge { font: 600 10px var(--font-mono); fill: var(--muted); text-anchor: middle; }
 .g-node.active text.badge { fill: var(--visit-ink); font-weight: 700; }
 .g-edge { stroke: var(--muted); stroke-width: 1.8; fill: none; transition: stroke 0.25s, stroke-width 0.25s; }
-.g-edge.mst { stroke: var(--accent); stroke-width: 3.5; }
-.g-edge.relax { stroke: var(--visit); stroke-width: 3; }
+.g-edge.mst { stroke: var(--accent); stroke-width: 3.5; animation: edgeDraw 0.35s ease-out; }
+.g-edge.relax { stroke: var(--visit); stroke-width: 3; animation: edgeDraw 0.35s ease-out; }
 .g-edge.reject { stroke: var(--bad); stroke-width: 2; stroke-dasharray: 4 3; opacity: 0.6; }
 .edge-weight-bg { fill: var(--surface); stroke: var(--line); stroke-width: 1; rx: 4; }
 .edge-weight-txt { font: 600 11px var(--font-mono); fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+
+@keyframes pulseRing { 0% { transform: scale(0.92); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+@keyframes bump { 0% { transform: scale(0.95); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@keyframes edgeDraw { from { stroke-dasharray: 60; stroke-dashoffset: 60; opacity: 0; } to { stroke-dashoffset: 0; opacity: 1; } }
 
 /* Adjacency Matrix & DSU view styles */
 .aux-view { width: 100%; margin-top: 10px; overflow-x: auto; }
@@ -229,7 +235,42 @@ td code, .code { font: 500 12.5px var(--font-mono); }
 .panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
 .log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
 .seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
+
+/* Exam & Interview Marks Section (2M, 4M, 6M) */
+.marks-section { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.marks-bar { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; gap: 8px; }
+.marks-title { font: 600 12px var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
+.marks-filters { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; background: var(--surface); }
+.marks-filter-btn { appearance: none; border: none; background: none; padding: 3px 9px; font: 600 11px var(--font-mono); color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.marks-filter-btn + .marks-filter-btn { border-left: 1px solid var(--line); }
+.marks-filter-btn.active { background: var(--accent); color: var(--accent-ink); }
+.marks-list { display: flex; flex-direction: column; }
+.mark-card { padding: 9px 12px; border-top: 1px solid var(--line); }
+.mark-card:first-child { border-top: none; }
+.mark-summary { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; list-style: none; font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.mark-summary::-webkit-details-marker { display: none; }
+.mark-summary::before { content: "▸"; font-family: var(--font-mono); color: var(--accent); display: inline-block; transition: transform 0.15s; font-size: 11px; margin-top: 2px; }
+details[open] > .mark-summary::before { transform: rotate(90deg); }
+.badge-mark { font: 700 10px var(--font-mono); padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0; margin-top: 1px; }
+.badge-mark.m2 { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+.badge-mark.m4 { background: var(--visit-soft); color: var(--visit-ink); border: 1px solid var(--visit); }
+.badge-mark.m6 { background: #ede9fe; color: #4c1d95; border: 1px solid #c084fc; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+}
+:root[data-theme="dark"] .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+.mark-body { margin-top: 8px; padding-left: 18px; font-size: 13px; line-height: 1.6; color: var(--ink); }
+.mark-body p { margin-top: 6px; }
+.mark-body p:first-child { margin-top: 0; }
+.mark-body ul, .mark-body ol { margin: 6px 0; padding-left: 18px; }
+.mark-body li { margin-top: 3px; }
+.mark-body pre { background: var(--surface-2); padding: 8px; border-radius: 4px; overflow-x: auto; margin: 6px 0; font-family: var(--font-mono); font-size: 12px; }
+.mark-body code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 4px; border-radius: 3px; }
+.mark-body .key-takeaway { margin-top: 8px; padding: 6px 10px; background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; font-size: 12px; }
+
 </style>
+</head>
+<body>
 <div class="page">
   <header class="top">
     <div>
@@ -237,6 +278,7 @@ td code, .code { font: 500 12.5px var(--font-mono); }
         <span class="eyebrow">Module 3 of 5</span>
         <a href="Module 2 Hashing Lab.html" class="navlink" title="Previous Module: Hashing">&larr; Module 2</a>
         <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="exam-suite.html" class="navlink" title="Master Exam Bank (72 Q&amp;As)">📝 Exam Bank</a>
         <a href="Module 4 String & Range Lab.html" class="navlink next" title="Next Module: String & Range">Next: Module 4 (String &amp; Range) &rarr;</a>
       </div>
       <h1>Graph Representations, BFS &amp; DFS, Kruskal's MST, Dijkstra &amp; Floyd-Warshall</h1>
@@ -277,6 +319,7 @@ td code, .code { font: 500 12.5px var(--font-mono); }
     <div class="stepper-actions">
       <a href="Module 2 Hashing Lab.html" class="btn sm">&larr; Prev: Module 2 (Hashing)</a>
       <a href="index.html" class="btn sm">🏠 Course Hub</a>
+      <a href="exam-suite.html" class="btn sm">📝 Exam Bank</a>
       <a href="Module 4 String & Range Lab.html" class="btn primary" style="font-weight:600;">Next: Module 4 (String &amp; Range) &rarr;</a>
     </div>
   </footer>
@@ -721,7 +764,8 @@ var TOPICS = [
           'Graph Density: Sparse graphs have |E| &approx; O(V); dense graphs approach complete topology with |E| &approx; V(V - 1)/2.'
         ],
         extra: GRAPH_REP_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "State the Handshaking Lemma and define the space complexity difference between Adjacency Matrix and Adjacency List.", "a": "<p><strong>Handshaking Lemma:</strong> In every finite undirected graph, the sum of all vertex degrees equals twice the number of edges: <code>\u2211_{v \u2208 V} deg(v) = 2|E|</code>.</p><p><strong>Space Complexity Difference:</strong></p><ul><li><strong>Adjacency Matrix:</strong> Requires <code>O(V\u00b2)</code> memory regardless of edge count (inefficient for sparse graphs).</li><li><strong>Adjacency List:</strong> Requires <code>O(V + E)</code> memory for directed and <code>O(V + 2E)</code> for undirected graphs (optimal for sparse graphs).</li></ul>"}, {"marks": 4, "q": "Compare Adjacency Matrix and Adjacency List across Space, Edge Existence lookup, Finding Neighbors, and Edge Insertion.", "a": "<table style=\"width:100%;font-size:12px;\"><thead><tr><th>Operation</th><th>Adjacency Matrix (V\u00d7V)</th><th>Adjacency List</th></tr></thead><tbody><tr><td>Memory Space</td><td><code>O(V\u00b2)</code></td><td><code>O(V + E)</code> (Optimal)</td></tr><tr><td>Edge Query <code>(u, v)</code></td><td><code>O(1)</code> (Direct cell lookup)</td><td><code>O(deg(u))</code> (Scan neighbor list)</td></tr><tr><td>Find All Neighbors of <code>u</code></td><td><code>O(V)</code> (Scan row <code>u</code>)</td><td><code>O(deg(u))</code> (Iterate list)</td></tr><tr><td>Add Edge <code>(u, v)</code></td><td><code>O(1)</code></td><td><code>O(1)</code> (Prepend to list)</td></tr><tr><td>Remove Edge <code>(u, v)</code></td><td><code>O(1)</code></td><td><code>O(deg(u))</code></td></tr><tr><td>Ideal Graph Topology</td><td>Dense (<code>E \u2248 V\u00b2</code>)</td><td>Sparse (<code>E \u226a V\u00b2</code>)</td></tr></tbody></table>"}, {"marks": 6, "q": "Explain Compressed Sparse Row (CSR) graph format, hardware cache locality implications, and when Adjacency Matrix outperforms Adjacency List.", "a": "<p><strong>1. Limitations of Standard Adjacency Lists:</strong></p><p>Standard Adjacency Lists use pointers to allocate linked list nodes dynamically across heap memory. Iterating through neighbors of vertex <code>u</code> causes pointer chasing and cache misses, severely stalling modern high-performance CPU/GPU memory pipelines.</p><p><strong>2. Compressed Sparse Row (CSR) Representation:</strong></p><p>CSR packs a sparse graph into two contiguous arrays with zero pointer overhead:</p><ul><li><code>col_idx[]</code>: An array of size <code>|E|</code> storing the target neighbors of all edges contiguously.</li><li><code>row_ptr[]</code>: An array of size <code>|V| + 1</code> where <code>row_ptr[u]</code> stores the starting index of vertex <code>u</code>'s neighbors in <code>col_idx</code>.</li><li><em>Neighbors of u:</em> Given by slice <code>col_idx[row_ptr[u] : row_ptr[u+1]]</code> in <code>O(deg(u))</code> time with 100% contiguous CPU cache prefetching!</li></ul><p><strong>3. When Adjacency Matrix Outperforms Adjacency List:</strong></p><ul><li>Dense graphs where <code>|E| \u2248 V(V-1)/2</code>.</li><li>SIMD / GPU matrix operations (e.g., graph algorithms expressed via linear algebra in GraphBLAS).</li><li>Transitive closure (Warshall's algorithm) using bitwise word parallelism (64 edge queries in 1 CPU cycle).</li></ul>"}],
+          tries: [
           { label: 'Load Complete Mesh (K₄)', reset: true, preset: 'k4' },
           { label: 'Load Directed DAG', reset: true, preset: 'dag' },
           { label: 'Load Cycle Graph (C₆)', reset: true, preset: 'cycle' }
@@ -743,7 +787,8 @@ var TOPICS = [
           'Topological Sort: Linear ordering of vertices in a DAG where every directed edge u &rarr; v has u appearing before v (order by decreasing DFS finish time).'
         ],
         extra: BFS_DFS_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "What data structures power BFS and DFS, and what are their time complexities on an adjacency list?", "a": "<p><strong>Breadth-First Search (BFS):</strong> Uses a <strong>FIFO Queue</strong> (iterative level-order wave).</p><p><strong>Depth-First Search (DFS):</strong> Uses a <strong>LIFO Stack</strong> (or function call recursion).</p><div class=\"key-takeaway\"><strong>Time & Space Complexity:</strong> Both BFS and DFS run in <code>O(V + E)</code> time and consume <code>O(V)</code> auxiliary space to store visited markers and queue/stack state.</div>"}, {"marks": 4, "q": "Explain cycle detection in directed graphs using DFS three-color marking (White, Gray, Black) and classify DFS edge types.", "a": "<p><strong>Three-Color Vertex States:</strong></p><ol><li><strong>WHITE (0):</strong> Vertex is unvisited.</li><li><strong>GRAY (1):</strong> Vertex is currently on the active recursion call stack (discovered, but exploration of its descendants is incomplete).</li><li><strong>BLACK (2):</strong> Vertex and all its reachable descendants have completed exploration.</li></ol><p><strong>Cycle Detection Theorem:</strong> A directed graph contains a cycle if and only if DFS encounters an edge <code>(u, v)</code> where vertex <code>v</code> is currently <strong>GRAY</strong> (a <strong>Back Edge</strong> to an active ancestor).</p><p><strong>Four DFS Edge Classifications:</strong></p><ul><li><em>Tree Edge:</em> Discovers an unvisited WHITE vertex.</li><li><em>Back Edge:</em> Connects to an active GRAY ancestor (indicates cycle).</li><li><em>Forward Edge:</em> Connects to an already explored BLACK descendant.</li><li><em>Cross Edge:</em> Connects to a BLACK vertex in a different subtree/branch.</li></ul>"}, {"marks": 6, "q": "Explain Topological Sort on Directed Acyclic Graphs (DAGs) in full detail: contrast Kahn's In-Degree Algorithm against DFS Post-Order Reversal.", "a": "<p><strong>Definition:</strong> A <strong>Topological Sort</strong> of a DAG is a linear ordering of vertices such that for every directed edge <code>u \u2192 v</code>, vertex <code>u</code> appears before vertex <code>v</code> in the ordering. If the graph contains a directed cycle, no topological ordering exists.</p><p><strong>Method 1: Kahn's Algorithm (BFS In-Degree Queue):</strong></p><ol><li>Calculate in-degree <code>in_deg[v]</code> for all vertices <code>v \u2208 V</code>.</li><li>Enqueue all vertices with <code>in_deg[v] == 0</code> into a FIFO Queue <code>Q</code>.</li><li>While <code>Q</code> is not empty:<ul><li>Dequeue vertex <code>u</code>, append <code>u</code> to topological order list.</li><li>For each outgoing neighbor <code>v</code> of <code>u</code>, decrement <code>in_deg[v]--</code>.</li><li>If <code>in_deg[v] == 0</code>, enqueue <code>v</code>.</li></ul></li><li><em>Cycle Check:</em> If output list contains fewer than <code>|V|</code> vertices, graph contains a cycle!</li></ol><p><strong>Method 2: DFS Finish-Time Algorithm:</strong></p><ol><li>Run DFS on all unvisited vertices.</li><li>When a vertex finishes exploring all descendants (turns BLACK), push it onto a Stack.</li><li>Pop all elements from the stack: the resulting sequence is a valid topological sort (vertices ordered by decreasing DFS finish times).</li></ol><div class=\"key-takeaway\"><strong>Applications:</strong> Build system compilation order (Make, CMake), task workflow dependency resolution (Airflow, Celery), course prerequisite sequencing.</div>"}],
+          tries: [
           { label: 'Run BFS from Vertex A', reset: true, act: 'bfs' },
           { label: 'Run DFS from Vertex A', reset: true, act: 'dfs' },
           { label: 'Run BFS from Vertex C', reset: true, act: 'bfs-c' }
@@ -765,7 +810,8 @@ var TOPICS = [
           'Termination: Exactly V - 1 edges are accepted, producing a tree spanning all vertices.'
         ],
         extra: KRUSKAL_PRIM_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "Define a Minimum Spanning Tree (MST) and state the Cut Property.", "a": "<p>A <strong>Minimum Spanning Tree (MST)</strong> of an undirected, connected, weighted graph <code>G = (V, E)</code> is a spanning subgraph that connects all <code>V</code> vertices using exactly <code>V - 1</code> edges with no cycles, such that the total sum of edge weights is minimized.</p><p><strong>Cut Property:</strong> For any partition (cut) of vertices into sets <code>S</code> and <code>V \\ S</code>, the edge with the strictly minimum weight crossing the cut must belong to the MST.</p>"}, {"marks": 4, "q": "Explain Kruskal's algorithm step-by-step and how Disjoint Set Union (DSU) prevents cycles.", "a": "<p><strong>Kruskal's Algorithm Steps:</strong></p><ol><li>Sort all <code>|E|</code> edges in non-decreasing order of their weight: <code>w(e\u2081) \u2264 w(e\u2082) \u2264 ... \u2264 w(e_E)</code> (takes <code>O(E log E)</code> time).</li><li>Initialize a Disjoint Set Union (DSU) structure where each vertex <code>v \u2208 V</code> is in its own isolated set (<code>MakeSet(v)</code>).</li><li>Initialize <code>mst = []</code> and edge count <code>count = 0</code>.</li><li>For each edge <code>(u, v)</code> in sorted order:<ul><li>Find the set representatives: <code>root_u = Find(u)</code> and <code>root_v = Find(v)</code>.</li><li><strong>Cycle Check:</strong> If <code>root_u == root_v</code>, adding <code>(u, v)</code> would create a cycle; discard edge!</li><li>If <code>root_u \u2260 root_v</code>, accept edge: add <code>(u, v)</code> to <code>mst</code>, call <code>Union(root_u, root_v)</code>, increment <code>count++</code>.</li><li>If <code>count == V - 1</code>, terminate early.</li></ul></li></ol>"}, {"marks": 6, "q": "Write the complete Disjoint Set Union (DSU) with Path Compression and Union by Rank, analyze its amortized complexity, and compare Kruskal vs Prim.", "a": "<p><strong>1. Complete DSU Implementation (C / C++):</strong></p><pre><code>struct DSU {\n  vector<int> parent, rank;\n  DSU(int n) : parent(n), rank(n, 0) {\n    for (int i = 0; i < n; i++) parent[i] = i;\n  }\n  int find(int i) { // Path Compression\n    if (parent[i] == i) return i;\n    return parent[i] = find(parent[i]);\n  }\n  bool unite(int i, int j) { // Union by Rank\n    int root_i = find(i), root_j = find(j);\n    if (root_i == root_j) return false; // Cycle\n    if (rank[root_i] < rank[root_j]) parent[root_i] = root_j;\n    else if (rank[root_i] > rank[root_j]) parent[root_j] = root_i;\n    else { parent[root_j] = root_i; rank[root_i]++; }\n    return true;\n  }\n};</code></pre><p><strong>2. Complexity Analysis (Tarjan's Theorem):</strong></p><p>With both Path Compression and Union by Rank, any sequence of <code>m</code> operations on <code>n</code> elements runs in <code>O(m \u00b7 \u03b1(n))</code> time, where <code>\u03b1(n)</code> is the inverse Ackermann function. Because <code>\u03b1(n) \u2264 4</code> for all universe sizes up to <code>10^{80}</code>, DSU operations run in strictly <strong>amortized O(1)</strong> time!</p><p><strong>3. Kruskal's vs Prim's Algorithm:</strong></p><ul><li><strong>Kruskal's:</strong> <code>O(E log E)</code>. Operates on edges. Outperforms Prim on <strong>sparse graphs</strong> (<code>E \u226a V\u00b2</code>).</li><li><strong>Prim's (with Fibonacci Heap):</strong> <code>O(E + V log V)</code>. Operates on vertices. Vastly superior on <strong>dense graphs</strong> (<code>E \u2248 V\u00b2</code>).</li></ul>"}],
+          tries: [
           { label: 'Step through Kruskal MST', reset: true, act: 'kruskal-step' },
           { label: 'Run Full Kruskal Algorithm', reset: true, act: 'kruskal-all' }
         ]
@@ -786,7 +832,8 @@ var TOPICS = [
           'Negative Cycle Detection: Floyd-Warshall safely handles negative edge weights and flags a negative cycle if any diagonal D[i][i] becomes &lt; 0.'
         ],
         extra: SHORTEST_PATH_TABLE,
-        tries: [
+        marks: [{"marks": 2, "q": "What is edge relaxation in shortest path algorithms, and why does Dijkstra's algorithm fail on graphs with negative edge weights?", "a": "<p><strong>Edge Relaxation:</strong> For directed edge <code>(u, v)</code> with weight <code>w</code>, if <code>dist[u] + w < dist[v]</code>, update <code>dist[v] = dist[u] + w</code>.</p><p><strong>Why Dijkstra Fails on Negative Weights:</strong> Dijkstra relies on a greedy invariant: once a vertex <code>u</code> is extracted from the min-priority queue, its shortest path <code>dist[u]</code> is considered final. A subsequent negative edge could produce a cheaper path to <code>u</code> later, violating this greedy assumption and producing incorrect distances.</p>"}, {"marks": 4, "q": "Explain Dijkstra's Single Source Shortest Path algorithm with a Min-Priority Queue and analyze time complexity.", "a": "<p><strong>Algorithm Steps:</strong></p><ol><li>Set <code>dist[src] = 0</code> and <code>dist[v] = \u221e</code> for all other vertices.</li><li>Insert pair <code>(0, src)</code> into a Min-Priority Queue <code>PQ</code>.</li><li>While <code>PQ</code> is not empty:<ul><li>Extract vertex <code>u</code> with smallest tentative distance <code>d</code>.</li><li>If <code>d > dist[u]</code>, skip (stale entry).</li><li>For each outgoing neighbor <code>v</code> with weight <code>w</code>:<ul><li>If <code>dist[u] + w < dist[v]</code>: set <code>dist[v] = dist[u] + w</code> and insert <code>(dist[v], v)</code> into <code>PQ</code>.</li></ul></li></ul></li></ol><p><strong>Time Complexity Analysis:</strong></p><ul><li>With Binary Heap: Each of <code>V</code> vertices is extracted (<code>V log V</code>) and up to <code>E</code> edges are relaxed (<code>E log V</code>), yielding <code>O((V + E) log V)</code>.</li><li>With Fibonacci Heap: Decrease-Key runs in <code>O(1)</code> amortized time, yielding optimal <code>O(E + V log V)</code>.</li></ul>"}, {"marks": 6, "q": "Explain the Floyd-Warshall All-Pairs Shortest Path dynamic programming recurrence, show how negative cycles are detected, and contrast with running Dijkstra V times.", "a": "<p><strong>1. Floyd-Warshall Dynamic Programming Recurrence:</strong></p><p>Let <code>D^{(k)}[i][j]</code> be the length of the shortest path from vertex <code>i</code> to vertex <code>j</code> using only intermediate vertices from the subset <code>{1, 2, ..., k}</code>.</p><p><code>D^{(k)}[i][j] = min( D^{(k-1)}[i][j], D^{(k-1)}[i][k] + D^{(k-1)}[k][j] )</code></p><p><em>Base Case (k=0):</em> <code>D[i][j] = w(i, j)</code> if edge exists, <code>0</code> if <code>i == j</code>, and <code>\u221e</code> otherwise.</p><p><strong>2. In-Place Triple Loop (O(V\u00b3) Time, O(V\u00b2) Space):</strong></p><pre><code>for (int k = 0; k < V; k++) {\n  for (int i = 0; i < V; i++) {\n    for (int j = 0; j < V; j++) {\n      if (D[i][k] < INF && D[k][j] < INF)\n        D[i][j] = min(D[i][j], D[i][k] + D[k][j]);\n    }\n  }\n}</code></pre><p><strong>3. Negative Cycle Detection:</strong></p><p>After the <code>k</code> loop completes, inspect diagonal entries: if any <code>D[i][i] < 0</code>, vertex <code>i</code> belongs to a <strong>negative-weight cycle</strong> (cost can decrease indefinitely by repeatedly looping through this cycle).</p><p><strong>4. Comparison with Running Dijkstra V Times:</strong></p><ul><li><em>Dijkstra \u00d7 V:</em> Takes <code>O(V(V + E) log V) = O(V\u00b2 log V + V E log V)</code>. On sparse graphs (<code>E \u2248 V</code>), runs in <code>O(V\u00b2 log V)</code>, vastly faster than Floyd-Warshall's <code>O(V\u00b3)</code>! However, Dijkstra <em>cannot</em> handle negative edge weights.</li><li><em>Floyd-Warshall:</em> Handles arbitrary negative edge weights, detects negative cycles, has simple cache-friendly loops, and requires no auxiliary heap data structures.</li></ul>"}],
+          tries: [
           { label: 'Run Dijkstra from Vertex A', reset: true, act: 'dijkstra-a' },
           { label: 'Step Floyd-Warshall (k = A)', reset: true, act: 'floyd-1' },
           { label: 'Run Full Floyd-Warshall APSP', reset: true, act: 'floyd-all' }
@@ -851,7 +898,51 @@ function makeStandardGraph(directed) {
    ===================================================================== */
 var panels = {};
 
-function panelHTML(t) {
+
+  function renderMarksHTML(s) {
+    if (!s.marks || !s.marks.length) return '';
+    var items = s.marks.map(function (m) {
+      var cls = 'm' + m.marks;
+      return '<details class="mark-card ' + cls + '" open>' +
+        '<summary class="mark-summary">' +
+        '<span class="badge-mark ' + cls + '">' + m.marks + ' Marks</span>' +
+        '<span class="mark-q">' + esc(m.q) + '</span>' +
+        '</summary>' +
+        '<div class="mark-body">' + m.a + '</div>' +
+        '</details>';
+    }).join('');
+    return '<div class="marks-section">' +
+      '<div class="marks-bar">' +
+      '<div class="marks-title"><span>📝 Exam &amp; Interview Answers</span></div>' +
+      '<div class="marks-filters">' +
+      '<button class="marks-filter-btn active" data-mark-filter="all">All</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="2">2M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="4">4M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="6">6M</button>' +
+      '</div></div>' +
+      '<div class="marks-list">' + items + '</div>' +
+      '</div>';
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mark-filter]');
+    if (!b) return;
+    var filter = b.getAttribute('data-mark-filter');
+    var sec = b.closest('.marks-section');
+    if (sec) {
+      sec.querySelectorAll('[data-mark-filter]').forEach(function (x) { x.classList.toggle('active', x === b); });
+      sec.querySelectorAll('.mark-card').forEach(function (c) {
+        if (filter === 'all' || c.classList.contains('m' + filter)) {
+          c.style.display = '';
+          if (filter !== 'all') c.open = true;
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+  });
+
+  function panelHTML(t) {
   var id = t.id;
   var extras = '';
   
@@ -896,7 +987,7 @@ function panelHTML(t) {
     }).join('') + '</div>' : '';
     return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
       '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
-      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+      '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + renderMarksHTML(s) + '</article>';
   }).join('');
 
   return '<section class="panel" id="panel-' + id + '" role="tabpanel" aria-labelledby="tab-' + id + '" hidden>' +
@@ -1051,6 +1142,133 @@ function draw(p, meta) {
       p.aux.innerHTML = renderFloydMatrixHTML(p.lastFloyd.D, p.graph.vertices);
     }
   }
+}
+
+var graphTimer = null;
+function stopGraphSeq() {
+  if (graphTimer) { clearTimeout(graphTimer); graphTimer = null; }
+}
+
+function playTraversal(p, res, algo, start) {
+  stopGraphSeq();
+  if (reduce || !motionOn || !res.order || !res.order.length) {
+    var badges = {};
+    p.graph.vertices.forEach(function (v) {
+      badges[v] = algo === 'bfs'
+        ? (res.dist[v] === Infinity ? 'd=∞' : 'd=' + res.dist[v])
+        : (res.dTime[v] ? res.dTime[v] + '/' + res.fTime[v] : '—');
+    });
+    draw(p, { activeNode: start, visitedNodes: res.order, nodeBadges: badges });
+    showLog(p, (algo === 'bfs' ? 'Breadth-First Search from ' : 'Depth-First Search from ') + start, (algo === 'bfs' ? 'BFS Complete' : 'DFS Complete'), (algo === 'bfs' ? 'hit' : 'blue'), res.steps);
+    return;
+  }
+
+  var visited = [];
+  var badges = {};
+  var stepIdx = 0;
+  var order = res.order;
+
+  function step() {
+    if (stepIdx >= order.length) {
+      p.graph.vertices.forEach(function (v) {
+        badges[v] = algo === 'bfs'
+          ? (res.dist[v] === Infinity ? 'd=∞' : 'd=' + res.dist[v])
+          : (res.dTime[v] ? res.dTime[v] + '/' + res.fTime[v] : '—');
+      });
+      draw(p, { activeNode: order[order.length - 1], visitedNodes: order, nodeBadges: badges });
+      showLog(p, (algo === 'bfs' ? 'Breadth-First Search from ' : 'Depth-First Search from ') + start, (algo === 'bfs' ? 'BFS Complete' : 'DFS Complete'), (algo === 'bfs' ? 'hit' : 'blue'), res.steps);
+      return;
+    }
+
+    var cur = order[stepIdx];
+    visited.push(cur);
+    if (algo === 'bfs') {
+      badges[cur] = res.dist[cur] === Infinity ? 'd=∞' : 'd=' + res.dist[cur];
+    } else {
+      badges[cur] = res.dTime[cur] ? res.dTime[cur] + '/' + (res.fTime[cur] || '?') : '—';
+    }
+    draw(p, { activeNode: cur, visitedNodes: visited.slice(), nodeBadges: Object.assign({}, badges) });
+    stepIdx++;
+    graphTimer = setTimeout(step, 380);
+  }
+  step();
+}
+
+function playDijkstra(p, res, src) {
+  stopGraphSeq();
+  if (reduce || !motionOn) {
+    var badges = {};
+    p.graph.vertices.forEach(function (v) { badges[v] = 'd=' + (res.dist[v] === Infinity ? '∞' : res.dist[v]); });
+    draw(p, { activeNode: src, visitedNodes: p.graph.vertices, nodeBadges: badges });
+    showLog(p, 'Dijkstra SSSP from ' + src, 'Shortest Paths Found', 'hit', res.steps);
+    return;
+  }
+
+  var settled = [];
+  var vertOrder = p.graph.vertices.slice().sort(function (a, b) { return res.dist[a] - res.dist[b]; });
+  var badges = {};
+  var sIdx = 0;
+
+  function dStep() {
+    if (sIdx >= vertOrder.length) {
+      p.graph.vertices.forEach(function (v) { badges[v] = 'd=' + (res.dist[v] === Infinity ? '∞' : res.dist[v]); });
+      draw(p, { activeNode: src, visitedNodes: p.graph.vertices, nodeBadges: badges });
+      showLog(p, 'Dijkstra SSSP from ' + src, 'Shortest Paths Found', 'hit', res.steps);
+      return;
+    }
+    var v = vertOrder[sIdx];
+    settled.push(v);
+    badges[v] = 'd=' + (res.dist[v] === Infinity ? '∞' : res.dist[v]);
+    draw(p, { activeNode: v, visitedNodes: settled.slice(), nodeBadges: Object.assign({}, badges) });
+    sIdx++;
+    graphTimer = setTimeout(dStep, 420);
+  }
+  dStep();
+}
+
+function playKruskalAll(p) {
+  stopGraphSeq();
+  var ks = p.kruskalState;
+  if (!ks) return;
+  if (reduce || !motionOn) {
+    var res = runKruskal(p.graph);
+    p.kruskalState = {
+      dsu: new DisjointSet(p.graph.vertices),
+      sortedEdges: res.sortedEdges,
+      curIdx: res.sortedEdges.length - 1,
+      mst: res.mst,
+      rejected: res.rejected,
+      totalWeight: res.totalWeight,
+      steps: res.steps
+    };
+    draw(p, { mstEdges: res.mst, rejectEdges: res.rejected });
+    showLog(p, 'Kruskal MST Complete', 'Weight: ' + res.totalWeight, 'hit', res.steps);
+    return;
+  }
+
+  function kStep() {
+    if (ks.curIdx + 1 >= ks.sortedEdges.length) {
+      showLog(p, 'Kruskal MST Complete', 'Weight: ' + ks.totalWeight, 'hit', ks.steps);
+      return;
+    }
+    ks.curIdx++;
+    var edge = ks.sortedEdges[ks.curIdx];
+    var rU = ks.dsu.find(edge.u);
+    var rV = ks.dsu.find(edge.v);
+    if (rU !== rV) {
+      ks.dsu.union(edge.u, edge.v);
+      ks.mst.push(edge);
+      ks.totalWeight += edge.w;
+      ks.steps.push('Step ' + (ks.curIdx + 1) + ': Edge (' + edge.u + '-' + edge.v + ' wt ' + edge.w + ') connects disjoint sets. ACCEPT into MST!');
+    } else {
+      ks.rejected.push(edge);
+      ks.steps.push('Step ' + (ks.curIdx + 1) + ': Edge (' + edge.u + '-' + edge.v + ' wt ' + edge.w + ') creates a cycle between ' + rU + '. REJECT!');
+    }
+    draw(p, { mstEdges: ks.mst.slice(), rejectEdges: ks.rejected.slice() });
+    showLog(p, 'Kruskal Evaluation Step ' + (ks.curIdx + 1), (rU !== rV ? 'Accepted' : 'Cycle Rejected'), (rU !== rV ? 'hit' : 'miss'), ks.steps);
+    graphTimer = setTimeout(kStep, 380);
+  }
+  kStep();
 }
 
 /* =====================================================================
@@ -1215,28 +1433,18 @@ function fromHash() {
       }
 
       if (b.getAttribute('data-act') === 'run-traversal') {
+        stopGraphSeq();
         var start = $('#start-' + t.id, el).value;
         p.startNode = start;
-        if (p.algo === 'bfs') {
-          var res = runBFS(p.graph, start);
-          p.lastResult = res;
-          var badges = {};
-          p.graph.vertices.forEach(function (v) { badges[v] = res.dist[v] === Infinity ? 'd=∞' : 'd=' + res.dist[v]; });
-          draw(p, { activeNode: start, visitedNodes: res.order, nodeBadges: badges });
-          showLog(p, 'Breadth-First Search from ' + start, 'BFS Complete', 'hit', res.steps);
-        } else {
-          var res = runDFS(p.graph, start);
-          p.lastResult = res;
-          var badges = {};
-          p.graph.vertices.forEach(function (v) { badges[v] = res.dTime[v] ? res.dTime[v] + '/' + res.fTime[v] : '—'; });
-          draw(p, { activeNode: start, visitedNodes: res.order, nodeBadges: badges });
-          showLog(p, 'Depth-First Search from ' + start, 'DFS Complete', 'blue', res.steps);
-        }
+        var res = p.algo === 'bfs' ? runBFS(p.graph, start) : runDFS(p.graph, start);
+        p.lastResult = res;
+        playTraversal(p, res, p.algo, start);
         return;
       }
 
       // Tab 3: Kruskal MST
       if (b.getAttribute('data-act') === 'kruskal-step') {
+        stopGraphSeq();
         var ks = p.kruskalState;
         if (ks.curIdx + 1 >= ks.sortedEdges.length) {
           hint(p, 'All edges evaluated. MST construction is complete.');
@@ -1261,22 +1469,12 @@ function fromHash() {
       }
 
       if (b.getAttribute('data-act') === 'kruskal-all') {
-        var res = runKruskal(p.graph);
-        p.kruskalState = {
-          dsu: new DisjointSet(p.graph.vertices),
-          sortedEdges: res.sortedEdges,
-          curIdx: res.sortedEdges.length - 1,
-          mst: res.mst,
-          rejected: res.rejected,
-          totalWeight: res.totalWeight,
-          steps: res.steps
-        };
-        draw(p, { mstEdges: res.mst, rejectEdges: res.rejected });
-        showLog(p, 'Kruskal MST Complete', 'Weight: ' + res.totalWeight, 'hit', res.steps);
+        playKruskalAll(p);
         return;
       }
 
       if (b.getAttribute('data-act') === 'kruskal-reset') {
+        stopGraphSeq();
         p.kruskalState = {
           dsu: new DisjointSet(p.graph.vertices),
           sortedEdges: p.graph.edges.slice().sort(function (a, b) { return a.w - b.w; }),
@@ -1293,6 +1491,7 @@ function fromHash() {
 
       // Tab 4: Shortest Paths
       if (b.hasAttribute('data-sp')) {
+        stopGraphSeq();
         p.spMode = b.getAttribute('data-sp');
         $$('[data-sp]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
         var stepBtn = $('[data-act="step-floyd"]', el);
@@ -1300,10 +1499,7 @@ function fromHash() {
         if (p.spMode === 'dijkstra') {
           var res = runDijkstra(p.graph, p.sourceNode);
           p.lastDijkstra = res;
-          var badges = {};
-          p.graph.vertices.forEach(function (v) { badges[v] = 'd=' + (res.dist[v] === Infinity ? '∞' : res.dist[v]); });
-          draw(p, { visitedNodes: p.graph.vertices, nodeBadges: badges });
-          showLog(p, 'Dijkstra Shortest Paths from ' + p.sourceNode, 'SSSP Computed', 'hit', res.steps);
+          playDijkstra(p, res, p.sourceNode);
         } else {
           p.floydStep = 0;
           p.lastFloyd = runFloydWarshall(p.graph, 0);
@@ -1314,15 +1510,13 @@ function fromHash() {
       }
 
       if (b.getAttribute('data-act') === 'run-sp') {
+        stopGraphSeq();
         var src = $('#source-' + t.id, el).value;
         p.sourceNode = src;
         if (p.spMode === 'dijkstra') {
           var res = runDijkstra(p.graph, src);
           p.lastDijkstra = res;
-          var badges = {};
-          p.graph.vertices.forEach(function (v) { badges[v] = 'd=' + (res.dist[v] === Infinity ? '∞' : res.dist[v]); });
-          draw(p, { activeNode: src, visitedNodes: p.graph.vertices, nodeBadges: badges });
-          showLog(p, 'Dijkstra SSSP from ' + src, 'Shortest Paths Found', 'hit', res.steps);
+          playDijkstra(p, res, src);
         } else {
           p.floydStep = p.graph.vertices.length;
           p.lastFloyd = runFloydWarshall(p.graph, p.floydStep);

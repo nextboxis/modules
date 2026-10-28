@@ -1,10 +1,11 @@
-<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Module 1 Tree Lab</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
 /* Layout concept: syllabus header with a progress strip, one tab per topic,
    a graph-paper workbench on the left and the concept notes on the right. */
 :root {
@@ -22,6 +23,12 @@
   --visit-ink: #774c06;
   --bad: #b3372a;
   --bad-soft: #f7dcd7;
+  --purple: #6b21a8;
+  --purple-soft: #f3e8ff;
+  --purple-ink: #4c1d95;
+  --blue: #1d4ed8;
+  --blue-soft: #dbeafe;
+  --blue-ink: #1e3a8a;
   --grid: rgba(16, 32, 44, 0.06);
   --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
   --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -32,7 +39,7 @@
     --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
     --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
     --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
-    --bad: #f07a66; --bad-soft: #471f19; --grid: rgba(229, 237, 243, 0.06);
+    --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff; --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe; --grid: rgba(229, 237, 243, 0.06);
     color-scheme: dark;
   }
 }
@@ -40,7 +47,7 @@
   --bg: #0d141a; --surface: #131c24; --surface-2: #1b2732; --ink: #e5edf3; --muted: #93a5b4; --line: #263542;
   --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
   --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
-  --bad: #f07a66; --bad-soft: #471f19; --grid: rgba(229, 237, 243, 0.06);
+  --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff; --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe; --grid: rgba(229, 237, 243, 0.06);
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -95,7 +102,7 @@ h1 { font-size: clamp(24px, 4.4vw, 40px); font-weight: 700; font-stretch: 112%; 
 .tab { appearance: none; background: none; border: 0; border-bottom: 3px solid transparent; border-radius: 0; margin-bottom: -1px; padding: 11px 14px; font: 600 14px var(--font-body); color: var(--muted); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 8px; align-items: center; }
 .tab:hover { color: var(--ink); }
 .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
-.cnt { font: 500 11px var(--font-mono); padding: 1px 7px; border-radius: 10px; background: var(--surface-2); color: var(--muted); }
+.cnt { font: 500 11px var(--font-mono); padding: 1px 7px; border-radius: 10px; background: var(--surface-2); color: var(--muted); transition: background 0.2s, color 0.2s; }
 .cnt.full { background: var(--accent); color: var(--accent-ink); }
 
 /* panel */
@@ -127,8 +134,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .stats { display: flex; flex-wrap: wrap; gap: 4px 18px; font: 500 12px var(--font-mono); color: var(--muted); }
 .stats b { color: var(--ink); font-weight: 600; }
 
-.canvas { min-height: 270px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: flex; }
-.canvas svg { display: block; margin: auto; max-width: none; flex: none; }
+.canvas { min-height: 310px; padding: 14px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.canvas svg { display: block; margin: auto; max-width: 100%; flex: none; }
 .empty { margin: auto; color: var(--muted); font: 500 13px var(--font-mono); text-align: center; padding: 40px 12px; }
 
 /* svg tree styles */
@@ -147,7 +154,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .panel.enter .lede, .panel.enter .bench, .panel.enter .topic { animation: rise 0.42s cubic-bezier(.2,.7,.2,1) both; }
 .panel.enter .bench { animation-delay: 0.05s; }
 .panel.enter .topic { animation-delay: calc(0.1s + var(--i, 0) * 0.07s); }
-.log li { animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 70ms); }
+.log li { padding-left: 4px; overflow-wrap: anywhere; animation: rise 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
 .log .hint, .log .err { animation: rise 0.3s ease-out both; }
 .chip { animation: segpop 0.4s ease-out; }
 .seg.on, .done[aria-pressed="true"] .box { animation: segpop 0.4s ease-out; }
@@ -231,13 +238,49 @@ td code, .code { font: 500 12.5px var(--font-mono); }
 :root[data-motion="off"] * { transition: none !important; animation: none !important; }
 .mnote { max-width: 34ch; font-size: 12px; color: var(--muted); }
 #motion b { font-weight: 600; color: var(--accent); }
+
+
+/* Exam & Interview Marks Section (2M, 4M, 6M) */
+.marks-section { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.marks-bar { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line); flex-wrap: wrap; gap: 8px; }
+.marks-title { font: 600 12px var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
+.marks-filters { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; background: var(--surface); }
+.marks-filter-btn { appearance: none; border: none; background: none; padding: 3px 9px; font: 600 11px var(--font-mono); color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.marks-filter-btn + .marks-filter-btn { border-left: 1px solid var(--line); }
+.marks-filter-btn.active { background: var(--accent); color: var(--accent-ink); }
+.marks-list { display: flex; flex-direction: column; }
+.mark-card { padding: 9px 12px; border-top: 1px solid var(--line); }
+.mark-card:first-child { border-top: none; }
+.mark-summary { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; list-style: none; font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.mark-summary::-webkit-details-marker { display: none; }
+.mark-summary::before { content: "▸"; font-family: var(--font-mono); color: var(--accent); display: inline-block; transition: transform 0.15s; font-size: 11px; margin-top: 2px; }
+details[open] > .mark-summary::before { transform: rotate(90deg); }
+.badge-mark { font: 700 10px var(--font-mono); padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0; margin-top: 1px; }
+.badge-mark.m2 { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+.badge-mark.m4 { background: var(--visit-soft); color: var(--visit-ink); border: 1px solid var(--visit); }
+.badge-mark.m6 { background: #ede9fe; color: #4c1d95; border: 1px solid #c084fc; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+}
+:root[data-theme="dark"] .badge-mark.m6 { background: #2e1065; color: #e9d5ff; border: 1px solid #7e22ce; }
+.mark-body { margin-top: 8px; padding-left: 18px; font-size: 13px; line-height: 1.6; color: var(--ink); }
+.mark-body p { margin-top: 6px; }
+.mark-body p:first-child { margin-top: 0; }
+.mark-body ul, .mark-body ol { margin: 6px 0; padding-left: 18px; }
+.mark-body li { margin-top: 3px; }
+.mark-body pre { background: var(--surface-2); padding: 8px; border-radius: 4px; overflow-x: auto; margin: 6px 0; font-family: var(--font-mono); font-size: 12px; }
+.mark-body code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 4px; border-radius: 3px; }
+.mark-body .key-takeaway { margin-top: 8px; padding: 6px 10px; background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; font-size: 12px; }
 </style>
+</head>
+<body>
 <div class="page">
   <header class="top">
     <div>
       <div class="top-nav">
         <span class="eyebrow">Module 1 of 5</span>
         <a href="index.html" class="navlink" title="Course Hub">🏠 Hub</a>
+        <a href="exam-suite.html" class="navlink" title="Master Exam Bank (72 Q&amp;As)">📝 Exam Bank</a>
         <a href="Module 2 Hashing Lab.html" class="navlink next" title="Next Module: Hashing">Next: Module 2 (Hashing) &rarr;</a>
       </div>
       <h1>Binary Tree, AVL, Splay, B-Tree</h1>
@@ -276,6 +319,7 @@ td code, .code { font: 500 12.5px var(--font-mono); }
     </div>
     <div class="stepper-actions">
       <a href="index.html" class="btn sm">🏠 Course Hub</a>
+      <a href="exam-suite.html" class="btn sm">📝 Exam Bank</a>
       <a href="Module 2 Hashing Lab.html" class="btn primary" style="font-weight:600;">Next: Module 2 (Hashing) &rarr;</a>
     </div>
   </footer>
@@ -1034,14 +1078,17 @@ if (typeof module !== 'undefined') {
         { id: 'bt-ins', title: 'Insertion',
           lead: 'Compare the new key with the root. Go left if it is smaller, right if it is larger, and attach it as a leaf at the first empty slot.',
           points: ['Duplicate keys are rejected.', 'Cost is O(h), where h is the height of the tree.', 'Keys that arrive already sorted make h equal to n, so the tree becomes a linked list.'],
+          marks: [{"marks": 2, "q": "What is a Binary Search Tree (BST) and what rule governs insertion?", "a": "<p>A <strong>Binary Search Tree (BST)</strong> is a node-based binary tree where for every node with key <code>k</code>: all keys in its left subtree are strictly smaller (<code>key &lt; k</code>) and all keys in its right subtree are strictly larger (<code>key &gt; k</code>).</p><p><strong>Insertion Rule:</strong> Compare incoming key with current node: branch left if smaller, branch right if larger. When a <code>null</code> pointer is reached, insert the key as a new leaf node.</p><div class=\"key-takeaway\"><strong>Complexity:</strong> Average Time: <code>O(log n)</code>, Worst Case: <code>O(n)</code> (skewed), Auxiliary Space: <code>O(1)</code> iterative or <code>O(h)</code> recursive.</div>"}, {"marks": 4, "q": "Explain the step-by-step BST insertion algorithm and analyze why worst-case performance degrades to O(n).", "a": "<p><strong>Step-by-Step Algorithm:</strong></p><ol><li>If tree is empty (<code>root == null</code>), allocate new node and designate it as <code>root</code>.</li><li>Otherwise, initialize a traversal pointer <code>curr = root</code> and trailing pointer <code>parent = null</code>.</li><li>While <code>curr != null</code>:<ul><li>If <code>key == curr.key</code>: reject duplicate or increment counter.</li><li>If <code>key &lt; curr.key</code>: set <code>parent = curr</code>, move <code>curr = curr.left</code>.</li><li>If <code>key &gt; curr.key</code>: set <code>parent = curr</code>, move <code>curr = curr.right</code>.</li></ul></li><li>Attach <code>newNode</code> as <code>parent.left</code> (if <code>key &lt; parent.key</code>) or <code>parent.right</code>.</li></ol><p><strong>Worst-Case Degradation to O(n):</strong></p><p>If keys arrive already sorted (e.g., <code>[10, 20, 30, 40, 50]</code>) or reverse-sorted, each node has only one child. The tree degenerates into a linear chain (linked list), causing height <code>h = n</code>. Every lookup and insertion must traverse all <code>n</code> nodes sequentially.</p>"}, {"marks": 6, "q": "Discuss BST insertion in detail: write iterative/recursive implementations, evaluate duplicate handling strategies, and explain how self-balancing trees prevent skewing.", "a": "<p><strong>1. Implementation (Iterative - O(1) Auxiliary Space):</strong></p><pre><code>Node* insert(Node* root, int key) {\n  Node* nn = createNode(key);\n  if (!root) return nn;\n  Node *curr = root, *parent = NULL;\n  while (curr) {\n    parent = curr;\n    if (key == curr->key) { free(nn); return root; } // Duplicate\n    else if (key < curr->key) curr = curr->left;\n    else curr = curr->right;\n  }\n  if (key < parent->key) parent->left = nn;\n  else parent->right = nn;\n  return root;\n}</code></pre><p><strong>2. Duplicate Handling Tradeoffs:</strong></p><ul><li><strong>Rejection:</strong> Strict mathematical set behavior; returns error or false.</li><li><strong>Frequency Count:</strong> Store an integer <code>count</code> inside each node. Preserves minimal tree height and prevents node allocation overhead.</li><li><strong>Subtree Convention:</strong> Place duplicates strictly in left (or right) branch. Increases tree depth unevenly and complicates deletion logic.</li></ul><p><strong>3. Solution to Degeneracy (Self-Balancing Trees):</strong></p><p>Standard BSTs cannot guarantee logarithmic height. Self-balancing trees (AVL, Red-Black) enforce strict height or color invariants. After every insertion, they retrace the path back to the root and perform <code>O(1)</code> pointer rotations (LL, RR, LR, RL) at the lowest unbalanced node, restoring height strictly to <code>O(log n)</code> regardless of input permutation.</p>"}],
           tries: [{ label: 'Insert 45', reset: true, seq: [['insert', 45]] }] },
         { id: 'bt-del', title: 'Deletion',
           lead: 'Three cases, depending on how many children the node has.',
           points: ['Leaf: remove it.', 'One child: replace the node with that child.', 'Two children: copy the inorder successor (the smallest key in the right subtree) into the node, then remove the successor.'],
+          marks: [{"marks": 2, "q": "State the three structural cases encountered when deleting a node from a BST.", "a": "<ol><li><strong>Case 1 (Leaf Node - 0 children):</strong> Simply disconnect the parent's pointer to this node by setting it to <code>null</code> and deallocate memory.</li><li><strong>Case 2 (Single Child - 1 child):</strong> Bypass the node by linking the parent directly to the node's only child.</li><li><strong>Case 3 (Two Children - 2 children):</strong> Find the node's in-order successor (minimum in right subtree) or in-order predecessor, copy its value into the target node, then recursively delete that successor.</li></ol>"}, {"marks": 4, "q": "Explain how to delete a node having two children in a BST with an illustrative example.", "a": "<p><strong>Mechanism for Two-Child Deletion:</strong></p><p>A node with two children cannot be simply spliced out because doing so would orphan two distinct subtrees. Instead, we replace its key with the closest value that preserves BST ordering:</p><ol><li>Locate target node <code>Z</code> to delete.</li><li>Find <code>Z</code>'s <strong>in-order successor</strong> <code>S</code>: the node with the minimum key in <code>Z</code>'s right subtree (traverse left pointers starting from <code>Z.right</code>).</li><li>Copy <code>S.key</code> into <code>Z.key</code>.</li><li>Recursively delete node <code>S</code> from the right subtree. Because <code>S</code> was the minimum, it is guaranteed to have <strong>at most one child</strong> (a right child), reducing this step to Case 1 or Case 2.</li></ol><p><em>Example:</em> Deleting root <code>50</code> from tree with subtrees <code>[30, 40]</code> and <code>[70, 60, 80]</code>. The in-order successor is <code>60</code>. Copy <code>60</code> to root, and delete the leaf node <code>60</code> from right subtree.</p>"}, {"marks": 6, "q": "Write the comprehensive recursive BST deletion algorithm, prove that in-order successor replacement maintains the BST invariant, and analyze its complexity.", "a": "<p><strong>1. Complete Recursive Implementation:</strong></p><pre><code>Node* deleteNode(Node* root, int key) {\n  if (!root) return NULL;\n  if (key < root->key) root->left = deleteNode(root->left, key);\n  else if (key > root->key) root->right = deleteNode(root->right, key);\n  else {\n    // Node found: handle 0 or 1 child\n    if (!root->left) { Node* t = root->right; free(root); return t; }\n    if (!root->right) { Node* t = root->left; free(root); return t; }\n    // 2 children: find inorder successor (min in right subtree)\n    Node* succ = root->right;\n    while (succ->left) succ = succ->left;\n    root->key = succ->key; // Copy key\n    root->right = deleteNode(root->right, succ->key); // Delete successor\n  }\n  return root;\n}</code></pre><p><strong>2. Proof of Invariant Preservation:</strong></p><p>Let node <code>Z</code> have left subtree <code>L</code> and right subtree <code>R</code>. For all <code>x \u2208 L</code>, <code>x &lt; Z.key</code>. For all <code>y \u2208 R</code>, <code>y &gt; Z.key</code>. The in-order successor <code>S = min(R)</code> satisfies: <code>S &lt; y</code> for all other <code>y \u2208 R</code>, and since <code>S \u2208 R</code>, <code>S &gt; x</code> for all <code>x \u2208 L</code>. Thus replacing <code>Z.key</code> with <code>S.key</code> maintains <code>L &lt; S.key &lt; R \\ {S}</code> perfectly.</p><div class=\"key-takeaway\"><strong>Complexity:</strong> Time: <code>O(h)</code> where <code>h</code> is height (<code>O(log n)</code> average, <code>O(n)</code> worst). Auxiliary Space: <code>O(h)</code> due to call stack frames.</div>"}],
           tries: [{ label: 'Delete 20 (leaf)', reset: true, seq: [['delete', 20]] }, { label: 'Delete 30 (two children)', reset: true, seq: [['delete', 30]] }] },
         { id: 'bt-srch', title: 'Searching',
           lead: 'Follow the same left or right comparisons from the root until the key matches or the path ends at an empty link.',
           points: ['O(log n) on a balanced tree, O(n) on a skewed one.', 'An inorder traversal visits the keys in sorted order.'],
+          marks: [{"marks": 2, "q": "Why is BST search O(log n) on average but O(n) in the worst case?", "a": "<p>On a <strong>balanced BST</strong>, each comparison at a node discards roughly half of the remaining subtrees, yielding a logarithmic recurrence <code>T(n) = T(n/2) + O(1) \u21d2 O(log n)</code>.</p><p>However, if keys were inserted in sequential order, the tree degenerates into a single path of length <code>n</code> (height <code>h = n</code>). In this <strong>skewed BST</strong>, search behaves like sequential search over an unindexed linked list, requiring <code>O(n)</code> comparisons in the worst case.</p>"}, {"marks": 4, "q": "Compare BST tree traversal strategies (In-order, Pre-order, Post-order, Level-order) and explain how In-order yields sorted order.", "a": "<p><strong>Traversal Orders:</strong></p><ul><li><strong>In-order (L-Root-R):</strong> Traverses left subtree, visits root, traverses right subtree. Yields keys in monotonically increasing sorted order.</li><li><strong>Pre-order (Root-L-R):</strong> Visits root first. Essential for tree cloning and prefix serialization.</li><li><strong>Post-order (L-R-Root):</strong> Visits children before root. Essential for bottom-up memory deallocation and postfix evaluation.</li><li><strong>Level-order (BFS):</strong> Traverses nodes depth-by-depth using a FIFO Queue.</li></ul><p><strong>Proof for Sorted In-Order:</strong> By definition, all nodes in the left subtree are smaller than root, and all nodes in the right subtree are greater. By induction, traversing <code>L</code> prints all smaller elements in sorted order, then <code>Root</code>, then all larger elements in <code>R</code> in sorted order.</p>"}, {"marks": 6, "q": "Explain iterative BST search, contrast its hardware cache behavior against sorted array binary search, and explain Morris In-Order Traversal (O(1) space).", "a": "<p><strong>1. Iterative Search Implementation:</strong></p><pre><code>Node* search(Node* root, int key) {\n  Node* curr = root;\n  while (curr && curr->key != key) {\n    curr = (key < curr->key) ? curr->left : curr->right;\n  }\n  return curr;\n}</code></pre><p><strong>2. BST vs Sorted Array Cache Locality:</strong></p><ul><li><strong>Sorted Array Binary Search:</strong> Stored in contiguous memory. While binary jumps incur some cache misses, sequential elements benefit from hardware prefetching. However, insertion/deletion takes <code>O(n)</code> time due to shifting elements.</li><li><strong>BST:</strong> Nodes are dynamically allocated on the heap at arbitrary memory addresses. Following child pointers induces random memory lookups (pointer chasing), leading to frequent L1/L2 CPU cache misses despite <code>O(log n)</code> algorithmic complexity.</li></ul><p><strong>3. Morris Traversal (O(1) Auxiliary Space):</strong></p><p>Standard recursion or stack traversal requires <code>O(h)</code> auxiliary memory. Morris Traversal utilizes <em>threaded binary trees</em>: if <code>curr->left</code> exists, it finds the in-order predecessor and temporarily points its right child to <code>curr</code>. On the second visit, it breaks the thread, prints <code>curr</code>, and moves right. Time: <code>O(n)</code>, Space: strictly <code>O(1)</code>.</p>"}],
           tries: [{ label: 'Search 60', reset: true, seq: [['search', 60]] }, { label: 'Search 55 (absent)', reset: true, seq: [['search', 55]] }] }
       ]
     },
@@ -1052,15 +1099,18 @@ if (typeof module !== 'undefined') {
         { id: 'avl-id', title: 'Insertion & Deletion',
           lead: 'Do the normal BST operation, then walk back up the path. At each node update its height and compute the balance factor: height of left subtree minus height of right subtree.',
           points: ['Allowed balance factors are -1, 0 and +1. At +2 or -2 the node is rotated.', 'An insertion needs at most one rotation (single or double).', 'A deletion can need a rotation at several levels on the way up.'],
+          marks: [{"marks": 2, "q": "Define an AVL tree and state the Balance Factor (BF) formula and validity range.", "a": "<p>An <strong>AVL Tree</strong> (Adelson-Velsky and Landis) is a self-balancing binary search tree where the heights of the two child subtrees of any node differ by at most one.</p><p><strong>Balance Factor Formula:</strong> <code>BF(node) = height(left_subtree) - height(right_subtree)</code></p><p><strong>Invariant:</strong> For every node <code>v</code>, <code>BF(v) \u2208 {-1, 0, +1}</code>. If <code>BF(v)</code> becomes <code>+2</code> or <code>-2</code> after an update, rotations must be executed immediately.</p>"}, {"marks": 4, "q": "Why does an AVL insertion require at most one rotation (single or double) while an AVL deletion may trigger up to O(log n) rotations?", "a": "<p><strong>Insertion (At most 1 rotation):</strong></p><p>When an insertion causes an imbalance (<code>BF = \u00b12</code>), executing a rotation at the lowest unbalanced ancestor reduces the height of that entire subtree back to its pre-insertion height. Because the height of this subtree is restored, all higher ancestor balance factors remain unchanged. The rebalancing process halts immediately (<code>O(1)</code> rotations).</p><p><strong>Deletion (Up to O(log n) rotations):</strong></p><p>Deleting a node and rebalancing a subtree can reduce that subtree's overall height by 1. This height decrease can propagate upwards and violate the balance factor of its parent node. In the worst case, rotations must be performed at every level up to the root, requiring <code>O(log n)</code> rotations.</p>"}, {"marks": 6, "q": "Derive the mathematical proof for the maximum height of an AVL tree with n nodes and establish why its lookup is strictly O(log n).", "a": "<p><strong>1. Minimum Nodes for Height h (Fibonacci Relation):</strong></p><p>Let <code>N(h)</code> be the minimum number of nodes in an AVL tree of height <code>h</code>. To minimize nodes while maximizing height, one subtree must have height <code>h - 1</code> and the other <code>h - 2</code>:</p><p><code>N(h) = 1 + N(h - 1) + N(h - 2)</code> with base cases <code>N(0) = 0</code>, <code>N(1) = 1</code>, <code>N(2) = 2</code>, <code>N(3) = 4</code>.</p><p>This matches Fibonacci shifted: <code>N(h) = F_{h+2} - 1</code>, where <code>F_k \u2248 \u03c6^k / \u221a5</code> and golden ratio <code>\u03c6 = (1 + \u221a5)/2 \u2248 1.618</code>.</p><p><strong>2. Height Upper Bound:</strong></p><p><code>n \u2265 N(h) \u2248 (\u03c6^{h+2} / \u221a5) - 1</code></p><p><code>\u03c6^{h+2} \u2264 \u221a5(n + 1) \u21d2 (h + 2) log\u2082 \u03c6 \u2264 log\u2082(\u221a5(n + 1))</code></p><p><code>h \u2264 (1 / log\u2082 1.618) \u00b7 log\u2082 n \u2248 1.4404 log\u2082 n</code></p><div class=\"key-takeaway\"><strong>Conclusion:</strong> An AVL tree with <code>n</code> nodes can never exceed a height of <code>1.44 log\u2082 n</code>. Consequently, search, insert, and delete operations have a strict worst-case time bound of <code>O(log n)</code>, completely eliminating BST skewing.</div>"}],
           tries: [{ label: 'Insert 5, then 3', reset: true, seq: [['insert', 5], ['insert', 3]] }, { label: 'Delete 50, 35, then 40', reset: true, seq: [['delete', 50], ['delete', 35], ['delete', 40]] }] },
         { id: 'avl-rot', title: 'Rotations',
           lead: 'A rotation changes which node sits on top of a small group while keeping the inorder sequence intact. Four imbalance cases exist.',
           extra: ROT_TABLE,
           points: ['Use the rotation buttons above the diagram to trigger each case from an empty tree.'],
+          marks: [{"marks": 2, "q": "List the four AVL tree imbalance rotation cases and specify the corrective rotation for each.", "a": "<ol><li><strong>LL Case (Left-Left):</strong> Inserted into left subtree of left child (<code>BF = +2</code>, child <code>BF \u2265 0</code>) \u2192 <strong>Single Right Rotation</strong>.</li><li><strong>RR Case (Right-Right):</strong> Inserted into right subtree of right child (<code>BF = -2</code>, child <code>BF \u2264 0</code>) \u2192 <strong>Single Left Rotation</strong>.</li><li><strong>LR Case (Left-Right):</strong> Inserted into right subtree of left child (<code>BF = +2</code>, child <code>BF = -1</code>) \u2192 <strong>Double Rotation: Left rotate child, then Right rotate root</strong>.</li><li><strong>RL Case (Right-Left):</strong> Inserted into left subtree of right child (<code>BF = -2</code>, child <code>BF = +1</code>) \u2192 <strong>Double Rotation: Right rotate child, then Left rotate root</strong>.</li></ol>"}, {"marks": 4, "q": "Illustrate Single Right Rotation (LL) and Single Left Rotation (RR) with before-and-after tree diagrams and pointer assignments.", "a": "<p><strong>1. Single Right Rotation (LL Case at Node Z):</strong></p><pre><code>      Z (+2)                 Y (0)\n     / \\                    /   \\\n    Y   T3     ===>        X     Z\n   / \\                    / \\   / \\\n  X   T2                 T0 T1 T2 T3\n / \\\nT0 T1</code></pre><p><em>Pointer logic:</em> <code>Node* Y = Z->left; Z->left = Y->right; Y->right = Z;</code></p><p><strong>2. Single Left Rotation (RR Case at Node Z):</strong></p><pre><code>    Z (-2)                   Y (0)\n   / \\                      /   \\\n  T1  Y        ===>        Z     X\n     / \\                  / \\   / \\\n    T2  X                T1 T2 T3 T4\n       / \\\n      T3 T4</code></pre><p><em>Pointer logic:</em> <code>Node* Y = Z->right; Z->right = Y->left; Y->left = Z;</code></p>"}, {"marks": 6, "q": "Explain the LR (Left-Right) and RL (Right-Left) double rotations in detail: why a single rotation fails, step-by-step subtree re-linking, and balance factor updates.", "a": "<p><strong>Why Single Rotation Fails on LR/RL:</strong></p><p>In an LR imbalance, the offending node is placed in the <em>inner</em> subtree (right subtree of the left child). Performing a single right rotation at <code>Z</code> simply shifts the inner kink to the other side without reducing overall height. A two-step transformation is strictly required.</p><p><strong>LR Double Rotation (Two Steps):</strong></p><ol><li><strong>Step 1 (Left rotate left child Y):</strong> Straightens the bend from Left-Right into a linear Left-Left configuration. Node <code>X</code> (child of <code>Y</code>) moves up to become <code>Z</code>'s left child, and <code>Y</code> becomes <code>X</code>'s left child.</li><li><strong>Step 2 (Right rotate root Z):</strong> Node <code>X</code> rises to become the root of the entire subtree. <code>Y</code> becomes <code>X</code>'s left child, and <code>Z</code> becomes <code>X</code>'s right child.</li></ol><pre><code>     Z (+2)                  Z                     X (0)\n    / \\                     / \\                  /   \\\n   Y (-1) T4   =Step 1=>   X   T4   =Step 2=>   Y     Z\n  / \\                     / \\                  / \\   / \\\n T1  X                   Y  T3                T1 T2 T3 T4\n    / \\                 / \\\n   T2 T3               T1 T2</code></pre><p><strong>Balance Factor Updates for X, Y, and Z:</strong></p><ul><li>If <code>X</code> originally had <code>BF = +1</code> (inserted in <code>T2</code>): after rotation, <code>BF(Y) = 0</code>, <code>BF(Z) = -1</code>, <code>BF(X) = 0</code>.</li><li>If <code>X</code> originally had <code>BF = -1</code> (inserted in <code>T3</code>): after rotation, <code>BF(Y) = +1</code>, <code>BF(Z) = 0</code>, <code>BF(X) = 0</code>.</li><li>If <code>X</code> was the inserted leaf (<code>BF = 0</code>): <code>BF(Y) = 0</code>, <code>BF(Z) = 0</code>, <code>BF(X) = 0</code>.</li></ul>"}],
           tries: [] },
         { id: 'avl-srch', title: 'Searching',
           lead: 'Identical to BST search. An AVL tree\'s height never exceeds about 1.44 log₂(n + 2), so the worst case stays O(log n).',
           points: ['Compare the height reading here with the same keys in a plain BST after sorted input.'],
+          marks: [{"marks": 2, "q": "How does searching in an AVL tree differ from a standard BST?", "a": "<p>The search logic is identical to a standard BST: compare key, move left if smaller, right if larger. However, because AVL height is strictly bounded by <code>1.44 log\u2082 n</code>, AVL search is <strong>guaranteed O(log n) in the worst case</strong>, whereas standard BST search can degenerate to <code>O(n)</code>.</p>"}, {"marks": 4, "q": "Compare AVL Trees and Red-Black Trees in terms of balance strictness, lookup speed, and rotation frequency.", "a": "<table style=\"width:100%;font-size:12px;\"><thead><tr><th>Property</th><th>AVL Tree</th><th>Red-Black Tree</th></tr></thead><tbody><tr><td>Balance Invariant</td><td>Strict: <code>|h_L - h_R| \u2264 1</code></td><td>Relaxed: Longest path \u2264 2 \u00d7 Shortest path</td></tr><tr><td>Maximum Height</td><td><code>\u2248 1.44 log\u2082 n</code> (Shallow)</td><td><code>\u2248 2.0 log\u2082 n</code> (Taller)</td></tr><tr><td>Search Performance</td><td>Faster (fewer pointer hops)</td><td>Slightly slower</td></tr><tr><td>Insertion Rotations</td><td>At most 1 rotation</td><td>At most 2 rotations</td></tr><tr><td>Deletion Rotations</td><td>Up to <code>O(log n)</code> rotations</td><td>At most 3 rotations</td></tr><tr><td>Primary Use Case</td><td>Read-heavy datasets</td><td>Write-heavy / general associative maps (C++ <code>std::map</code>)</td></tr></tbody></table>"}, {"marks": 6, "q": "Explain how node metadata is represented in production AVL trees (Height vs Balance Factor bits) and analyze memory overhead.", "a": "<p><strong>1. Method A: Storing Explicit Height (Integer):</strong></p><ul><li>Each node stores <code>int height</code> (4 bytes).</li><li><code>BF(node) = node->left->height - node->right->height</code>.</li><li><em>Tradeoff:</em> Code is simple and intuitive, but adds 4 bytes of padding per node. On a 64-bit system with two child pointers (16 bytes) and an integer key (4 bytes), padding often rounds node size to 32 bytes.</li></ul><p><strong>2. Method B: Storing Balance Factor in 2 Bits:</strong></p><ul><li>The Balance Factor only takes values in <code>{-1, 0, +1}</code>. These 3 states can be represented using <strong>2 bits</strong>.</li><li><em>Pointer Tagging:</em> In modern 64-bit architectures, pointers are 8-byte aligned, meaning the lowest 3 bits of every pointer address are always <code>000</code>. We can embed the 2 balance bits directly into the unused lowest bits of the child pointer!</li><li><em>Tradeoff:</em> Zero extra memory allocated per node! Requires bitwise masking (<code>ptr & ~0x07</code>) before dereferencing.</li></ul><div class=\"key-takeaway\"><strong>Summary:</strong> High-performance in-memory systems use 2-bit tagged pointers to reduce heap footprint by up to 25%, drastically improving CPU cache line packing.</div>"}],
           tries: [{ label: 'Search 25', reset: true, seq: [['search', 25]] }] }
       ]
     },
@@ -1072,6 +1122,7 @@ if (typeof module !== 'undefined') {
           lead: 'Insert, search and delete all begin by splaying. The node moves up in steps, each one of three kinds.',
           extra: SPLAY_CASES,
           points: ['Amortized O(log n) per operation, although a single operation can take O(n).', 'A search that fails still splays the last node it visited.'],
+          marks: [{"marks": 2, "q": "What is a Splay Tree and what fundamental property defines its amortized efficiency?", "a": "<p>A <strong>Splay Tree</strong> is a self-adjusting binary search tree that stores zero balance metadata. Every time a node is accessed (via search, insert, or delete), it is moved to the root through a sequence of rotations called <strong>Splaying</strong>.</p><p>Its fundamental property is <strong>amortized O(log n) time per operation</strong>. While an individual operation can take <code>O(n)</code> on a degenerate tree, any sequence of <code>m</code> operations takes <code>O(m log n)</code> time, halving search depth for frequently used keys.</p>"}, {"marks": 4, "q": "Explain the three Splay Tree rotation steps: Zig, Zig-Zig, and Zig-Zag.", "a": "<p><strong>1. Zig Step (Terminal):</strong></p><p>Executed when parent <code>P</code> is the root. Perform a single rotation (left or right) around the root to make accessed node <code>X</code> the new root.</p><p><strong>2. Zig-Zig Step (Same Side):</strong></p><p>Executed when <code>X</code> and <code>P</code> are either both left children or both right children. Rotate grandparent <code>G</code> first, then rotate parent <code>P</code>. <em>Crucial Note:</em> Rotating <code>G</code> before <code>P</code> roughly halves the depth of all nodes along the access path!</p><p><strong>3. Zig-Zag Step (Opposite Sides):</strong></p><p>Executed when <code>X</code> is a right child and <code>P</code> is a left child (or vice versa). Rotate parent <code>P</code> first, then rotate grandparent <code>G</code> in the opposite direction (identical to an AVL double rotation).</p>"}, {"marks": 6, "q": "Explain the Potential Method analysis of Splay Trees and describe practical applications where Splay Trees outperform AVL trees.", "a": "<p><strong>1. Potential Method Analysis (Sleator & Tarjan):</strong></p><p>Define the size <code>s(x)</code> of node <code>x</code> as the number of nodes in its subtree. Define rank <code>r(x) = log\u2082(s(x))</code>.</p><p>Define the tree potential <code>\u03a6 = \u2211_{x \u2208 T} r(x)</code>. The amortized cost of an operation is <code>a_i = c_i + \u03a6_i - \u03a6_{i-1}</code>.</p><p><em>The Access Lemma:</em> Splaying node <code>x</code> to the root in a tree of size <code>n</code> has an amortized cost bounded by: <code>a_i \u2264 3(r(root) - r(x)) + 1 = O(log n)</code>. Over <code>m</code> operations, telescoping potential guarantees total time <code>O(m log n)</code>.</p><p><strong>2. Where Splay Trees Outperform AVL / Red-Black Trees:</strong></p><ul><li><strong>Working Set Property:</strong> If a subset of <code>k</code> keys is accessed 90% of the time (80/20 Pareto principle), accessing those <code>k</code> keys costs only <code>O(log k)</code> amortized time because they cluster near the root.</li><li><strong>Zero Storage Overhead:</strong> No balance factors, heights, or color bits need to be stored in nodes.</li><li><strong>Simpler Code:</strong> No complex case balancing tables; a single <code>splay(key)</code> primitive implements search, insert, and delete.</li><li><em>Applications:</em> Network router routing-table caches, memory allocators (e.g. tracking free memory chunks), and adaptive data compression.</li></ul>"}],
           tries: [{ label: 'Search 10 (deepest)', reset: true, seq: [['search', 10]] }, { label: 'Search 30, then 30 again', reset: true, seq: [['search', 30], ['search', 30]] }] }
       ]
     },
@@ -1083,6 +1134,7 @@ if (typeof module !== 'undefined') {
           lead: 'In a tree of order m, every node has at most m children (m - 1 keys) and every non-root node is at least half full. All leaves sit at the same depth.',
           points: ['Insert: add the key to a leaf. If the leaf overflows, split it at the median and push the median up. Splits can cascade to the root.', 'Delete: remove the key. If a node underflows, borrow from a sibling through the parent, or merge with a sibling.', 'Height is O(logₘ n), so a lookup touches very few nodes.'],
           extra: BCMP,
+          marks: [{"marks": 2, "q": "Define a B-Tree of order m and state the minimum and maximum keys allowed per node.", "a": "<p>A <strong>B-Tree of order m</strong> is a balanced, multi-way search tree where:</p><ul><li>Every node has at most <code>m</code> children (and at most <code>m - 1</code> keys).</li><li>Every non-root internal node has at least <code>\u2308m/2\u2309</code> children (and at least <code>\u2308m/2\u2309 - 1</code> keys).</li><li>The root has at least 2 children if it is not a leaf.</li><li>All leaves appear at the exact same depth.</li></ul>"}, {"marks": 4, "q": "Explain node splitting in a B-Tree during insertion with a step-by-step example.", "a": "<p><strong>Node Splitting Procedure:</strong></p><ol><li>Traverse the B-Tree down to the appropriate leaf node and insert the key in sorted order.</li><li>If the leaf now contains <code>m</code> keys (overflow), it must split around its median key at index <code>\u230am/2\u230b</code>:<ul><li>Keys to the left of the median remain in the original left node.</li><li>Keys to the right of the median are placed into a newly allocated right sibling node.</li><li>The median key is promoted up into the parent node.</li></ul></li><li>If the parent node also overflows, the split propagates recursively up to the root.</li><li>If the root splits, a new root is created containing the single median key and two children, increasing tree height by 1.</li></ol><p><em>Example (Order 4):</em> Node with keys <code>[10, 20, 30]</code> receives <code>25</code> \u2192 temporary <code>[10, 20, 25, 30]</code>. Median <code>25</code> moves up; left leaf retains <code>[10, 20]</code>, right leaf receives <code>[30]</code>.</p>"}, {"marks": 6, "q": "Compare B-Trees and B+ Trees in comprehensive detail and explain why B+ Trees are universally selected for relational database indexes.", "a": "<table style=\"width:100%;font-size:12px;\"><thead><tr><th>Feature</th><th>B-Tree</th><th>B+ Tree</th></tr></thead><tbody><tr><td>Data Storage Location</td><td>Keys and data records stored in <strong>all nodes</strong> (internal and leaf).</td><td>Data records stored <strong>only in leaf nodes</strong>; internal nodes hold only routing keys.</td></tr><tr><td>Leaf Structure</td><td>Leaves are independent nodes.</td><td>All leaves are connected via a <strong>doubly linked list</strong>.</td></tr><tr><td>Range Queries</td><td>Requires costly in-order tree traversal jumping across disk pages.</td><td>Direct sequential scan along leaf links in <code>O(k)</code> disk reads.</td></tr><tr><td>Node Key Capacity</td><td>Lower (data records consume space in internal nodes).</td><td>Higher (internal nodes hold only keys, maximizing fan-out).</td></tr><tr><td>Tree Height</td><td>Taller for same number of keys.</td><td>Noticeably shorter (typically 3-4 levels for billions of records).</td></tr><tr><td>Search Latency</td><td>Variable: ends early if key is in root or internal node.</td><td>Predictable: every search proceeds to a leaf node.</td></tr></tbody></table><p><strong>Why Databases (MySQL InnoDB, Postgres) Use B+ Trees:</strong></p><ol><li><strong>High Fan-out minimizes Disk I/O:</strong> A database page is typically 16KB. A B+ Tree internal node holding 8-byte keys and 8-byte pointers can achieve fan-out <code>m > 1000</code>. A 3-level tree indexes over 1 billion records with at most 3 disk reads.</li><li><strong>Lightning Fast Range Scans:</strong> SQL queries with <code>BETWEEN x AND y</code> find <code>x</code> in <code>O(log_m n)</code>, then follow linked leaf pointers sequentially without re-traversing internal nodes.</li></ol>"}],
           tries: [{ label: 'Insert 35', reset: true, seq: [['insert', 35]] }, { label: 'Delete 7', reset: true, seq: [['delete', 7]] }, { label: 'Delete 3, then 5', reset: true, seq: [['delete', 3], ['delete', 5]] }] }
       ]
     }
@@ -1115,6 +1167,50 @@ if (typeof module !== 'undefined') {
 
   /* ---------- panel markup ---------- */
   var panels = {};
+  
+  function renderMarksHTML(s) {
+    if (!s.marks || !s.marks.length) return '';
+    var items = s.marks.map(function (m) {
+      var cls = 'm' + m.marks;
+      return '<details class="mark-card ' + cls + '" open>' +
+        '<summary class="mark-summary">' +
+        '<span class="badge-mark ' + cls + '">' + m.marks + ' Marks</span>' +
+        '<span class="mark-q">' + esc(m.q) + '</span>' +
+        '</summary>' +
+        '<div class="mark-body">' + m.a + '</div>' +
+        '</details>';
+    }).join('');
+    return '<div class="marks-section">' +
+      '<div class="marks-bar">' +
+      '<div class="marks-title"><span>📝 Exam &amp; Interview Answers</span></div>' +
+      '<div class="marks-filters">' +
+      '<button class="marks-filter-btn active" data-mark-filter="all">All</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="2">2M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="4">4M</button>' +
+      '<button class="marks-filter-btn" data-mark-filter="6">6M</button>' +
+      '</div></div>' +
+      '<div class="marks-list">' + items + '</div>' +
+      '</div>';
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mark-filter]');
+    if (!b) return;
+    var filter = b.getAttribute('data-mark-filter');
+    var sec = b.closest('.marks-section');
+    if (sec) {
+      sec.querySelectorAll('[data-mark-filter]').forEach(function (x) { x.classList.toggle('active', x === b); });
+      sec.querySelectorAll('.mark-card').forEach(function (c) {
+        if (filter === 'all' || c.classList.contains('m' + filter)) {
+          c.style.display = '';
+          if (filter !== 'all') c.open = true;
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+  });
+
   function panelHTML(t) {
     var id = t.id;
     var extras = '';
@@ -1147,7 +1243,7 @@ if (typeof module !== 'undefined') {
       }).join('') + '</div>' : '';
       return '<article class="topic" id="t-' + s.id + '" style="--i:' + si + '"><div class="topic-head"><h3>' + esc(s.title) + '</h3>' +
         '<button class="done" data-done="' + s.id + '" aria-pressed="false"><span class="box" aria-hidden="true"></span>Studied</button></div>' +
-        '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + '</article>';
+        '<p>' + esc(s.lead) + '</p>' + pts + (s.extra || '') + tries + renderMarksHTML(s) + '</article>';
     }).join('');
     return '<section class="panel" id="panel-' + id + '" role="tabpanel" aria-labelledby="tab-' + id + '" hidden>' +
       '<p class="lede">' + esc(t.lede) + '</p>' +
@@ -1344,18 +1440,39 @@ if (typeof module !== 'undefined') {
   }
 
   /* ---------- operations ---------- */
+  var seqTimer = null;
+  function stopSeq() {
+    if (seqTimer) { clearTimeout(seqTimer); seqTimer = null; }
+  }
+
   function exec(p, act, key, silent) {
     var res = p.tree[act](key);
     if (!silent) { draw(p, res); showLog(p, act, key, res); }
     return res;
   }
-  function runSeq(p, seq) {
-    seq.forEach(function (st, i) {
-      var last = i === seq.length - 1;
-      exec(p, st[0], st[1], !last);
-    });
+  function runSeq(p, seq, stepDelay) {
+    stopSeq();
     var lastKey = seq[seq.length - 1][1];
     p.input.value = lastKey;
+    if (reduce || !motionOn || seq.length <= 1) {
+      seq.forEach(function (st, i) {
+        var last = i === seq.length - 1;
+        exec(p, st[0], st[1], !last);
+      });
+      return;
+    }
+    var idx = 0;
+    var d = stepDelay || 650;
+    function next() {
+      if (idx >= seq.length) return;
+      var st = seq[idx];
+      exec(p, st[0], st[1], false);
+      idx++;
+      if (idx < seq.length) {
+        seqTimer = setTimeout(next, d);
+      }
+    }
+    next();
   }
   function readKey(p) {
     var raw = p.input.value.trim();
@@ -1368,12 +1485,15 @@ if (typeof module !== 'undefined') {
     return k;
   }
   function onAct(p, act) {
+    stopSeq();
     if (act === 'reset') {
+      p.drawn = false;
       seed(p); draw(p);
       hint(p, 'Example tree restored. Pick an operation to see each step explained here.');
       return;
     }
     if (act === 'clear') {
+      p.drawn = false;
       p.tree = makeTree(p.kind, p.m); draw(p);
       hint(p, 'Tree cleared. Insert a key to start building.');
       return;
@@ -1392,11 +1512,16 @@ if (typeof module !== 'undefined') {
   }
 
   function onPreset(p, name) {
+    stopSeq();
     if (name === 'sorted') {
-      p.tree = makeTree('bst'); [10, 20, 30, 40, 50].forEach(function (k) { p.tree.insert(k); });
+      p.tree = makeTree('bst');
+      p.drawn = false;
       draw(p);
+      var seq = [10, 20, 30, 40, 50].map(function (k) { return ['insert', k]; });
+      runSeq(p, seq, 480);
       hint(p, 'Keys arrived in sorted order, so every key went right. Height equals the node count: the tree is a linked list and search is O(n).');
     } else if (name === 'balanced') {
+      p.drawn = false;
       seed(p); draw(p);
       hint(p, 'The same seven keys, inserted in a different order, give a tree of height 3.');
     } else if (name === 'deepest') {
@@ -1405,28 +1530,37 @@ if (typeof module !== 'undefined') {
       p.input.value = k; exec(p, 'search', k);
     } else if (name === 'seq') {
       p.tree = makeTree(p.kind, p.m);
-      var last;
-      for (var i = 1; i <= 12; i++) last = p.tree.insert(i);
-      draw(p, last); showLog(p, 'insert', 12, last);
-      p.input.value = 12;
+      p.drawn = false;
+      draw(p);
+      var seq = [];
+      for (var i = 1; i <= 12; i++) seq.push(['insert', i]);
+      runSeq(p, seq, 450);
     }
   }
 
   var ROT = { LL: [30, 20, 10], RR: [10, 20, 30], LR: [30, 10, 20], RL: [10, 30, 20] };
   function onRot(p, name) {
+    stopSeq();
     p.tree = makeTree('avl');
+    p.drawn = false;
+    draw(p);
     var seq = ROT[name].map(function (k) { return ['insert', k]; });
-    runSeq(p, seq);
+    runSeq(p, seq, 700);
   }
 
   function onTry(p, spec) {
+    stopSeq();
     var parts = spec.split(':');
     var sub = null;
     p.topic.subs.forEach(function (s) { if (s.id === parts[0]) sub = s; });
     if (!sub) return;
     var tr = sub.tries[Number(parts[1])];
-    if (tr.reset) seed(p);
-    runSeq(p, tr.seq);
+    if (tr.reset) {
+      p.drawn = false;
+      seed(p);
+      draw(p);
+    }
+    runSeq(p, tr.seq, 650);
     var bench = $('.bench', p.el);
     if (bench && bench.scrollIntoView && window.innerWidth <= 940) bench.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
   }

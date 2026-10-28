@@ -1,10 +1,11 @@
-<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Data Structures &amp; Algorithms Lab Suite</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
 :root {
   --bg: #edf1f4;
   --surface: #fbfcfd;
@@ -25,6 +26,8 @@
   --purple-ink: #4c1d95;
   --blue: #1d4ed8;
   --blue-soft: #dbeafe;
+  --purple-ink: #4c1d95;
+  --blue-ink: #1e3a8a;
   --grid: rgba(16, 32, 44, 0.06);
   --font-display: 'Archivo', 'IBM Plex Sans', system-ui, sans-serif;
   --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -36,7 +39,8 @@
     --accent: #3cc4b5; --accent-ink: #06201d; --accent-soft: #12403c;
     --visit: #e0a23a; --visit-soft: #43320f; --visit-ink: #f0c36f;
     --bad: #f07a66; --bad-soft: #471f19; --purple: #c084fc; --purple-soft: #2e1065; --purple-ink: #e9d5ff;
-    --blue: #60a5fa; --blue-soft: #172554;
+    --purple-ink: #e9d5ff;
+    --blue: #60a5fa; --blue-soft: #172554; --blue-ink: #bfdbfe;
     --grid: rgba(229, 237, 243, 0.06);
     color-scheme: dark;
   }
@@ -164,16 +168,20 @@ h1 { font-size: clamp(28px, 4.5vw, 44px); font-weight: 700; line-height: 1.15; l
   flex-wrap: wrap;
   gap: 12px;
 }
+
 </style>
+</head>
+<body>
 <div class="page">
   <div class="hero">
     <p class="eyebrow">Interactive Course Platform</p>
     <h1>Data Structures &amp; Algorithms Lab Suite</h1>
-    <p>Five self-contained, browser-executable modules covering foundational and advanced computer science data structures with interactive workbenches, visual SVG state engines, step-by-step algorithms, and side-by-side complexity matrices.</p>
+    <p>Five self-contained, browser-executable modules covering foundational and advanced computer science data structures with interactive workbenches, visual SVG state engines, step-by-step algorithms, side-by-side complexity matrices, and comprehensive <strong>2-Mark, 4-Mark &amp; 6-Mark Exam &amp; Interview Questions &amp; Answers</strong> for every topic.</p>
     
     <div class="start-bar">
       <a href="Module 1 Tree Lab.html" class="btn primary">Start Module 1: Trees &rarr;</a>
-      <span style="font:500 13px var(--font-mono);color:var(--muted);">Use the "Next Module &rarr;" button in each lab to progress one by one.</span>
+      <a href="exam-suite.html" class="btn" style="border-color:var(--accent);font-weight:600;">📝 Master Exam Bank (72 Q&amp;As) &rarr;</a>
+      <span style="font:500 13px var(--font-mono);color:var(--muted);">All modules include interactive 2M, 4M, 6M exam revision tabs on the concept side!</span>
     </div>
   </div>
 
@@ -215,6 +223,7 @@ h1 { font-size: clamp(28px, 4.5vw, 44px); font-weight: 700; line-height: 1.15; l
           <span class="tag">Splay Trees</span>
           <span class="tag">B-Tree</span>
           <span class="tag">B+ Tree</span>
+          <span class="tag" style="color:var(--accent);border:1px solid var(--accent);font-weight:600;">2M / 4M / 6M Q&amp;A</span>
         </div>
         <p class="card-desc">Master ordered lookups, self-balancing rotations (LL, RR, LR, RL), amortized splay operations, and multi-way disk B-Tree node splitting &amp; borrowing.</p>
       </div>
@@ -235,6 +244,7 @@ h1 { font-size: clamp(28px, 4.5vw, 44px); font-weight: 700; line-height: 1.15; l
           <span class="tag">Double Hashing</span>
           <span class="tag">Cuckoo Evictions</span>
           <span class="tag">Bloom Filter</span>
+          <span class="tag" style="color:var(--accent);border:1px solid var(--accent);font-weight:600;">2M / 4M / 6M Q&amp;A</span>
         </div>
         <p class="card-desc">Interactive modulo tables, tombstone deletion mechanics, guaranteed O(1) worst-case 2-read Cuckoo evictions, and zero-false-negative Bloom filters.</p>
       </div>
@@ -255,6 +265,7 @@ h1 { font-size: clamp(28px, 4.5vw, 44px); font-weight: 700; line-height: 1.15; l
           <span class="tag">Kruskal DSU</span>
           <span class="tag">Dijkstra SSSP</span>
           <span class="tag">Floyd-Warshall O(V³)</span>
+          <span class="tag" style="color:var(--accent);border:1px solid var(--accent);font-weight:600;">2M / 4M / 6M Q&amp;A</span>
         </div>
         <p class="card-desc">Full graph workbench with matrix/list toggle, concentric BFS discovery, cycle-detecting DFS back edges, Kruskal MST with Disjoint Sets, and edge relaxation.</p>
       </div>
@@ -275,6 +286,7 @@ h1 { font-size: clamp(28px, 4.5vw, 44px); font-weight: 700; line-height: 1.15; l
           <span class="tag">KMP &pi; Table</span>
           <span class="tag">Aho-Corasick</span>
           <span class="tag">Segment Tree RMQ/RSQ</span>
+          <span class="tag" style="color:var(--accent);border:1px solid var(--accent);font-weight:600;">2M / 4M / 6M Q&amp;A</span>
         </div>
         <p class="card-desc">Prefix tree autocompletions, linear-time LCP suffix sorting, KMP non-backtracking failure tables, and binary interval decomposition with point updates.</p>
       </div>
@@ -295,6 +307,7 @@ h1 { font-size: clamp(28px, 4.5vw, 44px); font-weight: 700; line-height: 1.15; l
           <span class="tag">1-NN Pruning</span>
           <span class="tag">Quadtree</span>
           <span class="tag">Lock-Free CAS Stack</span>
+          <span class="tag" style="color:var(--accent);border:1px solid var(--accent);font-weight:600;">2M / 4M / 6M Q&amp;A</span>
         </div>
         <p class="card-desc">Multi-level express lane lists, Git-style immutable path copying with structural sharing, 2D plane partitioning with nearest-neighbor search, and atomic CAS concurrency.</p>
       </div>
